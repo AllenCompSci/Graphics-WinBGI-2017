@@ -70,7 +70,7 @@ void gr_Start(int &GrDriver, int&GrMode, int&ErrorCode) {
 	//set the graphics driver
 	GrDriver = VGA; //800x600 
 	GrMode = VGAMAX;//set graphics mode
-	initgraph(&GrDriver, &GrMode, "");//start graphics
+	initgraph(&GrDriver, &GrMode, "Title");//start graphics
 	//check for problems
 	ErrorCode = graphresult();
 	if (ErrorCode != grOk)
