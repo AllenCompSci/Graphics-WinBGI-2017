@@ -1,5 +1,3 @@
-# Graphics-WinBGI-2017
-This is a Repository to share Notes for Computer Science 1, during the 2016-2017 year.
 #Graphics Assignment
 
 ##Pick 2 of the 3 following assignments to complete. Use WinBGI to display the graphics.
@@ -21,4 +19,6 @@ you have 3 Rectangles who test each other for intersection and none of them do.
 
 ##Remember all shapes/object displayed must be defined with a structure format, and have the 
 ##functions they use created defined inside them. 
+
+
 
