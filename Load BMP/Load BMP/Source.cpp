@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-const int NUMVECTOR = 9;
+const int NUMVECTOR = 20;
 struct RGB {
 	int r;
 	int g;
@@ -149,37 +149,28 @@ void main() {
 	/*Copy all the vector values color.at() HERE*/
 #pragma region example
 	colors.at(0).init(0, 0, 0, 0);
-	colors.at(1).init(110, 104, 78, 8);
-	colors.at(2).init(152, 147, 143, 7);
-	colors.at(3).init(183, 141, 37, 14);
-	colors.at(4).init(27, 93, 117, 1);
-	colors.at(5).init(246, 231, 64, 14);
-	colors.at(6).init(255, 255, 255, 15);
-	colors.at(7).init(108, 165, 184, 9);
-	colors.at(8).init(118, 118, 118, 8);
-	colors.at(9).init(116, 116, 116, 8);
-	colors.at(10).init(117, 117, 117, 8);
-	colors.at(11).init(5, 5, 5, 0);
-	colors.at(12).init(9, 9, 9, 0);
-	colors.at(13).init(6, 6, 6, 0);
-	colors.at(14).init(15, 15, 15, 0);
-	colors.at(15).init(14, 14, 14, 0);
-	colors.at(16).init(128, 208, 16, 2);
-	colors.at(17).init(0, 5, 10, 0);
-	colors.at(18).init(0, 11, 22, 0);
-	colors.at(19).init(130, 209, 20, 2);
-	colors.at(20).init(0, 15, 31, 0);
-	colors.at(21).init(0, 7, 14, 0);
-	colors.at(22).init(0, 3, 6, 0);
-	colors.at(23).init(0, 1, 2, 0);
-	colors.at(24).init(1, 113, 236, 1);
-	colors.at(25).init(0, 112, 236, 1);
-	colors.at(26).init(252, 252, 252, 15);
-	colors.at(27).init(0, 168, 0, 2);
-	colors.at(28).init(240, 188, 60, 14);
+	colors.at(1).init(136, 112, 0, 6);
+	colors.at(2).init(188, 188, 188, 7);
+	colors.at(3).init(156, 252, 240, 11);
+	colors.at(4).init(188, 0, 188, 5);
+	colors.at(5).init(212, 200, 252, 13);
+	colors.at(6).init(228, 0, 88, 4);
+	colors.at(7).init(240, 188, 60, 14);
+	colors.at(8).init(24, 60, 92, 8);
+	colors.at(9).init(252, 152, 56, 6);
+	colors.at(10).init(196, 212, 252, 7);
+	colors.at(11).init(0, 168, 0, 2);
+	colors.at(12).init(76, 220, 72, 10);
+	colors.at(13).init(252, 228, 160, 9);
+	colors.at(14).init(255, 255, 255, 15);
+	colors.at(15).init(0, 148, 0, 10);
+	colors.at(16).init(60, 188, 252, 9);
+	colors.at(17).init(0, 144, 56, 2);
+	colors.at(18).init(252, 252, 252, 15);
+	colors.at(19).init(32, 56, 236, 1);
 #pragma endregion
 	/*Make sure the *.bmp file is located in the same directory as the Source.cpp file*/
-	ReadBMP(TEXT("CountDown.bmp")); // 24 bit depth .bmp
+	ReadBMP(TEXT("Level6.bmp")); // 24 bit depth .bmp
 	/*
 	Creates multiple files, find the vector
 	use this to normalize the RGB values from what they are to
