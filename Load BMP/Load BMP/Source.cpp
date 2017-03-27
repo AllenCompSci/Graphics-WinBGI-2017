@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-const int NUMVECTOR = 20;
+const int NUMVECTOR = 62; /// HERE 
 struct RGB {
 	int r;
 	int g;
@@ -148,29 +148,76 @@ void main() {
 	h = 0;
 	/*Copy all the vector values color.at() HERE*/
 #pragma region example
-	colors.at(0).init(0, 0, 0, 0);
-	colors.at(1).init(136, 112, 0, 6);
-	colors.at(2).init(188, 188, 188, 7);
-	colors.at(3).init(156, 252, 240, 11);
-	colors.at(4).init(188, 0, 188, 5);
-	colors.at(5).init(212, 200, 252, 13);
-	colors.at(6).init(228, 0, 88, 4);
-	colors.at(7).init(240, 188, 60, 14);
-	colors.at(8).init(24, 60, 92, 8);
-	colors.at(9).init(252, 152, 56, 6);
-	colors.at(10).init(196, 212, 252, 7);
-	colors.at(11).init(0, 168, 0, 2);
-	colors.at(12).init(76, 220, 72, 10);
-	colors.at(13).init(252, 228, 160, 9);
-	colors.at(14).init(255, 255, 255, 15);
-	colors.at(15).init(0, 148, 0, 10);
-	colors.at(16).init(60, 188, 252, 9);
-	colors.at(17).init(0, 144, 56, 2);
-	colors.at(18).init(252, 252, 252, 15);
-	colors.at(19).init(32, 56, 236, 1);
+	
+	
+	colors.at(0).init(31, 236, 243, 99);
+	colors.at(1).init(182, 108, 147, 12);
+	colors.at(2).init(3, 7, 7, 0);
+	colors.at(3).init(204, 202, 202, 7);
+	colors.at(4).init(230, 105, 39, 6);
+	colors.at(5).init(232, 108, 40, 6);
+	colors.at(6).init(0, 4, 4, 0);
+	colors.at(7).init(228, 102, 38, 6);
+	colors.at(8).init(254, 156, 143, 12);
+	colors.at(9).init(229, 104, 39, 6);
+	colors.at(10).init(250, 234, 27, 14);
+	colors.at(11).init(234, 152, 20, 6);
+	colors.at(12).init(228, 103, 38, 6);
+	colors.at(13).init(234, 156, 18, 6);
+	colors.at(14).init(223, 95, 35, 6);
+	colors.at(15).init(234, 154, 19, 6);
+	colors.at(16).init(234, 155, 18, 6);
+	colors.at(17).init(234, 153, 19, 6);
+	colors.at(18).init(234, 144, 24, 6);
+	colors.at(19).init(234, 144, 25, 6);
+	colors.at(20).init(234, 150, 21, 6);
+	colors.at(21).init(234, 148, 22, 6);
+	colors.at(22).init(234, 143, 25, 6);
+	colors.at(23).init(234, 146, 23, 6);
+	colors.at(24).init(234, 147, 22, 6);
+	colors.at(25).init(234, 145, 24, 6);
+	colors.at(26).init(234, 143, 26, 6);
+	colors.at(27).init(234, 145, 23, 6);
+	colors.at(28).init(234, 142, 26, 6);
+	colors.at(29).init(234, 142, 27, 6);
+	colors.at(30).init(234, 151, 21, 6);
+	colors.at(31).init(234, 146, 24, 6);
+	colors.at(32).init(234, 149, 21, 6);
+	colors.at(33).init(234, 144, 23, 6);
+	colors.at(34).init(234, 147, 23, 6);
+	colors.at(35).init(231, 107, 40, 6);
+	colors.at(36).init(234, 152, 21, 6);
+	colors.at(37).init(234, 158, 17, 6);
+	colors.at(38).init(234, 149, 22, 6);
+	colors.at(39).init(234, 157, 18, 6);
+	colors.at(40).init(224, 97, 36, 6);
+	colors.at(41).init(234, 155, 19, 14);
+	colors.at(42).init(212, 80, 30, 6);
+	colors.at(43).init(234, 157, 17, 6);
+	colors.at(44).init(221, 93, 35, 6);
+	colors.at(45).init(234, 151, 20, 14);
+	colors.at(46).init(215, 84, 32, 6);
+	colors.at(47).init(229, 104, 38, 6);
+	colors.at(48).init(16, 201, 234, 3);
+	colors.at(49).init(226, 99, 36, 6);
+	colors.at(50).init(222, 94, 35, 6);
+	colors.at(51).init(224, 96, 36, 6);
+	colors.at(52).init(222, 95, 35, 6);
+	colors.at(53).init(216, 85, 32, 6);
+	colors.at(54).init(234, 156, 19, 6);// or 14
+	colors.at(55).init(213, 82, 30, 6);
+	colors.at(56).init(255, 255, 255, 15);
+	colors.at(57).init(4, 8, 9, 0);
+	colors.at(58).init(5, 11, 11, 8);
+	colors.at(59).init(6, 12, 12, 8);
+	colors.at(60).init(7, 14, 14, 8);
+	colors.at(61).init(0, 0, 0, 0);
+	
+
+
 #pragma endregion
 	/*Make sure the *.bmp file is located in the same directory as the Source.cpp file*/
-	ReadBMP(TEXT("Level6.bmp")); // 24 bit depth .bmp
+	ReadBMP(TEXT("bigbird.bmp")); // 24 bit depth .bmp
 	/*
 	Creates multiple files, find the vector
 	use this to normalize the RGB values from what they are to

@@ -29,18 +29,22 @@ void gr_Start(int &GrDriver, int &GrMode, int &ErrorCode) {
 void test() {
 	gr_Start(GrDriver, GrMode, ErrorCode);
 	drawCoundDownCenter();
+	PageOutline();
 	char t = getch();
 	setbkcolor(1);
 	cleardevice();
 	setbkcolor(0);
+	PageOutline();
 	drawLevel8Center();
 	t = getch();
 	setbkcolor(1);
 	cleardevice();
 	setbkcolor(0);
+	PageOutline();
 	drawLevel7Center();
 	t = getch();
 	cleardevice();
 	setbkcolor(0);
+	PageOutline();
 	drawLevel6Center();
 }
