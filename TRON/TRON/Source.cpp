@@ -173,7 +173,6 @@ void main() {
 		CREATE("title.bmp");
 	}
 }
-
 void gr_Start(int&GrDriver, int&GrMode, int&ErrorCode) {
 	GrDriver = VGA;
 	GrMode = VGAMAX;
@@ -333,6 +332,31 @@ void TRON() {
 			resetListeners();
 			break;
 		case END:
+			if (changeStates) {
+				int top, left, bottom, right;
+				top = (maxY / 2) / 2;
+				bottom = maxY / 2;
+				left = ((maxX / 2) / 2) / 2;
+				bottom = bottom - top;
+				top = ((maxY - title_Height) / 2) + title_Height;
+				bottom = top + bottom;
+				right = maxX - left;
+				end.init(left, top, right, bottom);
+				int Xs = (maxX - title_Width) / 2;
+				int Ys = (maxY - title_Height) / 2;
+				drawTitleE(Xs, Ys);
+				start.init(Xs, Ys, Xs + title_Width, Ys + title_Height);
+				end.render(4);
+				changeStates = false;
+			}
+			if (mouseInput.isPressed && start.isPressed(click)) {
+				changeStates = true;
+				Tron = START_MENU;
+			}
+			else if (mouseInput.isPressed && end.isPressed(click)) {
+				isRunning = false;
+			}
+			resetListeners();
 			if (P1 == LOSE) {
 				cout << "Player 2 Wins\n";
 			}
@@ -342,8 +366,6 @@ void TRON() {
 			else {
 				cout << "DRAW \n";
 			}
-			system("pause");
-			Tron = START_MENU;
 			break;
 		}
 		Sleep(15);
