@@ -1,7 +1,78 @@
 #include <winbgi.cpp>
 #include <graphics.h>
 #include "Title.h"
-
+void Player1(int X, int Y, int color) {
+	int Ignore = 99;
+	int PlayerColor = 4;
+	int SecondTone = 15;
+	int h = player_Height;
+	int w = player_Width;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			if (player1_ARRY[i][j] == PlayerColor) {
+				putpixel((X + j), (Y + i), color);
+			}
+			else if (player1_ARRY[i][j] == SecondTone)
+			{
+					putpixel((X + j), (Y + i), WHITE);
+			}
+		}
+	}
+}
+void Player2(int X, int Y, int color) {
+	int Ignore = 99;
+	int PlayerColor = 4;
+	int SecondTone = 15;
+	int h = player_Height;
+	int w = player_Width;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			if (player2_ARRY[i][j] == PlayerColor) {
+				putpixel((X + j), (Y + i), color);
+			}
+			else if (player2_ARRY[i][j] == SecondTone)
+			{
+				putpixel((X + j), (Y + i), WHITE);
+			}
+		}
+	}
+}
+void Player1O(int X, int Y, int color) {
+	int Ignore = 99;
+	int PlayerColor = 4;
+	int SecondTone = 15;
+	int h = player_Height;
+	int w = 520;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			if (player1_ARRY[i][j] == PlayerColor) {
+				putpixel((X + j), (Y + i), color);
+			}
+			else if (player1_ARRY[i][j] == SecondTone)
+			{
+				putpixel((X + j), (Y + i), WHITE);
+			}
+		}
+	}
+}
+void Player2O(int X, int Y, int color) {
+	int Ignore = 99;
+	int PlayerColor = 4;
+	int SecondTone = 15;
+	int h = player_Height;
+	int w = 520;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			if (player2_ARRY[i][j] == PlayerColor) {
+				putpixel((X + j), (Y + i), color);
+			}
+			else if (player2_ARRY[i][j] == SecondTone)
+			{
+				putpixel((X + j), (Y + i), WHITE);
+			}
+		}
+	}
+}
 void drawTitle(int X, int Y) {
 	int h = title_Height;
 	int w = title_Width;

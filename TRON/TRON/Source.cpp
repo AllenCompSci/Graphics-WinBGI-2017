@@ -6,13 +6,13 @@
 #include <mmsystem.h> /// WAV
 #include <mciapi.h> /// MP3
 #pragma comment(lib, "winmm.lib") /// WAV also maybe MP3
-
-using namespace std;
 enum GAMESTATE{START_MENU, PLAYER_1, PLAYER_2, GAME, END};
 enum DIRECTION{UP, RIGHT, DOWN, LEFT, PAUSE, SELECT, LEFTCLICK, RIGHTCLICK};
 enum WIN{CONT, LOSE, TIE};
+vector <int> PlayerColorChoices;
 bool isRunning = true;
 bool debug = false;
+bool selectColor, finalizeColor;
 char ** grid;
 POINT click;
 GAMESTATE Tron = START_MENU;
@@ -46,6 +46,12 @@ struct BUTTON {
 			Bottom = y1;
 		}
 	}
+	void init(BUTTON t) {
+		Left = t.Left;
+		Right = t.Right;
+		Top = t.Top;
+		Bottom = t.Bottom;
+	}
 	bool isPressed(POINT p) {
 		if (debug) {
 			cout << "Point.X : " << p.x << " Point.Y : " << p.y << endl;
@@ -60,7 +66,10 @@ struct BUTTON {
 		setcolor(color);
 		bar(Left, Top, Right, Bottom);
 	}
-};
+	bool isEqual(BUTTON t) {
+		return t.Left == Left && t.Right == Right && t.Bottom == Bottom && t.Top == Top;
+	}
+}Playerselect[6];
 struct PLAYERPOS {
 	int maxR;
 	int maxC;
@@ -139,6 +148,34 @@ struct PLAYERPOS {
 		cout << "row : " << row << " col : " << col << endl;
 	}
 }readyPlayer1, readyPlayer2;
+struct ButtonHighlight {
+	int Left, Top, Right, Bottom;
+	int padding;
+	BUTTON inner;
+	void init(int x) {
+		padding = x/2;
+	}
+	void pick(BUTTON t) {
+		inner.init(t);
+		Left = t.Left - padding;
+		Right = t.Right + padding;
+		Top = t.Top - padding;
+		Bottom = t.Bottom + padding;
+	}
+	void draw() {
+		render(WHITE);
+	}
+	void remove() {
+		render(BLACK);
+	}
+	void render(int color) {
+			setcolor(color);
+			rectangle(Left, Top, Right, Bottom);
+			rectangle(inner.Left, inner.Top, inner.Right, inner.Bottom);
+			floodfill(Left + 1, Top + 1, color);
+		
+	}
+}selected;
 int GrDriver, GrMode, ErrorCode;
 INPUT_RECORD irInBuf1, irInBuf2;
 void gr_Start(int &GrDriver, int &GrMode, int &ErrorCode);
@@ -154,8 +191,11 @@ bool KEYBOARD2(int);
 void playSound(string, int);
 void playSoundSFX(string, int);
 void resetListeners();
+void setColorPallet();
+void drawPLAYER(int);
+bool checkPLAYER(int);
 void main() {
-	bool GmNotArt = true;
+	bool GmNotArt = (true);
 	if (GmNotArt) {
 		thread tron(TRON);
 		thread p1(PLAYER1);
@@ -170,7 +210,7 @@ void main() {
 		p2.join();
 	}
 	else {
-		CREATE("title.bmp");
+		CREATE("player2.bmp");
 	}
 }
 void gr_Start(int&GrDriver, int&GrMode, int&ErrorCode) {
@@ -197,7 +237,7 @@ void PLAYER1() {
 			playerInput1.move = UP;
 		}
 		if (KEYBOARD1(VK_S)) {
-			if(playerInput1.move != DOWN)
+			if(playerInput1.move != UP)
 			playerInput1.move = DOWN;
 		}
 
@@ -269,6 +309,7 @@ void TRON() {
 		switch (Tron) {
 		case START_MENU:
 			if (changeStates) {
+				setColorPallet();
 				cleardevice();
 				int top, left, bottom, right;
 				top = (maxY / 2) / 2;
@@ -281,35 +322,42 @@ void TRON() {
 				start.init(left, top, right, bottom);
 				drawTitle((maxX - title_Width) / 2, (maxY - title_Height) / 2);
 				start.render(7);
-
 				changeStates = false;
 			}
 			if (mouseInput.isPressed && start.isPressed(click)) {
 				changeStates = true;
-				Tron = GAME;///PLAYER_1;
-				cout << "SWITCH STATE \n";
+				Tron = PLAYER_1;//GAME;///
+				//cout << "SWITCH STATE \n";
 			}
 			resetListeners();
 			break;
 		case PLAYER_1:
 			if (changeStates) {
+				selectColor = false;
+				finalizeColor = false;
 				cleardevice();
-				Sleep(30000);
-				changeStates = false;
+				drawPLAYER(1);
 			}
-			isRunning = false;
+			changeStates = checkPLAYER(1);
 			resetListeners();
 			break;
 		case PLAYER_2:
-
+			if (changeStates) {
+				selectColor = false;
+				finalizeColor = false;
+				cleardevice();
+				drawPLAYER(2);
+			}
+			changeStates = checkPLAYER(2);
+			resetListeners();
 			break;
 		case GAME:
 			if (changeStates) {
 				drawGrid(unitSize, maxX, maxY, CYAN, WHITE);
 				playerInput1.move = RIGHT;
 				playerInput2.move = LEFT;
-				readyPlayer1.init((row / 2), 10, unitSize, &playerInput1, RED, row, col);
-				readyPlayer2.init((row / 2), (col - 10), unitSize, &playerInput2, YELLOW, row, col);
+				readyPlayer1.init((row / 2), 10, unitSize, &playerInput1, readyPlayer1.color, row, col);
+				readyPlayer2.init((row / 2), (col - 10), unitSize, &playerInput2, readyPlayer2.color, row, col);
 				changeStates = false;
 			}
 			readyPlayer1.tick();
@@ -347,6 +395,28 @@ void TRON() {
 				drawTitleE(Xs, Ys);
 				start.init(Xs, Ys, Xs + title_Width, Ys + title_Height);
 				end.render(4);
+				settextstyle(2, 0, 96);
+				setbkcolor(CYAN);
+				string GAMEOVER = "";
+				if (P1 == LOSE) {
+					 GAMEOVER = "Player 2 Wins!";
+					 Player2((maxX-player_Width)/2,Ys-player_Height,readyPlayer2.color);
+				}
+				else if (P2 == LOSE) {
+					GAMEOVER = "Player 1 Wins!";
+					Player1((maxX - player_Width) / 2, Ys - player_Height, readyPlayer1.color);
+				}
+				else {
+					GAMEOVER = "DRAW";
+					setcolor(WHITE);
+					Ys -= textheight(GAMEOVER.c_str());
+					Xs = (maxX - textwidth(GAMEOVER.c_str())) / 2;
+					outtextxy(Xs, Ys, GAMEOVER.c_str());
+					putpixel(0, 0, CYAN);
+				}
+				setcolor(BLACK);
+				setbkcolor(BLACK);
+				cout << GAMEOVER << "\n";
 				changeStates = false;
 			}
 			if (mouseInput.isPressed && start.isPressed(click)) {
@@ -357,15 +427,7 @@ void TRON() {
 				isRunning = false;
 			}
 			resetListeners();
-			if (P1 == LOSE) {
-				cout << "Player 2 Wins\n";
-			}
-			else if(P2 == LOSE) {
-				cout << "Player 1 Wins \n";
-			}
-			else {
-				cout << "DRAW \n";
-			}
+			
 			break;
 		}
 		Sleep(15);
@@ -489,4 +551,77 @@ void resetListeners() {
 	playerInput1.reset();
 	playerInput2.reset();
 	mouseInput.reset();
+}
+void setColorPallet() {
+	PlayerColorChoices.clear();
+	PlayerColorChoices.push_back(RED); // 0
+	PlayerColorChoices.push_back(BLUE); // 1
+	PlayerColorChoices.push_back(BROWN); // 2
+	PlayerColorChoices.push_back(MAGENTA); // 3
+	PlayerColorChoices.push_back(GREEN); // 4
+	PlayerColorChoices.push_back(LIGHTMAGENTA); // 5
+	PlayerColorChoices.push_back(YELLOW); // 6
+}
+void drawPLAYER(int playerNum) {
+	int Xf, Xs, Xt, Yf, Ys, Yt; // Xfirst, Xsecond, Xthird (three rows)
+	int padding = 25; 
+	selected.init(padding);
+	int h = player_Height;
+	Yf = (getmaxy() - ((h*3) + (padding*2))) / 2;
+	Ys = Yf + h + padding; 
+	Yt = Ys + h + padding;
+	Xf = (getmaxx() - 520) / 2;
+	padding = (padding * 2);
+	Xt = Xs = (getmaxx() - (h * 3 + (padding * 2))) / 2;
+	if (playerNum == 1) {
+		Player1O(Xf, Yf, CYAN);
+	}
+	else {
+		Player2O(Xf, Yf, CYAN);
+	}
+	
+	int pointX = Xs;
+	for (int i = 0; i < 3; i++) {
+		Playerselect[i].init(pointX, Ys, pointX + h, Ys + h);
+		Playerselect[i + 3].init(pointX, Yt, pointX + h, Yt + h);
+		Playerselect[i].render(PlayerColorChoices.at(i));
+		Playerselect[i + 3].render(PlayerColorChoices.at(i + 3));
+		pointX += h + padding;
+	}
+
+}
+bool checkPLAYER(int playerNum) {
+	
+	if (mouseInput.isPressed){
+		for (int i = 0; i < 6; i++) {
+			if (Playerselect[i].isPressed(click)) {
+				if (selectColor) {
+					if (selected.inner.isEqual(Playerselect[i])) {
+						if (playerNum == 1) {
+							readyPlayer1.color = PlayerColorChoices.at(i);
+							PlayerColorChoices.erase(PlayerColorChoices.begin() + i);
+							Tron = PLAYER_2;
+							return true;
+						}
+						else {
+							readyPlayer2.color = PlayerColorChoices.at(i);
+							Tron = GAME;
+							return true;
+						}
+					}
+					else {
+						selected.remove();
+						selected.pick(Playerselect[i]);
+						selected.draw();
+					}
+				}
+				else {
+					selectColor = true;
+					selected.pick(Playerselect[i]);
+					selected.draw();
+				}
+			}
+		}
+	}
+	return false;
 }

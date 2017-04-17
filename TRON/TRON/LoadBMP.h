@@ -4,9 +4,9 @@
 #include <vector>
 #include <string>
 #include <stdio.h>
-#include <Windows.h>
+#include <Windows.h> // KEY PRESS MOUSE LISTENER NECESSITY 
 using namespace std;
-const int NUMVECTOR = 4; /// HERE 
+const int NUMVECTOR = 10; /// HERE 
 struct RGB {
 	int r;
 	int g;
@@ -152,15 +152,18 @@ void CREATE(string test) {
 	h = 0;
 	/*Copy all the vector values color.at() HERE*/
 #pragma region example
-	
-
-	
-	colors.at(1).init(0, 0, 0, 0);
-	colors.at(2).init(252, 71, 25, 99);
-	colors.at(3).init(88, 216, 252, 3);
-	colors.at(0).init(255, 255, 255, 15);
-
-
+	colors.at(4).init(252, 71, 25, 99);
+	colors.at(5).init(0, 48, 222, 15);
+	colors.at(6).init(1, 48, 221, 15);
+	colors.at(7).init(4, 48, 219, 15);
+	colors.at(8).init(9, 49, 215, 15);
+	colors.at(9).init(11, 49, 214, 15);
+	colors.at(0).init(10, 49, 214, 15);
+	colors.at(1).init(7, 49, 217, 15);
+	colors.at(2).init(3, 48, 220, 15);
+	colors.at(3).init(123, 97, 247, 4);
+	/*
+	*/
 #pragma endregion
 	/*Make sure the *.bmp file is located in the same directory as the Source.cpp file*/
 	ReadBMP(TEXT((LPTSTR)test.c_str())); // 24 bit depth .bmp

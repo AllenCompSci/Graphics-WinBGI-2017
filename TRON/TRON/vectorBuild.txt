@@ -1,4 +1,10 @@
-colors.at(0).init( 255, 255, 255, ); 
-colors.at(1).init( 0, 0, 0, ); 
-colors.at(2).init( 252, 71, 25, ); 
-colors.at(3).init( 88, 216, 252, ); 
+colors.at(0).init( 10, 49, 214, ); 
+colors.at(1).init( 7, 49, 217, ); 
+colors.at(2).init( 3, 48, 220, ); 
+colors.at(3).init( 123, 97, 247, ); 
+colors.at(4).init( 252, 71, 25, ); 
+colors.at(5).init( 0, 48, 222, ); 
+colors.at(6).init( 1, 48, 221, ); 
+colors.at(7).init( 4, 48, 219, ); 
+colors.at(8).init( 9, 49, 215, ); 
+colors.at(9).init( 11, 49, 214, ); 
