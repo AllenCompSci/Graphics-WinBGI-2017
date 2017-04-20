@@ -218,7 +218,10 @@ void PLAYER1() {
 		if (KEYBOARD1(VK_S)) {
 			playerInput1.move = DOWN;
 		}
-
+		if (KEYBOARD1(VK_SPACE)) {
+			temp.init(PONG.left, PONG.top, PONG.w);
+			Entities.push_back(temp);
+		}
 		Sleep(15);
 	}
 }
@@ -321,13 +324,23 @@ void PADDLEGAME() {
 					Entities[i].y = XPadding + Entities[i].radius;
 					Entities[i].dy *= -1;
 				}
-			
-				Entities[i].draw();
+				if ((Entities[i].y) >= maxY) {
+					// GAME OVER DUDE
+					Entities.erase(Entities.begin() + i);
+					i--;
+					if(Entities.size() < 1)
+						Paddle = END;
+				}
+				else {
+					Entities[i].draw();
+				}
 			}
 			Sleep(15);
 			break;
 		case END:
 			Sleep(2000);
+			// for now. 
+			closegraph();
 			break;
 		}
 	}
@@ -383,6 +396,7 @@ bool KEYBOARD1(int VirtualKey) {
 		do {
 			if (count++ > 200) {
 				playerInput1.isHeld = true;
+				return true;
 			}
 		} while ((GetAsyncKeyState(VirtualKey) & 0x8000) != 0);
 		

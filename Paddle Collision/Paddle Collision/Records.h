@@ -64,7 +64,7 @@ struct Ball {
 		remove();
 		update();
 	}
-};
+}temp;
 
 struct BLOCK {
 	BlockType TYPE;
@@ -160,10 +160,15 @@ struct BLOCK {
 	void MOVEPADDLE(int XPadding) {
 		int BLACKLEFT, BLACKRIGHT;
 		bool render = false;
-		if (playerInput1.isPressed) {
+		if (playerInput1.isPressed || playerInput1.isHeld) {
+			int multiplier = 1;
+			if (playerInput1.isHeld) {
+				multiplier *= 2;
+				playerInput1.isHeld = false;
+			}
 			if (playerInput1.move == LEFT) {
 				BLACKRIGHT = left + w; 
-				left -= PaddleSpeed;
+				left -= PaddleSpeed * multiplier;
 				if (left < XPadding) {
 					left = XPadding;
 				}
@@ -172,7 +177,7 @@ struct BLOCK {
 			}
 			else if (playerInput1.move == RIGHT) {
 				BLACKLEFT = left;
-				left += PaddleSpeed;
+				left += PaddleSpeed * multiplier;
 				if (left + w > getmaxx() - XPadding) {
 					left = getmaxx() - XPadding - w;
 				}
