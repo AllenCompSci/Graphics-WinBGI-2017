@@ -241,6 +241,7 @@ void MOUSE() {
 	}
 }
 void PADDLEGAME() {
+	srand((unsigned int)time(NULL));
 	gr_Start(GrDriver, GrMode, ErrorCode);
 	int maxX = getmaxx();
 	int maxY = getmaxy();

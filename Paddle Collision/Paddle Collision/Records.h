@@ -72,7 +72,9 @@ struct BLOCK {
 	int h, w;
 	int color;
 	bool damaged;
+	int collisionTIME;
 	void init(BlockType create, int x, int y, int VALUE) {
+		collisionTIME = 0;
 		top = y;
 		left = x;
 		TYPE = create;
@@ -109,7 +111,6 @@ struct BLOCK {
 			bar(left, top, left + w, top + h);
 		}
 	}
-
 	bool hit(Ball curr) {
 		int r = curr.radius;
 		int L = left - r;
@@ -121,6 +122,7 @@ struct BLOCK {
 		if (L <= Xc && Xc <= R) {
 			if (T <= Yc && Yc <= B) {	
 				damaged = true;
+				collisionTIME++;
 				if (debug) {
 					cout << "Ball X : " << Xc << "\nBall Y : " << Yc << "\nBall R : " << r << endl;
 					cout << "Block Top : " << top << "\nBlock Left : " << left << "\nBlock h : " << h << "\nBlock w : " << w << endl;
@@ -132,6 +134,9 @@ struct BLOCK {
 
 		if ((TYPE == PADDLE || TYPE == Indestructable) && damaged) {
 			damaged = false;
+			if (collisionTIME > 300 && TYPE == Indestructable) {
+				TYPE = Healthy;
+			}
 			if(debug)
 			cout << "PADDLE HIT" << endl;
 			return true;
