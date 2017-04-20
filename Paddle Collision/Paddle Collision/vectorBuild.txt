@@ -1,0 +1,2 @@
+colors.at(0).init( 252, 71, 25, ); 
+colors.at(1).init( 0, 0, 0, ); 
