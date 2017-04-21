@@ -22,6 +22,8 @@ bool KEYBOARD1(int);
 void playSound(string, int);
 void playSoundSFX(string, int);
 int level1();
+int level2();
+int level3();
 POINT pitBrick(int left, int top, int right, int bottom);
 POINT crackBrick(int left, int top, int right, int bottom);
 void pitBrick(int left, int top, int right, int bottom, int randomX, int randomY);

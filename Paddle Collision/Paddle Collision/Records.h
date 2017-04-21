@@ -11,6 +11,8 @@ const int SmallBallRadius = BLOCKUNIT / 3;
 const int LargeBallRadius = (int)(BLOCKUNIT / 1.25);
 const int PaddleSpeed = 8;
 bool debug = false;
+HWND stealth; //creating stealth (window is not visible)
+//HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 struct pass {
 	int VirtualKey;
 	bool isPressed;
@@ -147,20 +149,7 @@ struct BLOCK {
 		int Yc = curr.y;
 		if (L <= Xc && Xc <= R) {
 			if (T <= Yc && Yc <= B) {
-				if (curr.dy > 0) { // from top
-					curr.y = T;
-				}
-				else if (curr.dy < 0) { // from bottom
-					curr.y = B;
-				}
-				else{ // side
-					if (curr.dx > 0) { // from Left
-						curr.x = L;
-					}
-					else if (curr.dx < 0) { // from Right
-						curr.x = R;
-					}
-				}
+			
 				damaged = true;
 				collisionTIME++;
 				if (debug) {
@@ -174,7 +163,7 @@ struct BLOCK {
 
 		if ((TYPE == PADDLE || TYPE == Indestructable) && damaged) {
 			damaged = false;
-			if (collisionTIME % 60 == 0)
+			if (collisionTIME % 30 == 0)
 				draw();
 			if (collisionTIME > 300 && TYPE == Indestructable) {
 				TYPE = Healthy;

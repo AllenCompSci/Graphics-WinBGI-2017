@@ -13,6 +13,14 @@ BlockType randomType();
 void main() {
 	bool GmNotArt = (true);
 	if (GmNotArt) {
+/*
+The following segment of three lines of close uses stealth and h to hide the console
+*/
+#pragma region HIDECONSOLE
+		AllocConsole();
+		stealth = FindWindowA("ConsoleWindowClass", NULL);
+		ShowWindow(stealth, 0);
+#pragma endregion
 		thread paddle(PADDLEGAME);
 		thread p1(PLAYER1);
 		thread mouse(MOUSE);
@@ -54,6 +62,14 @@ void PLAYER1() {
 			temp.init(PONG.left, PONG.top, PONG.w);
 			Entities.push_back(temp);
 		}
+		if (KEYBOARD1(VK_P)) {
+			/// PAUSE
+		}
+		if (KEYBOARD1(VK_ESCAPE)) {
+			/// EXIT GAME
+			isRunning = false;
+			exit(0);
+		}
 		Sleep(15);
 	}
 }
@@ -82,13 +98,12 @@ void PADDLEGAME() {
 	int row = maxY / (unitSize + 1);
 	int col = maxX / (unitSize + 1);
 	int GMOverCount;
+	int level = 0;
 	bool changeStates = true;
 	BUTTON start, end;
 	WIN P1, P2;
 	cout << boolalpha; /// prints out true and false as bool vars
-	PONG.init(PADDLE,(int) ((getmaxx() - (BLOCKUNIT * 5)) / 2),(int)( (getmaxy() - BLOCKUNIT * 1.5)), WHITE);
 	///{START_MENU, PLAYER1, PLAYER2, GAME, END};
-	Entities[0].init(PONG.left, PONG.top, PONG.w);
 	int XPadding;
 	while (isRunning) {
 		switch (Paddle) {
@@ -97,29 +112,55 @@ void PADDLEGAME() {
 			break;
 		case GAME:
 			if (changeStates) {
+				cleardevice();
+				PONG.init(PADDLE, (int)((getmaxx() - (BLOCKUNIT * 5)) / 2), (int)((getmaxy() - BLOCKUNIT * 1.5)), WHITE);
+				Entities.erase(Entities.begin() + 1, Entities.end());
+				Entities[0].init(PONG.left, PONG.top, PONG.w);
 				PONG.draw();
-				XPadding = level1();
+				level++;
+				switch (level) {
+				case 1:
+					XPadding = level1();
+					break;
+				case 2:
+					XPadding = level2();
+					break;
+				default :
+					Paddle = END;
+					break;
+				}
 				redraw = 0;
-				GMOverCount = 0;
+				
 				for (int i = 0; i < (int)levelManager.size(); i++) {
 					levelManager[i].draw();
-					if (levelManager[i].TYPE == Indestructable) {
-						GMOverCount++;
-					}
 				}
 				changeStates = false;
 			}
 			PONG.MOVEPADDLE(XPadding);
-			Paddle = END;
+			changeStates = true;
 			for (int i = 0; i < (int)Entities.size(); i++) {
 				Entities[i].tick();
 				for (int j = 0; j < (int)levelManager.size(); j++) {
 					if (levelManager.at(j).hit(Entities[i])) {
 						levelManager[j].update();
+						if (Entities[i].dy > 0) { // from top
+							Entities[i].y = levelManager[j].top + Entities[i].radius;
+						}
+						else if (Entities[i].dy < 0) { // from bottom
+							Entities[i].y = levelManager[j].top + levelManager[j].h + Entities[i].radius;
+						}
+						else { // side
+							if (Entities[i].dx > 0) { // from Left
+								Entities[i].x = levelManager[j].left + Entities[i].radius;
+							}
+							else if (Entities[i].dx < 0) { // from Right
+								Entities[i].x = levelManager[j].left + levelManager[j].w + Entities[i].radius;
+							}
+						}
 						Entities[i].dy *= -1;
 					}
 					if (levelManager[j].TYPE == Healthy || levelManager[j].TYPE == Pitted || levelManager[j].TYPE == Cracked) {
-						Paddle = GAME;
+						changeStates = false;
 					}
 					if (levelManager[j].TYPE == Destroyed) {
 						if (debug)
@@ -327,6 +368,57 @@ int level1() {
 		}
 	}
 
+	return XPadding;
+}
+int level2() {
+	int screenWidth = getmaxx();
+	int screenHeight = getmaxy();
+	/*
+	Each Block is Height BLOCKUNIT
+	and    with    Width BLOCKUNIT * 3
+	level one has 4 rows
+	Blue
+	Red
+	Green
+	Yellow
+	*/
+	int initHeight = BLOCKUNIT * 3;
+	int NUMRowBlocks = (int)(screenWidth / (BLOCKUNIT * 3 * 1.05));
+	int XPadding = screenWidth - (int)(((NUMRowBlocks - 1) * BLOCKUNIT * 3 * 1.05) + (BLOCKUNIT * 3));
+	XPadding /= 2;
+	setcolor(LIGHTGRAY);
+	bar(0, 0, XPadding, screenHeight);
+	bar(screenWidth - XPadding, 0, screenWidth, screenHeight);
+	bar(0, 0, screenWidth, XPadding);
+	bool checker = true;
+	for (int i = 0; i < 4; i++) {
+		int value; // color
+		switch (i) {
+		case 0:
+			value = BLUE;
+			break;
+		case 1:
+			value = RED;
+			break;
+		case 2:
+			value = GREEN;
+			break;
+		case 3:
+			value = YELLOW;
+			break;
+		}
+
+		for (int j = 0; j < NUMRowBlocks; j++) {
+			if (checker) {
+				general.init(randomType(), (int)(j*BLOCKUNIT * 3 * 1.05) + XPadding, (int)(i*BLOCKUNIT * 1.05 + initHeight), value);
+				levelManager.push_back(general);
+				checker = false;
+			}
+			else {
+				checker = true;
+			}
+		}
+	}
 	return XPadding;
 }
 BlockType randomType() {
