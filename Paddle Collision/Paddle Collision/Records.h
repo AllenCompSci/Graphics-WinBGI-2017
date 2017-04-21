@@ -1,14 +1,10 @@
 #include "LoadBMP.h"
-#include "Pixel.h"
-#include <ctime>
-
 enum GAMESTATE { START_MENU, PLAYER_1, GAME, PAUSE, END, ESCAPE };
 enum DIRECTION { UP, RIGHT, DOWN, LEFT, FIRE, LEFTCLICK, RIGHTCLICK, NONE };
 enum WIN { CONT, LOSE, TIE };
 enum COLLISION { Left_Side, Far_Left, Mid_Left, Mid, Mid_Right, Far_Right, Right_Side, Block_Top, Block_Bottom };
 enum BlockType { Healthy, Pitted, Cracked, Destroyed, Indestructable, PADDLE };
 enum POWERUP { Regular, Multiball, ShortPaddle, LongPaddle, Small, Large };
-
 const int BLOCKUNIT = 40;
 const int RegularBallRadius = BLOCKUNIT / 2;
 const int SmallBallRadius = BLOCKUNIT / 3;
@@ -65,7 +61,6 @@ struct Ball {
 		update();
 	}
 }temp;
-
 struct BLOCK {
 	BlockType TYPE;
 	int top, left;
@@ -73,7 +68,10 @@ struct BLOCK {
 	int color;
 	bool damaged;
 	int collisionTIME;
+	int RandomX, RandomY;
 	void init(BlockType create, int x, int y, int VALUE) {
+		RandomX = -1;
+		RandomY = -1;
 		collisionTIME = 0;
 		top = y;
 		left = x;
@@ -94,14 +92,42 @@ struct BLOCK {
 			setcolor(DARKGRAY);
 			bar(left, top, left + w, top + h);
 			setcolor(WHITE);
-			rectangle(left, top, left + w, top + h);
+			int i = 1;
+			for(; (top +i + 10) < (top + h -i); i += 3)
+				rectangle(left+i, top+i, left + w-i, top + h-i);
+			i -= 3;
+			int rds = h - (2 *i);
+			rds /= 2;
+			int hp = (int)(5 * (collisionTIME / 300.0));
+			int adjust = 5;
+			for (int j = left + i + (rds * 2); j < (left + w - i - (rds * 2)) ; j += (rds * 2)) {
+				if (adjust-- == hp) {
+					setcolor(BLACK);
+				}
+				fillellipse(j + rds, top + i + rds, rds, rds);
+			}
+		
 		}
 		switch (TYPE) {
 		case Pitted:
-			pitBrick(left, top, left + w, top + h);
+			if (RandomX == -1) {
+				POINT temp = pitBrick(left, top, left + w, top + h);
+				RandomX = temp.x;
+				RandomY = temp.y;
+			}
+			else {
+				pitBrick(left, top, left + w, top + h, RandomX, RandomY);
+			}
 			break;
 		case Cracked:
-			crackBrick(left, top, left + w, top + h);
+			if (RandomX == -1) {
+				POINT temp = crackBrick(left, top, left + w, top + h);
+				RandomX = temp.x;
+				RandomY = temp.y;
+			}
+			else {
+				crackBrick(left, top, left + w, top + h, RandomX, RandomY);
+			}
 			break;
 		case Indestructable:
 
@@ -120,7 +146,21 @@ struct BLOCK {
 		int Xc = curr.x;
 		int Yc = curr.y;
 		if (L <= Xc && Xc <= R) {
-			if (T <= Yc && Yc <= B) {	
+			if (T <= Yc && Yc <= B) {
+				if (curr.dy > 0) { // from top
+					curr.y = T;
+				}
+				else if (curr.dy < 0) { // from bottom
+					curr.y = B;
+				}
+				else{ // side
+					if (curr.dx > 0) { // from Left
+						curr.x = L;
+					}
+					else if (curr.dx < 0) { // from Right
+						curr.x = R;
+					}
+				}
 				damaged = true;
 				collisionTIME++;
 				if (debug) {
@@ -134,8 +174,11 @@ struct BLOCK {
 
 		if ((TYPE == PADDLE || TYPE == Indestructable) && damaged) {
 			damaged = false;
+			if (collisionTIME % 60 == 0)
+				draw();
 			if (collisionTIME > 300 && TYPE == Indestructable) {
 				TYPE = Healthy;
+				collisionTIME = 0;
 			}
 			if(debug)
 			cout << "PADDLE HIT" << endl;
@@ -148,9 +191,13 @@ struct BLOCK {
 			switch (TYPE) {
 			case Healthy:
 				TYPE = Pitted;
+				collisionTIME = 0;
 				break;
 			case Pitted:
 				TYPE = Cracked;
+				RandomX = -1;
+				RandomY = -1;
+				collisionTIME = 0;
 				break;
 			case Cracked:
 				TYPE = Destroyed;
@@ -200,3 +247,153 @@ struct BLOCK {
 		}
 	}
 }PONG, general;
+struct BUTTON {
+	int Left, Top, Right, Bottom;
+	void init(int x1, int y1, int x2, int y2) {
+		if (x1 < x2) {
+			Left = x1;
+			Right = x2;
+		}
+		else {
+			Left = x2;
+			Right = x1;
+		}
+		if (y1 < y2) {
+			Top = y1;
+			Bottom = y2;
+		}
+		else {
+			Top = y2;
+			Bottom = y1;
+		}
+	}
+	void init(BUTTON t) {
+		Left = t.Left;
+		Right = t.Right;
+		Top = t.Top;
+		Bottom = t.Bottom;
+	}
+	bool isPressed(POINT p) {
+		if (debug) {
+			cout << "Point.X : " << p.x << " Point.Y : " << p.y << endl;
+			cout << "LEFT  : (" << Left << ")" << (Left <= p.x) << endl;
+			cout << "RIGHT : (" << Right << ")" << (p.x <= Right) << endl;
+			cout << "TOP   : (" << Top << ")" << (Top <= p.y) << endl;
+			cout << "BOTTOM: (" << Bottom << ")" << (p.y <= Bottom) << endl;
+		}
+		return ((Left <= p.x) && (p.x <= Right)) && ((Top <= p.y) && (p.y <= Bottom));
+	}
+	void render(int color) {
+		setcolor(color);
+		bar(Left, Top, Right, Bottom);
+	}
+	bool isEqual(BUTTON t) {
+		return t.Left == Left && t.Right == Right && t.Bottom == Bottom && t.Top == Top;
+	}
+}Playerselect[6];
+struct PLAYERPOS {
+	int maxR;
+	int maxC;
+	int color;
+	int row;
+	int col;
+	pass *listener;
+	int unit;
+	char C;
+	void init(int startR, int startC, int unitSize, pass *input, int COLOR, int row1, int col1) {
+		color = COLOR;
+		row = startR;
+		col = startC;
+		unit = unitSize;
+		listener = input;
+		maxR = row1;
+		maxC = col1;
+		switch (color)
+		{
+		case BLUE:
+			C = 'B';
+			break;
+		case RED:
+			C = 'R';
+			break;
+		case GREEN:
+			C = 'G';
+			break;
+		case YELLOW:
+			C = 'Y';
+			break;
+		case MAGENTA:
+			C = 'M';
+			break;
+		}
+		render();
+	}
+	void tick() {
+		switch (listener->move) {
+		case UP:
+			row--;
+			return;
+		case DOWN:
+			row++;
+			return;
+		case LEFT:
+			col--;
+			return;
+		case RIGHT:
+			col++;
+			return;
+		}
+	}
+	void render() {
+		setcolor(color);
+		bar(col*(unit + 1), row*(unit + 1), (col + 1)*(unit + 1), (row + 1)*(unit + 1));
+	}
+	WIN collide(PLAYERPOS opponent) {
+		if (maxR < row || row < 0 || maxC < col || col < 0) {
+			return LOSE;
+		}
+		if (opponent.row == row && opponent.col == col) {
+			return TIE;
+		}
+		if (pix(opponent)) {
+			return LOSE;
+		}
+		return CONT;
+	}
+	bool pix(PLAYERPOS opponent) {
+		int X = (col) * (unit + 1) + (unit + 1) / 2;
+		int Y = (row) * (unit + 1) + (unit + 1) / 2;
+		return getpixel(X, Y) == color || getpixel(X, Y) == opponent.color;
+	}
+	void state() {
+		cout << "row : " << row << " col : " << col << endl;
+	}
+}readyPlayer1, readyPlayer2;
+struct ButtonHighlight {
+	int Left, Top, Right, Bottom;
+	int padding;
+	BUTTON inner;
+	void init(int x) {
+		padding = x / 2;
+	}
+	void pick(BUTTON t) {
+		inner.init(t);
+		Left = t.Left - padding;
+		Right = t.Right + padding;
+		Top = t.Top - padding;
+		Bottom = t.Bottom + padding;
+	}
+	void draw() {
+		render(WHITE);
+	}
+	void remove() {
+		render(BLACK);
+	}
+	void render(int color) {
+		setcolor(color);
+		rectangle(Left, Top, Right, Bottom);
+		rectangle(inner.Left, inner.Top, inner.Right, inner.Bottom);
+		floodfill(Left + 1, Top + 1, color);
+
+	}
+}selected;

@@ -1,182 +1,14 @@
 #include "Records.h"
 #include "VirtualKeys.h"
-#include <thread>
-#include <mmsystem.h> /// WAV
-#include <mciapi.h> /// MP3
-#pragma comment(lib, "winmm.lib") /// WAV also maybe MP3
-
 vector <int> PlayerColorChoices;
 bool isRunning = true;
 bool selectColor, finalizeColor;
-char ** grid;
 POINT click;
 GAMESTATE Paddle = START_MENU;
-struct BUTTON {
-	int Left, Top, Right, Bottom;
-	void init(int x1, int y1, int x2, int y2) {
-		if (x1 < x2) {
-			Left = x1;
-			Right = x2;
-		}
-		else {
-			Left = x2;
-			Right = x1;
-		}
-		if (y1 < y2) {
-			Top = y1;
-			Bottom = y2;
-		}
-		else {
-			Top = y2;
-			Bottom = y1;
-		}
-	}
-	void init(BUTTON t) {
-		Left = t.Left;
-		Right = t.Right;
-		Top = t.Top;
-		Bottom = t.Bottom;
-	}
-	bool isPressed(POINT p) {
-		if (debug) {
-			cout << "Point.X : " << p.x << " Point.Y : " << p.y << endl;
-			cout << "LEFT  : (" << Left << ")" << (Left <= p.x) << endl;
-			cout << "RIGHT : (" << Right << ")" << (p.x <= Right) << endl;
-			cout << "TOP   : (" << Top << ")" << (Top <= p.y) << endl;
-			cout << "BOTTOM: (" << Bottom << ")" << (p.y <= Bottom) << endl;
-		}
-		return ((Left <= p.x) && (p.x <= Right)) && ((Top <= p.y) && (p.y <= Bottom));
-	}
-	void render(int color) {
-		setcolor(color);
-		bar(Left, Top, Right, Bottom);
-	}
-	bool isEqual(BUTTON t) {
-		return t.Left == Left && t.Right == Right && t.Bottom == Bottom && t.Top == Top;
-	}
-}Playerselect[6];
-struct PLAYERPOS {
-	int maxR;
-	int maxC;
-	int color;
-	int row;
-	int col;
-	pass *listener;
-	int unit;
-	char C;
-	void init(int startR, int startC, int unitSize, pass *input, int COLOR, int row1, int col1) {
-		color = COLOR;
-		row = startR;
-		col = startC;
-		unit = unitSize;
-		listener = input;
-		maxR = row1;
-		maxC = col1;
-		switch (color)
-		{
-		case BLUE:
-			C = 'B';
-			break;
-		case RED:
-			C = 'R';
-			break;
-		case GREEN:
-			C = 'G';
-			break;
-		case YELLOW:
-			C = 'Y';
-			break;
-		case MAGENTA:
-			C = 'M';
-			break;
-		}
-		render();
-	}
-	void tick() {
-		switch (listener->move) {
-		case UP:
-			row--;
-			return;
-		case DOWN:
-			row++;
-			return;
-		case LEFT:
-			col--;
-			return;
-		case RIGHT:
-			col++;
-			return;
-		}
-	}
-	void render() {
-		setcolor(color);
-		bar(col*(unit + 1), row*(unit + 1), (col + 1)*(unit + 1), (row + 1)*(unit + 1));
-	}
-	WIN collide(PLAYERPOS opponent) {
-		if (maxR < row || row < 0 || maxC < col || col < 0) {
-			return LOSE;
-		}
-		if (opponent.row == row && opponent.col == col) {
-			return TIE;
-		}
-		if (pix(opponent)) {
-			return LOSE;
-		}
-		return CONT;
-	}
-	bool pix(PLAYERPOS opponent) {
-		int X = (col) * (unit + 1) + (unit + 1) / 2;
-		int Y = (row) * (unit + 1) + (unit + 1) / 2;
-		return getpixel(X, Y) == color || getpixel(X, Y) == opponent.color;
-	}
-	void state() {
-		cout << "row : " << row << " col : " << col << endl;
-	}
-}readyPlayer1, readyPlayer2;
-struct ButtonHighlight {
-	int Left, Top, Right, Bottom;
-	int padding;
-	BUTTON inner;
-	void init(int x) {
-		padding = x / 2;
-	}
-	void pick(BUTTON t) {
-		inner.init(t);
-		Left = t.Left - padding;
-		Right = t.Right + padding;
-		Top = t.Top - padding;
-		Bottom = t.Bottom + padding;
-	}
-	void draw() {
-		render(WHITE);
-	}
-	void remove() {
-		render(BLACK);
-	}
-	void render(int color) {
-		setcolor(color);
-		rectangle(Left, Top, Right, Bottom);
-		rectangle(inner.Left, inner.Top, inner.Right, inner.Bottom);
-		floodfill(Left + 1, Top + 1, color);
-
-	}
-}selected;
-
 vector <Ball> Entities(1);
 vector <BLOCK> levelManager;
 int GrDriver, GrMode, ErrorCode;
 INPUT_RECORD irInBuf1, irInBuf2;
-void gr_Start(int &GrDriver, int &GrMode, int &ErrorCode);
-void PLAYER1();
-void MOUSE();
-void PADDLEGAME();
-void BACKGROUND();
-void getCursor(POINT &p, int VirtualKey);
-bool mousePress(int);
-bool KEYBOARD1(int);
-void playSound(string, int);
-void playSoundSFX(string, int);
-int level1();
 BlockType randomType();
 void main() {
 	bool GmNotArt = (true);
@@ -246,19 +78,10 @@ void PADDLEGAME() {
 	int maxX = getmaxx();
 	int maxY = getmaxy();
 	int unitSize = 9;
-
+	int redraw = 0;
 	int row = maxY / (unitSize + 1);
 	int col = maxX / (unitSize + 1);
-	grid = new char *[row];
-	for (int i = 0; i < row; i++) {
-		grid[i] = new char[col];
-		for (int j = 0; j < col; j++) {
-			grid[i][j] = '0';
-		}
-	}
-	// grid [row][col]
-
-
+	int GMOverCount;
 	bool changeStates = true;
 	BUTTON start, end;
 	WIN P1, P2;
@@ -276,23 +99,27 @@ void PADDLEGAME() {
 			if (changeStates) {
 				PONG.draw();
 				XPadding = level1();
-				
+				redraw = 0;
+				GMOverCount = 0;
 				for (int i = 0; i < (int)levelManager.size(); i++) {
 					levelManager[i].draw();
+					if (levelManager[i].TYPE == Indestructable) {
+						GMOverCount++;
+					}
 				}
 				changeStates = false;
 			}
 			PONG.MOVEPADDLE(XPadding);
+			Paddle = END;
 			for (int i = 0; i < (int)Entities.size(); i++) {
 				Entities[i].tick();
-				int count = 0;
 				for (int j = 0; j < (int)levelManager.size(); j++) {
 					if (levelManager.at(j).hit(Entities[i])) {
 						levelManager[j].update();
 						Entities[i].dy *= -1;
 					}
-					if (levelManager[j].TYPE != Indestructable) {
-						count++;
+					if (levelManager[j].TYPE == Healthy || levelManager[j].TYPE == Pitted || levelManager[j].TYPE == Cracked) {
+						Paddle = GAME;
 					}
 					if (levelManager[j].TYPE == Destroyed) {
 						if (debug)
@@ -302,14 +129,13 @@ void PADDLEGAME() {
 						if (debug)
 							cout << "POST   : " << levelManager.size();
 					}
+					
 				}
 				if (PONG.hit(Entities[i])) {
 					Entities[i].dy *= -1;
 					Entities[i].y = PONG.top - Entities[i].radius;
 				}
-				if (count == 0) {
-					Paddle = END;
-				}
+				
 				if (Entities[i].x - Entities[i].radius <= XPadding) {
 					// LEFT BUMPER
 					Entities[i].x = XPadding;
@@ -336,10 +162,22 @@ void PADDLEGAME() {
 					Entities[i].draw();
 				}
 			}
+			if (redraw++ > 300) {
+				for (int i = 0; i < (int)levelManager.size(); i++) {
+					if(levelManager[i].collisionTIME != 0)
+					levelManager[i].draw();
+				}
+				for (int i = 0; i < (int)Entities.size(); i++) {
+					Entities[i].draw();
+				}
+				PONG.draw();
+				redraw = -1;
+			}
 			Sleep(15);
 			break;
 		case END:
 			Sleep(2000);
+			isRunning = false;
 			// for now. 
 			closegraph();
 			break;
@@ -459,7 +297,7 @@ int level1() {
 	Yellow
 	*/
 	int initHeight = BLOCKUNIT * 3;
-	int NUMRowBlocks = screenWidth / (BLOCKUNIT * 3 * 1.05);
+	int NUMRowBlocks = (int)( screenWidth / (BLOCKUNIT * 3 * 1.05));
 	int XPadding = screenWidth - (int)(((NUMRowBlocks-1) * BLOCKUNIT * 3 * 1.05) + (BLOCKUNIT * 3));
 	XPadding /= 2;
 	setcolor(LIGHTGRAY);

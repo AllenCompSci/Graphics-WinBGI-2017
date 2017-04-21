@@ -1,6 +1,6 @@
+#include "FunctionProto.h"
 #include <winbgi.cpp>
 #include <graphics.h>
-
 const int brick_Height = 192;
 const int brick_Width = 832;
 #pragma region PITTED_DRAW 
@@ -201,7 +201,6 @@ const int pitted_ARRY[192][832] = {
 };
 
 #pragma endregion 
-
 #pragma region CRACKED2_DRAW 
 const int cracked2_ARRY[192][832] = {
 
@@ -400,16 +399,27 @@ const int cracked2_ARRY[192][832] = {
 };
 
 #pragma endregion 
-
-void pitBrick(int left, int top, int right, int bottom) {
+POINT pitBrick(int left, int top, int right, int bottom) {
+	POINT t;
+	t.x = rand() % (brick_Width - (right - left));
+	t.y = rand() % (brick_Height - (bottom - top));
+	pitBrick(left, top, right, bottom, t.x, t.y);
+	return t;
+}
+POINT crackBrick(int left, int top, int right, int bottom) {
+	POINT t;
+	t.x = rand() % (brick_Width - (right - left));
+	t.y = rand() % (brick_Height - (bottom - top));
+	crackBrick(left, top, right, bottom, t.x, t.y);
+	return t;
+}
+void pitBrick(int left, int top, int right, int bottom, int randomX, int randomY) {
 	int h = bottom - top;
 	int w = right - left;
-	int randomX = rand() % (brick_Width - w);
-	int randomY = rand() % (brick_Height - h);
 	int dr = 1;
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
-			if (pitted_ARRY[i+randomY][j + randomX] != 99)
+			if (pitted_ARRY[i + randomY][j + randomX] != 99)
 				if (dr % 6 != 0) {
 					putpixel(left + j, top + i, BLACK);
 					dr++;
@@ -421,16 +431,14 @@ void pitBrick(int left, int top, int right, int bottom) {
 		}
 	}
 }
-void crackBrick(int left, int top, int right, int bottom) {
+void crackBrick(int left, int top, int right, int bottom, int randomX, int randomY) {
 	int h = bottom - top;
 	int w = right - left;
-	int randomX = rand() % (brick_Width - w);
-	int randomY = rand() % (brick_Height - h);
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
-			if (cracked2_ARRY[i+randomY][j+randomX] != 99)
+			if (cracked2_ARRY[i + randomY][j + randomX] != 99)
 				putpixel(left + j, top + i, BLACK);
-				
+
 		}
 	}
 }

@@ -1,11 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <stdio.h>
-#include <Windows.h> // KEY PRESS MOUSE LISTENER NECESSITY 
-using namespace std;
+#include "Pixel.h"
 const int NUMVECTOR = 2; /// HERE 
 struct RGB {
 	int r;
