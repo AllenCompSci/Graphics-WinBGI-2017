@@ -125,6 +125,15 @@ void PADDLEGAME() {
 				case 2:
 					XPadding = level2();
 					break;
+				case 3:
+					XPadding = level3();
+					break;
+				case 4:
+					XPadding = level4();
+					break;
+				case 5:
+				case 6:
+				case 7:
 				default :
 					Paddle = END;
 					break;
@@ -203,7 +212,7 @@ void PADDLEGAME() {
 					Entities[i].draw();
 				}
 			}
-			if (redraw++ > 300) {
+			if (redraw++ > 3000) {
 				for (int i = 0; i < (int)levelManager.size(); i++) {
 					if(levelManager[i].collisionTIME != 0)
 					levelManager[i].draw();
@@ -382,7 +391,7 @@ int level2() {
 	Green
 	Yellow
 	*/
-	int initHeight = BLOCKUNIT * 3;
+	int initHeight = BLOCKUNIT * 2;
 	int NUMRowBlocks = (int)(screenWidth / (BLOCKUNIT * 3 * 1.05));
 	int XPadding = screenWidth - (int)(((NUMRowBlocks - 1) * BLOCKUNIT * 3 * 1.05) + (BLOCKUNIT * 3));
 	XPadding /= 2;
@@ -391,11 +400,11 @@ int level2() {
 	bar(screenWidth - XPadding, 0, screenWidth, screenHeight);
 	bar(0, 0, screenWidth, XPadding);
 	bool checker = true;
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 5; i++) {
 		int value; // color
 		switch (i) {
 		case 0:
-			value = BLUE;
+			value = WHITE;
 			break;
 		case 1:
 			value = RED;
@@ -405,6 +414,9 @@ int level2() {
 			break;
 		case 3:
 			value = YELLOW;
+			break;
+		case 4:
+			value = CYAN;
 			break;
 		}
 
@@ -421,8 +433,122 @@ int level2() {
 	}
 	return XPadding;
 }
+int level3() {
+	int screenWidth = getmaxx();
+	int screenHeight = getmaxy();
+	/*
+	Each Block is Height BLOCKUNIT
+	and    with    Width BLOCKUNIT * 3
+	level one has 4 rows
+	Blue
+	Red
+	Green
+	Yellow
+	*/
+	int initHeight = BLOCKUNIT * 2;
+	int NUMRowBlocks = (int)(screenWidth / (BLOCKUNIT * 3 * 1.05));
+	int XPadding = screenWidth - (int)(((NUMRowBlocks - 1) * BLOCKUNIT * 3 * 1.05) + (BLOCKUNIT * 3));
+	XPadding /= 2;
+	setcolor(LIGHTGRAY);
+	bar(0, 0, XPadding, screenHeight);
+	bar(screenWidth - XPadding, 0, screenWidth, screenHeight);
+	bar(0, 0, screenWidth, XPadding);
+	int checker = NUMRowBlocks / 3;
+	for (int i = 0; i < 5; i++) {
+		int value; // color
+		switch (i) {
+		case 0:
+			value = WHITE;
+			break;
+		case 1:
+			value = RED;
+			break;
+		case 2:
+			value = GREEN;
+			break;
+		case 3:
+			value = YELLOW;
+			break;
+		case 4:
+			value = CYAN;
+			break;
+		}
+
+		for (int j = 0; j < NUMRowBlocks; j++) {
+			if ((int)(j/checker)!=1 || i== 0 || i == 4) {
+				general.init(randomType(), (int)(j*BLOCKUNIT * 3 * 1.05) + XPadding, (int)(i*BLOCKUNIT * 1.05 + initHeight), value);
+				levelManager.push_back(general);
+			}
+		}
+	}
+	return XPadding;
+}
+int level4() {
+	int screenWidth = getmaxx();
+	int screenHeight = getmaxy();
+	/*
+	Each Block is Height BLOCKUNIT
+	and    with    Width BLOCKUNIT * 3
+	level one has 4 rows
+	Blue
+	Red
+	Green
+	Yellow
+	*/
+	int initHeight = BLOCKUNIT * 2;
+	int NUMRowBlocks = (int)(screenWidth / (BLOCKUNIT * 3 * 1.05));
+	int XPadding = screenWidth - (int)(((NUMRowBlocks - 1) * BLOCKUNIT * 3 * 1.05) + (BLOCKUNIT * 3));
+	XPadding /= 2;
+	setcolor(LIGHTGRAY);
+	bar(0, 0, XPadding, screenHeight);
+	bar(screenWidth - XPadding, 0, screenWidth, screenHeight);
+	bar(0, 0, screenWidth, XPadding);
+	bool checker = true;
+	for (int i = 0; i < 6; i++) {
+		int value; // color
+		switch (i) {
+		case 0:
+			value = WHITE;
+			break;
+		case 1:
+			value = BLUE;
+			break;
+		case 2:
+			value = GREEN;
+			break;
+		case 3:
+			value = YELLOW;
+			break;
+		case 4:
+			value = CYAN;
+			break;
+		case 5:
+			value = RED;
+			break;
+		}
+
+		for (int j = 0; j < NUMRowBlocks; j++) {
+			if (checker || i == 0 || i == 5) {
+				general.init(randomType(), (int)(j*BLOCKUNIT * 3 * 1.05) + XPadding, (int)(i*BLOCKUNIT * 1.05 + initHeight), value);
+				levelManager.push_back(general);
+				if (i != 0 || i != 5) {
+					checker = false;
+				}
+			}
+			else {
+				checker = true;
+			}
+		}
+
+		}
+	
+	return XPadding;
+}
 BlockType randomType() {
 	int value = rand() % 5;
+	if (value == 3) {
+		value = rand() % 4;
+	}
 	if (value == 3) {
 		value = rand() % 4;
 	}
