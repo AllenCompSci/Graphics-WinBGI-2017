@@ -59,10 +59,15 @@ void colorWheel() {
 	int color1 = WHITE;
 	int color2 = MAGENTA;
 	for (int t = 1; t <= radius; t++) {
+		
+		/* RANDOM COLORS
 		color1 = rand() % 16;
 		do {
 			color2 = rand() % 16;
 		} while (color2 == color1);
+		*/
+		color1 = (t % 256) / 16;
+		color2 = (t % 256) % 16;
 		string str1, str2;
 		str1 = COLORVAL(color1);
 		str2 = COLORVAL(color2);
