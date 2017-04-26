@@ -40,7 +40,7 @@ enum PAWNSpecial {
 	UP, DOWN, NotPawn
 };
 PIECECOLOR colorBoard[8][8];
-bool Design[8][8];
+
 struct boardPiece {
 	// Structures
 	PIECE currPiece;
@@ -320,37 +320,11 @@ struct boardPiece {
 	void Cadd(int deltaCol) {
 		MOVECOL.push_back(COL + deltaCol);
 	}
-	void render() {
-		switch (currPiece) {
-		case Pawn:
-			break;
-		case Knight:
-			break;
-		case Rook:
-			break;
-		case Bishop:
-			break;
-		case King:
-			break;
-		case Queen:
-			break;
-		case Empty:
-			remove();
-			break;
-		}
-	}
-	void remove() {
-		if (Design[ROW][COL]) {
-			every(ROW, COL);
-		}
-		else {
-			other(ROW, COL);
-		}
-	}
+
 }myboard;
 //Main
 boardPiece CHESS[8][8];
-
+bool Design[8][8];
 void setUpBoard();
 void updateChessCurrColor();
 void move(int, int, int, int);
@@ -429,15 +403,15 @@ void MOVINGBOARD() {
 	bool toggle = true;
 	
 	
-	for (int j = 0; j < 8; j++) { // ROW
-		for (int i = 0; i < 8; i++) { // COL
+	for (int j = 0; j < 8; j++) {
+		for (int i = 0; i < 8; i++) {
 			if (toggle) {
 				every(j, i);
 			}
 			else {
 				other(j, i);
 			}
-			Design[j][i] = toggle;
+			Design[i][j] = toggle;
 			toggle = !toggle;
 		}
 		toggle = !toggle;
