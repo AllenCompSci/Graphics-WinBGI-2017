@@ -26,19 +26,26 @@ int GrDriver, GrMode, ErrorCode;
 // Pre-Defined Functions
 void gr_Start(int &GrDriver, int &GrMode, int &ErrorCode);
 void board();
+int GRID_side = 100;
+int XOffsetBOARD;
+int YOffsetBOARD;
+void MOVINGBOARD();
 enum PIECE{
 	King, Queen, Bishop, Knight, Rook, Pawn, Empty
 };
 enum PIECECOLOR {
 	Black, White, Red, NA
 };
-
+enum PAWNSpecial {
+	UP, DOWN, NotPawn
+};
 PIECECOLOR colorBoard[8][8];
 
 struct boardPiece {
 	// Structures
 	PIECE currPiece;
 	PIECECOLOR currColor;
+	PAWNSpecial pawnMove;
 	int index;
 	int color;
 	int ROW;
@@ -50,6 +57,15 @@ struct boardPiece {
 		hasMoved = false;
 		currColor = color1;
 		currPiece = chess;
+		if (currPiece == Pawn) {
+			if (ROW == 6)
+				pawnMove = UP;
+			else
+				pawnMove = DOWN;
+		}
+		else {
+			pawnMove = NotPawn;
+		}
 		index = i;
 		if (currColor == White) {
 			color = WHITE;
@@ -328,9 +344,12 @@ struct boardPiece {
 }myboard;
 //Main
 boardPiece CHESS[8][8];
+bool Design[8][8];
 void setUpBoard();
 void updateChessCurrColor();
 void move(int, int, int, int);
+void every(int ROW, int COL);
+void other(int ROW, int COL);
 void main() {
 
 	gr_Start(GrDriver, GrMode, ErrorCode);
@@ -338,9 +357,11 @@ void main() {
 	maxX = getmaxx(); // From Graphics
 	maxY = getmaxy(); // From Graphics
 
-	board();
-	
-	
+	//board();
+	MOVINGBOARD();
+	setUpBoard();
+	updateChessCurrColor(); // Call this after every move, to make sure the colors and positions are kept 
+
 	cout << "WELCOME TO CHESS" << endl;
 	
 	system("pause");
@@ -391,17 +412,45 @@ void setUpBoard() {
 	/* An example of a possible move
 	CHESS[0][0].init(CHESS[0][1].index, CHESS[0][1].currPiece, CHESS[0][1].currColor, 0, 0);
 	CHESS[0][1].remove();
-	updateChessCurColor();
+	updateChessCurrColor();
 	*/
+	
+	
+}
+void MOVINGBOARD() {
+	XOffsetBOARD = (maxX - GRID_side * 8) / 2;
+	YOffsetBOARD = (maxY - GRID_side * 8) / 2;
+	bool toggle = true;
+	
+	
+	for (int j = 0; j < 8; j++) {
+		for (int i = 0; i < 8; i++) {
+			if (toggle) {
+				every(j, i);
+			}
+			else {
+				other(j, i);
+			}
+			Design[i][j] = toggle;
+			toggle = !toggle;
+		}
+		toggle = !toggle;
+	}
+	for (int i = 0; i < 3; i++) {
+		setcolor(WHITE);
+		rectangle(XOffsetBOARD - 1 - (i * 2), YOffsetBOARD - 1 - (i * 2), XOffsetBOARD + 8 * GRID_side + 1 + (i * 2), YOffsetBOARD + 8 * GRID_side + 1 + (i * 2));
+		setcolor(BLACK);
+		rectangle(XOffsetBOARD - (i * 2), YOffsetBOARD - (i * 2), XOffsetBOARD + 8 * GRID_side + (i * 2), YOffsetBOARD + 8 * GRID_side + (i * 2));
+	}
 }
 void move(int toRow, int toCol, int fromRow, int fromCol) { /// EVERY MOVE EXCEPT FOR THE SPECIAL SWAPS like Queen Side Castle etc 
 	CHESS[toRow][toCol].init(CHESS[fromRow][fromCol].index, CHESS[fromRow][fromCol].currPiece, CHESS[fromRow][fromCol].currColor, toRow, toCol);
 	CHESS[toRow][toCol].hasMoved = false;
 	CHESS[fromRow][fromCol].remove();
 
-	updateChessCurColor();
+	updateChessCurrColor();
 }
-void updateChessCurColor()
+void updateChessCurrColor()
 {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
@@ -421,7 +470,6 @@ void gr_Start(int &GrDriver, int&GrMode, int&ErrorCode) {
 		cout << "Error:" << ErrorCode;
 	}
 }
-
 void board() {
 	// ROW 1
 	bar(0, 0, 100, 100);
@@ -504,4 +552,20 @@ void board() {
 	bar(700, 700, 800, 800);
 
 	return;
+}
+void every(int ROW, int COL) {
+	setcolor(WHITE);
+	bar(XOffsetBOARD + COL * GRID_side, YOffsetBOARD + ROW * GRID_side, XOffsetBOARD + COL * GRID_side + GRID_side, YOffsetBOARD + ROW * GRID_side + GRID_side);
+}
+void other(int ROW, int COL) {
+	setcolor(WHITE);
+	bar(XOffsetBOARD + COL * GRID_side, YOffsetBOARD + ROW * GRID_side, XOffsetBOARD + COL * GRID_side + GRID_side, YOffsetBOARD + ROW * GRID_side + GRID_side);
+	bool swatch = true;
+	for (int ii = 0; ii <=GRID_side; ii++) {
+		for (int jj = 0; jj <= GRID_side; jj++) {
+			if (swatch)
+				putpixel(XOffsetBOARD + COL * GRID_side + ii, YOffsetBOARD + ROW * GRID_side + jj, DARKGRAY);
+			swatch = !swatch;
+		}
+	}
 }
