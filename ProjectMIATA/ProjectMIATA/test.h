@@ -181,6 +181,7 @@ void design(){
 	while (isRunning) {
 
 		if (ChangeCar) {
+			setbkcolor(BLACK);
 			if (ColorCar) {
 				switch (Part) {
 					/*
@@ -222,6 +223,7 @@ void design(){
 				}
 			}
 			if (SELECTION == STOCK) {
+				
 				drawMiata((maxX - miata_Width) / 2, (maxY - miata_Height) / 3);
 			}
 			else if (SELECTION == SLAMMED) {
@@ -234,6 +236,7 @@ void design(){
 		if (ChangePart) {
 			setcolor(background);
 			bar(LEFT.Right + 2 , (2 * maxY / 3) - miata_Height, RIGHT.Left - 2, (2 * maxY / 3) + miata_Height);
+			setbkcolor(BLACK);
 			switch (Part) {
 			case TopTone:
 				drawtopTone((maxX - miata_Width) / 2, ((maxY / 3) + (maxY / 3)) - topTone_Height);
@@ -278,8 +281,10 @@ void design(){
 			keyInput.reset();
 		}
 		else if (mouseInput.isPressed) {
-			for (int i = 0; i < 16; i++) {
+			COLORSELECT = 99;
+			for (int i = 0; i < 16 && COLORSELECT == 99; i++) {
 				if (COLOR[i].isPressed(click)) {
+					cout << i << endl;
 					COLORSELECT = i;
 					ChangeCar = true;
 					ChangePart = true;
