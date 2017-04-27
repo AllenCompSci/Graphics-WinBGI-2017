@@ -42,6 +42,10 @@ const int GRID_side = 100;
 int XOffsetBOARD;
 int YOffsetBOARD;
 bool Design[8][8];
+int P1TakenROW = 0;
+int P1TakenCOL = -2;
+int P2TakenCOL = 9;
+int P2TakenROW = 0;
 PIECECOLOR colorBoard[8][8];
 /// Color of the Pieces
 const int COLOR1 = BLACK;
@@ -118,7 +122,7 @@ struct boardPiece {
 		else {
 			pawnMove = NotPawn;
 		}
-		index = i;
+		index = i; /// Currently unused, I think this was for vector
 		if (currColor == White) {
 			color = WHITE;
 		}
@@ -401,6 +405,33 @@ struct boardPiece {
 			other(ROW, COL);
 		}
 	}
+	void offBoard() {
+		int tempROW = ROW;
+		int tempCOL = COL;
+		if (currColor == White) {
+			ROW = P1TakenROW++;
+			COL = P1TakenCOL;
+			if (P1TakenROW == 8) {
+				P1TakenCOL--;
+				P1TakenROW = 0;
+			}
+			other(ROW, COL); // DRAW A SQUARE UNDER REMOVED
+		}
+		else {
+			ROW = P2TakenROW++;
+			COL = P2TakenCOL;
+			if (P2TakenROW == 8) {
+				P2TakenCOL++;
+				P2TakenROW = 0;
+			}
+			other(ROW, COL); // DRAW A SQUARE UNDER REMOVED
+		}
+		render();
+		ROW = tempROW;
+		COL = tempCOL;
+		remove();
+		Sleep(100);
+	}
 }myboard;
 
 // Global Variables of Struct Types
@@ -420,6 +451,16 @@ void main() {
 	setUpBoard();
 	updateChessCurrColor(); // Call this after every move, to make sure the colors and positions are kept 
 
+	/// THIS WAS FOR TESTING ONLY
+	Sleep(4000);
+	for (int i = 0; i < 8; i++) {
+		CHESS[0][i].offBoard();
+		CHESS[1][i].offBoard();
+		CHESS[6][i].offBoard();
+		CHESS[7][i].offBoard();
+
+	}
+	/// MAKE SURE TO COMMENT OUT JUST VISUAL (454-463)
 	cout << "WELCOME TO CHESS" << endl;
 	
 	system("pause");
