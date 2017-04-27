@@ -540,6 +540,7 @@ void move(int toRow, int toCol, int fromRow, int fromCol) { /// EVERY MOVE EXCEP
 	CHESS[toRow][toCol].init(CHESS[fromRow][fromCol].index, CHESS[fromRow][fromCol].currPiece, CHESS[fromRow][fromCol].currColor, toRow, toCol);
 	CHESS[toRow][toCol].hasMoved = true;
 	CHESS[fromRow][fromCol].remove();
+	/// HERE IF THE CHESS[toRow][toCol] contains a Pawn that has reached the end of the board GIVE CHOICE OF NEW PIECE ***** 
 	updateChessCurrColor();
 }
 void updateChessCurrColor()
