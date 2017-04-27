@@ -406,9 +406,12 @@ struct boardPiece {
 		}
 	}
 	void offBoard() {
+		if (currColor == NA) {
+			return;
+		}
 		int tempROW = ROW;
 		int tempCOL = COL;
-		if (currColor == White) {
+		if (currColor == Black) {
 			ROW = P1TakenROW++;
 			COL = P1TakenCOL;
 			if (P1TakenROW == 8) {
@@ -537,10 +540,12 @@ void MOVINGBOARD() {
 	}
 }
 void move(int toRow, int toCol, int fromRow, int fromCol) { /// EVERY MOVE EXCEPT FOR THE SPECIAL SWAPS like Queen Side Castle etc 
+	CHESS[toRow][toCol].offBoard();
 	CHESS[toRow][toCol].init(CHESS[fromRow][fromCol].index, CHESS[fromRow][fromCol].currPiece, CHESS[fromRow][fromCol].currColor, toRow, toCol);
 	CHESS[toRow][toCol].hasMoved = true;
 	CHESS[fromRow][fromCol].remove();
 	/// HERE IF THE CHESS[toRow][toCol] contains a Pawn that has reached the end of the board GIVE CHOICE OF NEW PIECE ***** 
+	CHESS[toRow][toCol].render();
 	updateChessCurrColor();
 }
 void updateChessCurrColor()
