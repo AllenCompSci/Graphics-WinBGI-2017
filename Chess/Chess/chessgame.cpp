@@ -19,6 +19,8 @@ In this project, we will be creating a chess game.
 #include <vector>
 #include <string>
 #include <fstream>
+#include <thread>
+#include "VirtualKeyList.h"
 #include "Pieces.h" // Contains all of the Pieces arrays
 using namespace std;
 
@@ -46,7 +48,13 @@ int P1TakenROW = 0;
 int P1TakenCOL = -2;
 int P2TakenCOL = 9;
 int P2TakenROW = 0;
+bool isRunning = true;
+bool NewGame = true;
+bool EndTurn = true; // Sets Turn to White
+POINT TopLeftBoard[8][8];
 PIECECOLOR colorBoard[8][8];
+PIECECOLOR Turn = NA; // Start off anything but Black for White, and White for Black
+
 /// Color of the Pieces
 const int COLOR1 = BLACK;
 const int COLOR2 = WHITE;
@@ -54,6 +62,9 @@ const int COLOR2 = WHITE;
 const int BOARD1 = RED;
 const int OTHER1 = WHITE;
 const int OTHER2 = DARKGRAY;
+// Prototyped Threads
+void Chess();
+void Listener();
 // Prototyped Functions
 void setUpBoard();
 void updateChessCurrColor();
@@ -63,9 +74,11 @@ void other(int ROW, int COL);
 void gr_Start(int &GrDriver, int &GrMode, int &ErrorCode);
 void board();
 void LoadBMP();
+bool ActionListener(int VirtualKey);
 unsigned char* ReadBMP(char* filename);
 string toUpper(string s);
 void MOVINGBOARD();
+void drawBoard();
 // Prototyped Drawing Functions for Pieces
 void drawRook(int ROW, int COL, PIECECOLOR player);
 void drawKnight(int ROW, int COL, PIECECOLOR player);
@@ -101,15 +114,18 @@ struct boardPiece {
 	PIECE currPiece;
 	PIECECOLOR currColor;
 	PAWNSpecial pawnMove;
+	vector<int> MOVEROW;
+	vector<int> MOVECOL;
 	int index;
 	int color;
 	int ROW;
 	int COL;
 	bool hasMoved;
-	vector<int> MOVEROW;
-	vector<int> MOVECOL;
-
+	bool haze;
+	bool selected;
 	void init(int i, PIECE chess, PIECECOLOR color1, int I, int J) {
+		selected = false;
+		haze = false;
 		hasMoved = false;
 		currColor = color1;
 		currPiece = chess;
@@ -324,36 +340,36 @@ struct boardPiece {
 				// Defined as the upwards Pawn in the negative Y direction
 				// All pawns can always move up, 
 				if (!hasMoved) {
-					if (colorBoard[ROW][COL - 1] == NA && colorBoard[ROW][COL - 2] == NA) {
-						add(0, -2);
+					if (colorBoard[ROW - 1][COL] == NA && colorBoard[ROW - 2][COL] == NA) {
+						add(-2, 0);
 					}
 				}
-				if (colorBoard[ROW][COL - 1] == NA)
+				if (colorBoard[ROW - 1][COL] == NA)
 				{
-					add(0, -1);
+					add(-1, 0);
 				}
-				if (ROW < 7 && colorBoard[ROW + 1][COL - 1] != currColor && colorBoard[ROW + 1][COL - 1] != NA) {
-					add(1, -1);
+				if (COL < 7 && colorBoard[ROW - 1][COL + 1] != currColor && colorBoard[ROW + 1][COL - 1] != NA) {
+					add(-1, 1);
 				}
-				if (ROW > 0 && colorBoard[ROW - 1][COL - 1] != currColor && colorBoard[ROW - 1][COL - 1] != NA) {
+				if (COL > 0 && colorBoard[ROW - 1][COL - 1] != currColor && colorBoard[ROW - 1][COL - 1] != NA) {
 					add(-1, -1);
 				}
 			}
 			else {
 				if (!hasMoved) {
-					if (colorBoard[ROW][COL + 1] == NA && colorBoard[ROW][COL + 2] == NA) {
-						add(0, 2);
+					if (colorBoard[ROW + 1][COL] == NA && colorBoard[ROW + 2][COL] == NA) {
+						add(2, 0);
 					}
 				}
-				if (colorBoard[ROW][COL + 1] == NA)
+				if (colorBoard[ROW + 1][COL] == NA)
 				{
-					add(0, 1);
+					add(1, 0);
 				}
-				if (ROW < 7 && colorBoard[ROW + 1][COL + 1] != currColor && colorBoard[ROW + 1][COL + 1] != NA) {
+				if (COL < 7 && colorBoard[ROW + 1][COL + 1] != currColor && colorBoard[ROW + 1][COL + 1] != NA) {
 					add(1, 1);
 				}
-				if (ROW > 0 && colorBoard[ROW - 1][COL + 1] != currColor && colorBoard[ROW - 1][COL + 1] != NA) {
-					add(-1, 1);
+				if (COL > 0 && colorBoard[ROW + 1][COL - 1] != currColor && colorBoard[ROW - 1][COL + 1] != NA) {
+					add(1, -1);
 				}
 			}
 #pragma endregion
@@ -433,28 +449,186 @@ struct boardPiece {
 		ROW = tempROW;
 		COL = tempCOL;
 		remove();
+		if (currPiece == King) {
+			NewGame = true;
+		}
 		Sleep(100);
 	}
-}myboard;
-
+	void isClicked() {
+		if (currPiece != Empty) {
+			selected = !selected;
+			if (selected)
+				drawSelect();
+			else
+				render();
+		}
+	}
+	void drawSelect() {
+		setcolor(YELLOW);
+		for(int i = 1; i < 5; i++)
+		rectangle((XOffsetBOARD + COL * GRID_side) + i, (YOffsetBOARD + ROW * GRID_side) + i, (XOffsetBOARD + COL * GRID_side + GRID_side) - i , (YOffsetBOARD + ROW * GRID_side + GRID_side) - i);
+	}
+	void select() {
+		if (!haze) {
+			selectMove();
+		}
+		else {
+			deselectMove();
+		}
+	}
+	void selectMove() {
+		haze = true;
+		drawHaze();
+	}
+	void deselectMove() {
+		haze = false;
+		render();
+	}
+	void drawHaze() {
+		setcolor(YELLOW);
+		bool swatch = false;
+		for (int ii = 0; ii <= GRID_side; ii++) {
+			for (int jj = 0; jj <= GRID_side; jj++) {
+				if (swatch)
+					putpixel(XOffsetBOARD + COL * GRID_side + ii, YOffsetBOARD + ROW * GRID_side + jj, OTHER2);
+				swatch = !swatch;
+			}
+		}
+	}
+	void reset() {
+		haze = false;
+		selected = false;
+		render();
+	}
+}myboard, CHESS[8][8];
+struct SQR {
+	int ROW;
+	int COL;
+	bool valid;
+	bool isValidRow() {
+		return (ROW < 8 && ROW >= 0);
+	}
+	bool isValidCol() {
+		return (COL < 8 && COL >= 0);
+	}
+	void isValid() {
+		 if(isValidRow() && isValidCol()) {
+			valid = true;
+		}
+		else {
+			reset();
+		}		
+	}
+	void reset() {
+		valid = false;
+		ROW = -1;
+		COL = -1;
+	}
+	bool compare(SQR t) {
+		return (t.ROW == ROW && t.COL == COL);
+	}
+	void store(SQR t) {
+		ROW = t.ROW;
+		COL = t.COL;
+		valid = t.valid;
+	}
+}Action, Hold;
+struct KeyState {
+	int VirtualKey;
+	bool isAlpha;
+	bool isNumeric;
+	string Significance;
+	bool isPressed;
+	POINT Cursor;
+	void grid() {
+		if (VirtualKey == VK_LBUTTON)
+		{
+			Action.ROW = (Cursor.y - YOffsetBOARD) / GRID_side;
+			Action.COL = (Cursor.x - XOffsetBOARD) / GRID_side;
+			Significance = "RETURN";
+		}
+		if (isAlpha) {
+			Action.COL = (int)(Significance[0] - 'A');
+			if (!Action.isValidCol()) {
+				Action.COL = -1;
+			}
+			else {
+				if (Action.isValidRow()) {
+					Action.isValid();
+				}
+			}
+		}
+		if (isNumeric) {
+			Action.ROW = 7 - (int)(Significance[0] - '1');
+			if (!Action.isValidRow()) {
+				Action.ROW = -1;
+			}
+			else {
+				if (Action.isValidCol()) {
+					Action.isValid();
+				}
+			}
+		}
+		if (Significance == "RETURN") {
+			Action.isValid();
+			if (Action.valid) {
+				if (Hold.valid) {
+					if (Hold.compare(Action)) {
+						CHESS[Hold.ROW][Hold.COL].isClicked();
+						for (int i = 0; i < (int)CHESS[Hold.ROW][Hold.COL].MOVECOL.size(); i++) {
+							CHESS[CHESS[Hold.ROW][Hold.COL].MOVEROW.at(i)][CHESS[Hold.ROW][Hold.COL].MOVECOL.at(i)].select();
+						}
+						Hold.reset();
+						Action.reset();
+					}
+					else {
+						if (CHESS[Action.ROW][Action.COL].haze) {
+							move(Action.ROW, Action.COL, Hold.ROW, Hold.COL);
+						}
+					}
+				}
+				else {
+					if (CHESS[Action.ROW][Action.COL].currColor == Turn) {
+						Hold.store(Action);
+						Hold.isValid();
+						CHESS[Hold.ROW][Hold.COL].isClicked();
+						for (int i = 0; i < (int)CHESS[Hold.ROW][Hold.COL].MOVECOL.size(); i++) {
+							CHESS[CHESS[Hold.ROW][Hold.COL].MOVEROW.at(i)][CHESS[Hold.ROW][Hold.COL].MOVECOL.at(i)].select();
+						}
+					}
+					else {
+						Action.reset();
+					}
+				}
+			}
+		}
+		reset();
+	}
+	void reset() {
+		Significance = "";
+		isPressed = false;
+		VirtualKey = 0;
+		Cursor = POINT();
+	}
+}GLOBAL;
 // Global Variables of Struct Types
-boardPiece CHESS[8][8];
 vector <RGB> colors(NUMVECTOR);
 
 //Main
 void main() {
 	//LoadBMP();
-	gr_Start(GrDriver, GrMode, ErrorCode);
+	
+	cout << "WELCOME TO CHESS" << endl;
 
-	maxX = getmaxx(); // From Graphics
-	maxY = getmaxy(); // From Graphics
-
-	//board();
-	MOVINGBOARD();
-	setUpBoard();
-	updateChessCurrColor(); // Call this after every move, to make sure the colors and positions are kept 
+	/// Define Threads
+	thread game(Chess);
+	thread listener(Listener);
+	/// Join Threads
+	game.join();
+	listener.join();
 
 	/// THIS WAS FOR TESTING ONLY
+	/*
 	Sleep(4000);
 	for (int i = 0; i < 8; i++) {
 		CHESS[0][i].offBoard();
@@ -463,8 +637,8 @@ void main() {
 		CHESS[7][i].offBoard();
 
 	}
+	*/
 	/// MAKE SURE TO COMMENT OUT JUST VISUAL (454-463)
-	cout << "WELCOME TO CHESS" << endl;
 	
 	system("pause");
 	return;
@@ -515,6 +689,12 @@ void setUpBoard() {
 		CHESS[7][i].render();
 	}
 }
+void drawBoard() {
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++)
+			CHESS[i][j].render();
+	}
+}
 void MOVINGBOARD() {
 	XOffsetBOARD = (maxX - GRID_side * 8) / 2;
 	YOffsetBOARD = (maxY - GRID_side * 8) / 2;
@@ -544,9 +724,12 @@ void move(int toRow, int toCol, int fromRow, int fromCol) { /// EVERY MOVE EXCEP
 	CHESS[toRow][toCol].init(CHESS[fromRow][fromCol].index, CHESS[fromRow][fromCol].currPiece, CHESS[fromRow][fromCol].currColor, toRow, toCol);
 	CHESS[toRow][toCol].hasMoved = true;
 	CHESS[fromRow][fromCol].remove();
+	if ((toRow == 0 || toRow == 7) && CHESS[toRow][toCol].currPiece == Pawn) {
+		CHESS[toRow][toCol].currPiece = Queen;
+	}
 	/// HERE IF THE CHESS[toRow][toCol] contains a Pawn that has reached the end of the board GIVE CHOICE OF NEW PIECE ***** 
 	CHESS[toRow][toCol].render();
-	updateChessCurrColor();
+	EndTurn = true;
 }
 void updateChessCurrColor()
 {
@@ -1014,4 +1197,202 @@ void drawPawn(int ROW, int COL, PIECECOLOR player) {
 	}
 }
 #pragma endregion
-
+#pragma region THREADS
+void Chess() {
+	// Init Graphics Window
+	gr_Start(GrDriver, GrMode, ErrorCode);
+	// Grab Values
+	maxX = getmaxx(); // From Graphics
+	maxY = getmaxy(); // From Graphics
+	int ROWselect = -1;
+	int COLselect = -1;
+	
+	while (isRunning) {
+		if (NewGame) {
+			getch();
+			cleardevice();
+			/// GameStartUp
+			P1TakenROW = 0;
+			P1TakenCOL = -2;
+			P2TakenCOL = 9;
+			P2TakenROW = 0;
+			MOVINGBOARD();
+			setUpBoard();
+			NewGame = false;
+			//updateChessCurrColor(); // Call this after every move, to make sure the colors and positions are kept 
+		}
+		if (EndTurn) {
+			if (Turn == Black) {
+				Turn = White;
+			}
+			else {
+				Turn = Black;
+			}
+			updateChessCurrColor();
+			for (int r = 0; r < 8; r++)
+				for (int c = 0; c < 8; c++)
+					if (colorBoard[r][c] == Turn) {
+						CHESS[r][c].calcMove();
+					}
+			GLOBAL.reset();
+			Action.reset();
+			Hold.reset();
+			EndTurn = false;
+			drawBoard();
+		}
+		switch (Turn) {
+		case White:
+			if (GLOBAL.isPressed) {
+				GLOBAL.grid();
+			}
+			break;
+		case Black:
+			if (GLOBAL.isPressed) {
+				GLOBAL.grid();
+			}
+			break;
+		}
+		Sleep(15);
+	}
+}
+void Listener() {
+	GLOBAL.reset();
+	while (isRunning) {
+		if (!GLOBAL.isPressed) {
+			if (ActionListener(VK_LBUTTON)) {
+				// Left Mouse Button
+				GetCursorPos(&GLOBAL.Cursor);
+				GLOBAL.VirtualKey = VK_LBUTTON;
+				GLOBAL.Significance = "Left Mouse Click";
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_A)) {
+				GLOBAL.VirtualKey = VK_A;
+				GLOBAL.Significance = "A";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_B)) {
+				GLOBAL.VirtualKey = VK_B;
+				GLOBAL.Significance = "B";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_C)) {
+				GLOBAL.VirtualKey = VK_C;
+				GLOBAL.Significance = "C";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_D)) {
+				GLOBAL.VirtualKey = VK_D;
+				GLOBAL.Significance = "D";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_E)) {
+				GLOBAL.VirtualKey = VK_E;
+				GLOBAL.Significance = "E";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_F)) {
+				GLOBAL.VirtualKey = VK_F;
+				GLOBAL.Significance = "F";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			if (ActionListener(VK_G)) {
+				GLOBAL.VirtualKey = VK_G;
+				GLOBAL.Significance = "G";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_H)) {
+				GLOBAL.VirtualKey = VK_H;
+				GLOBAL.Significance = "H";
+				GLOBAL.isAlpha = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_1) || ActionListener(VK_NUMPAD1)) {
+				GLOBAL.VirtualKey = VK_1;
+				GLOBAL.Significance = "1";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_2) || ActionListener(VK_NUMPAD2)) {
+				GLOBAL.VirtualKey = VK_2;
+				GLOBAL.Significance = "2";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_3) || ActionListener(VK_NUMPAD3)) {
+				GLOBAL.VirtualKey = VK_3;
+				GLOBAL.Significance = "3";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_4) || ActionListener(VK_NUMPAD4)) {
+				GLOBAL.VirtualKey = VK_4;
+				GLOBAL.Significance = "4";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_5) || ActionListener(VK_NUMPAD5)) {
+				GLOBAL.VirtualKey = VK_5;
+				GLOBAL.Significance = "5";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_6) || ActionListener(VK_NUMPAD6)) {
+				GLOBAL.VirtualKey = VK_6;
+				GLOBAL.Significance = "6";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_7) || ActionListener(VK_NUMPAD7)) {
+				GLOBAL.VirtualKey = VK_7;
+				GLOBAL.Significance = "7";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_8) || ActionListener(VK_NUMPAD8)) {
+				GLOBAL.VirtualKey = VK_8;
+				GLOBAL.Significance = "8";
+				GLOBAL.isNumeric = true;
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_LEFT)) {
+				GLOBAL.VirtualKey = VK_LEFT;
+				GLOBAL.Significance = "LEFT";
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_RIGHT)) {
+				GLOBAL.VirtualKey = VK_RIGHT;
+				GLOBAL.Significance = "RIGHT";
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_UP)) {
+				GLOBAL.VirtualKey = VK_UP;
+				GLOBAL.Significance = "UP";
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_DOWN)) {
+				GLOBAL.VirtualKey = VK_DOWN;
+				GLOBAL.Significance = "DOWN";
+				GLOBAL.isPressed = true;
+			}
+			else if (ActionListener(VK_RETURN)) {
+				GLOBAL.VirtualKey = VK_RETURN;
+				GLOBAL.Significance = "RETURN";
+				GLOBAL.isPressed = true;
+			}
+		}
+		Sleep(15);
+	}
+}
+#pragma endregion
+/// AsynKeyState
+bool ActionListener(int VirtualKey) {
+	return ((GetAsyncKeyState(VirtualKey) & 0x8000) != 0);
+}

@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pieces.h" />
+    <ClInclude Include="VirtualKeyList.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2BA54141-8F07-4DC7-84CD-68758C28FEB9}</ProjectGuid>

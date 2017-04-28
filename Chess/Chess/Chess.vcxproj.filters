@@ -23,5 +23,8 @@
     <ClInclude Include="Pieces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VirtualKeyList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
