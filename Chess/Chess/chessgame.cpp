@@ -50,6 +50,8 @@ int P2TakenCOL = 9;
 int P2TakenROW = 0;
 bool isRunning = true;
 bool NewGame = true;
+bool CHECK = false;
+bool MATE = false;
 bool EndTurn = true; // Sets Turn to White
 POINT TopLeftBoard[8][8];
 PIECECOLOR colorBoard[8][8];
@@ -209,20 +211,20 @@ struct boardPiece {
 				if (piece)
 					add(-1 * i, 0);
 				else {
-					if (colorBoard[ROW - 1][COL] != currColor) {
+					if (colorBoard[ROW - i][COL] != currColor) {
 						add(-1 * i, 0);
 					}
 				}
 			}
 			piece = true;
 			for (int i = 1; COL - i >= 0 && piece; i++) { // For positions that slide Example moving Left
-				if (colorBoard[ROW][COL - 1] != NA) {
+				if (colorBoard[ROW][COL - i] != NA) {
 					piece = false;
 				}
 				if (piece)
 					add(0, -1 * i);
 				else {
-					if (colorBoard[ROW][COL - 1] != currColor) {
+					if (colorBoard[ROW][COL - i] != currColor) {
 						add(0, -1 * i);
 					}
 				}
@@ -236,7 +238,7 @@ struct boardPiece {
 				if (piece)
 					add(i, 0);
 				else {
-					if (colorBoard[ROW + 1][COL] != currColor) {
+					if (colorBoard[ROW + i][COL] != currColor) {
 						add(i, 0);
 					}
 				}
@@ -268,7 +270,7 @@ struct boardPiece {
 				if (piece)
 					add(-1 * i, -1 * i);
 				else {
-					if (colorBoard[ROW - 1][COL - i] != currColor) {
+					if (colorBoard[ROW - i][COL - i] != currColor) {
 						add(-1 * i, -1 * i);
 					}
 				}
@@ -282,7 +284,7 @@ struct boardPiece {
 				if (piece)
 					add(i, -1 * i);
 				else {
-					if (colorBoard[ROW + 1][COL - i] != currColor) {
+					if (colorBoard[ROW + i][COL - i] != currColor) {
 						add(i, -1 * i);
 					}
 				}
@@ -295,7 +297,7 @@ struct boardPiece {
 				if (piece)
 					add(i, i);
 				else {
-					if (colorBoard[ROW + 1][COL + i] != currColor) {
+					if (colorBoard[ROW + i][COL + i] != currColor) {
 						add(i, i);
 					}
 				}
@@ -313,10 +315,10 @@ struct boardPiece {
 			}
 			if (COL < 6) {
 
-				if (ROW > 0 && colorBoard[ROW - 1][COL - 2] != currColor)
-					add(-1, -2);					   
-				if (ROW < 7 && colorBoard[ROW + 1][COL - 2] != currColor)
-					add(1, -2);
+				if (ROW > 0 && colorBoard[ROW - 1][COL + 2] != currColor)
+					add(-1, 2);					   
+				if (ROW < 7 && colorBoard[ROW + 1][COL + 2] != currColor)
+					add(1, 2);
 			}
 			if (ROW < 6) {
 				if (COL > 0 && colorBoard[ROW + 2][COL - 1] != currColor)
@@ -348,7 +350,7 @@ struct boardPiece {
 				{
 					add(-1, 0);
 				}
-				if (COL < 7 && colorBoard[ROW - 1][COL + 1] != currColor && colorBoard[ROW + 1][COL - 1] != NA) {
+				if (COL < 7 && colorBoard[ROW - 1][COL + 1] != currColor && colorBoard[ROW - 1][COL + 1] != NA) {
 					add(-1, 1);
 				}
 				if (COL > 0 && colorBoard[ROW - 1][COL - 1] != currColor && colorBoard[ROW - 1][COL - 1] != NA) {
@@ -368,13 +370,14 @@ struct boardPiece {
 				if (COL < 7 && colorBoard[ROW + 1][COL + 1] != currColor && colorBoard[ROW + 1][COL + 1] != NA) {
 					add(1, 1);
 				}
-				if (COL > 0 && colorBoard[ROW + 1][COL - 1] != currColor && colorBoard[ROW - 1][COL + 1] != NA) {
+				if (COL > 0 && colorBoard[ROW + 1][COL - 1] != currColor && colorBoard[ROW + 1][COL - 1] != NA) {
 					add(1, -1);
 				}
 			}
 #pragma endregion
 			break;
 }
+
 }
 	void add(int dR, int dC) {
 		Radd(dR);
@@ -448,10 +451,12 @@ struct boardPiece {
 		render();
 		ROW = tempROW;
 		COL = tempCOL;
-		remove();
 		if (currPiece == King) {
+			MATE = true;
 			NewGame = true;
 		}
+		remove();
+		
 		Sleep(100);
 	}
 	void isClicked() {
@@ -459,13 +464,24 @@ struct boardPiece {
 			selected = !selected;
 			if (selected)
 				drawSelect();
-			else
-				render();
+			else {
+				rerender();
+
+			}
 		}
+	}
+	void rerender() {
+		if (Design[ROW][COL]) {
+			every(ROW, COL);
+		}
+		else {
+			other(ROW, COL);
+		}
+		render();
 	}
 	void drawSelect() {
 		setcolor(YELLOW);
-		for(int i = 1; i < 5; i++)
+		for(int i = 0; i < 5; i++)
 		rectangle((XOffsetBOARD + COL * GRID_side) + i, (YOffsetBOARD + ROW * GRID_side) + i, (XOffsetBOARD + COL * GRID_side + GRID_side) - i , (YOffsetBOARD + ROW * GRID_side + GRID_side) - i);
 	}
 	void select() {
@@ -482,10 +498,15 @@ struct boardPiece {
 	}
 	void deselectMove() {
 		haze = false;
-		render();
+		rerender();
 	}
 	void drawHaze() {
+		setbkcolor(BLACK);
 		setcolor(YELLOW);
+		bar(XOffsetBOARD + COL * GRID_side, YOffsetBOARD + ROW * GRID_side, XOffsetBOARD + COL * GRID_side + GRID_side, YOffsetBOARD + ROW * GRID_side + GRID_side);
+		if(currPiece != Empty)
+			render();
+		/*
 		bool swatch = false;
 		for (int ii = 0; ii <= GRID_side; ii++) {
 			for (int jj = 0; jj <= GRID_side; jj++) {
@@ -494,10 +515,17 @@ struct boardPiece {
 				swatch = !swatch;
 			}
 		}
+		*/
 	}
 	void reset() {
 		haze = false;
 		selected = false;
+		if (Design[ROW][COL]) {
+			every(ROW, COL);
+		}
+		else {
+			other(ROW, COL);
+		}
 		render();
 	}
 }myboard, CHESS[8][8];
@@ -613,7 +641,6 @@ struct KeyState {
 }GLOBAL;
 // Global Variables of Struct Types
 vector <RGB> colors(NUMVECTOR);
-
 //Main
 void main() {
 	//LoadBMP();
@@ -723,12 +750,15 @@ void move(int toRow, int toCol, int fromRow, int fromCol) { /// EVERY MOVE EXCEP
 	CHESS[toRow][toCol].offBoard();
 	CHESS[toRow][toCol].init(CHESS[fromRow][fromCol].index, CHESS[fromRow][fromCol].currPiece, CHESS[fromRow][fromCol].currColor, toRow, toCol);
 	CHESS[toRow][toCol].hasMoved = true;
+	if (CHESS[fromRow][fromCol].currPiece == Pawn) {
+		CHESS[toRow][toCol].pawnMove = CHESS[fromRow][fromCol].pawnMove;
+	}
 	CHESS[fromRow][fromCol].remove();
 	if ((toRow == 0 || toRow == 7) && CHESS[toRow][toCol].currPiece == Pawn) {
 		CHESS[toRow][toCol].currPiece = Queen;
 	}
 	/// HERE IF THE CHESS[toRow][toCol] contains a Pawn that has reached the end of the board GIVE CHOICE OF NEW PIECE ***** 
-	CHESS[toRow][toCol].render();
+	CHESS[toRow][toCol].rerender();
 	EndTurn = true;
 }
 void updateChessCurrColor()
@@ -861,12 +891,9 @@ string toUpper(string s) {
 }
 unsigned char* ReadBMP(char* filename)
 {
-
 	FILE* f = fopen(filename, "rb");
-
 	if (f == NULL)
 		throw "Argument Exception";
-
 	unsigned char info[54];
 	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
 	int width, height;
@@ -955,11 +982,9 @@ unsigned char* ReadBMP(char* filename)
 void LoadBMP() {
 	w = 0;
 	h = 0;
-	
 	colors.at(2).init(255, 255, 255, (int)'W');
 	colors.at(1).init(0, 0, 0, (int)'B');
 	colors.at(0).init(252, 71, 25, 99);
-	
 	string test[6] = {
 		"Bishop", "King", "Knight", "Queen", "Rook", "Pawn"
 	};
@@ -1219,6 +1244,10 @@ void Chess() {
 			MOVINGBOARD();
 			setUpBoard();
 			NewGame = false;
+			Turn = White;
+			EndTurn = true;
+			CHECK = false;
+			MATE = false;
 			//updateChessCurrColor(); // Call this after every move, to make sure the colors and positions are kept 
 		}
 		if (EndTurn) {
@@ -1229,16 +1258,28 @@ void Chess() {
 				Turn = Black;
 			}
 			updateChessCurrColor();
-			for (int r = 0; r < 8; r++)
-				for (int c = 0; c < 8; c++)
+			for (int r = 0; r < 8; r++) {
+				for (int c = 0; c < 8; c++) {
+					if (CHESS[r][c].haze || CHESS[r][c].selected)
+						CHESS[r][c].reset();
 					if (colorBoard[r][c] == Turn) {
 						CHESS[r][c].calcMove();
+
 					}
+					else {
+						CHESS[r][c].calcMove();
+						for (int i = 0; i < (int)CHESS[r][c].MOVECOL.size(); i++) {
+							if (CHESS[CHESS[r][c].MOVEROW[i]][CHESS[r][c].MOVECOL[i]].currPiece == King) {
+								CHECK = true;
+							}
+						}
+					}
+				}
+			}
 			GLOBAL.reset();
 			Action.reset();
 			Hold.reset();
 			EndTurn = false;
-			drawBoard();
 		}
 		switch (Turn) {
 		case White:
@@ -1259,11 +1300,12 @@ void Listener() {
 	GLOBAL.reset();
 	while (isRunning) {
 		if (!GLOBAL.isPressed) {
-			if (ActionListener(VK_LBUTTON)) {
+ 			if (ActionListener(VK_LBUTTON)) {
 				// Left Mouse Button
 				GetCursorPos(&GLOBAL.Cursor);
 				GLOBAL.VirtualKey = VK_LBUTTON;
 				GLOBAL.Significance = "Left Mouse Click";
+				do { Sleep(100); } while (ActionListener(VK_LBUTTON));
 				GLOBAL.isPressed = true;
 			}
 			else if (ActionListener(VK_A)) {
