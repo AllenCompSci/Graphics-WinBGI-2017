@@ -29,5 +29,8 @@
     <ClInclude Include="LoadBMP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FunctionProto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
