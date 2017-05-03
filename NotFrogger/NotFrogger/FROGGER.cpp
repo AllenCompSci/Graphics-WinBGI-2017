@@ -2,67 +2,202 @@
 Frogger Games Clean
 */
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <stdio.h>
-#include <Windows.h>
+#include "LoadBMP.h"
 #include <winbgi.cpp>
 #include <graphics.h>
 #include <thread>
+#include "Pixel.h"
 #include "VirtualKeyList.h"
-using namespace std;
+
 void Listener();
 bool ActionListener(int);
 string StringBuilder();
 void gr_Start(int &GrDriver, int&GrMode, int&ErrorCode);
 void game();
+void introColorSet(char value);
+void INTRO();
+void QuestLog();
+void RIVER();
+void SIDEWALK();
+void SAFEZONE();
+void LILYPAD();
 int GrDriver, GrMode, ErrorCode;
 int maxX, maxY;
 bool isRunning = true;
 bool isName = false;
-
-
-///          Safe   Car1    Car2   Car3    Safe   Log1   Log2     Log3   LilyPad
-enum Column {First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eight, Ninth};
-///  LEFT    200    9*40	13*40  17*40    800   25*40  28*40    32*40
-///  TOP	   0     						  0	 
-///  WIDTH	  80	 80      80    100      160      80
-///  HEIGHT 1080	120     150    300     1080
+int UNIT = 40;
+struct KeyState {
+	int VirtualKey;
+	bool isAlpha;
+	bool isNumeric;
+	bool isMove;
+	bool isClicked;
+	string Significance;
+	bool isPressed;
+	POINT Cursor;
+	void reset() {
+		Significance = "";
+		isPressed = false;
+		isClicked = false;
+		isAlpha = false;
+		isNumeric = false;
+		VirtualKey = 0;
+		Cursor = POINT();
+	}
+	void resetKey() {
+		Significance = "";
+		isPressed = false;
+		isAlpha = false;
+		isNumeric = false;
+		VirtualKey = 0;
+	}
+}GLOBAL;
+///          Safe   Car1    Car2   Car3    Safe   Log1   Log2     Log3   Log4   LilyPad
+enum Column {First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eight, Ninth, Tenth, Intro};
+///  LEFT    200    9*40	13*40  17*40    800   25*40  28*40    31*40  34*40	37*40
+///  TOP	   0							  0                                  7*40
+///  WIDTH	  80	 80      80    100      160      80                            80
+///  HEIGHT 1080	120     150    300     1080                                    80
 ///  SPEED	   0	 -9      +6     -6        0
-///  COLOR     8    4/3       1     15       11
+///  COLOR     8    4/3       1     15       11                                 GREEN
 struct NotFrogger {
 	int top;
 	int left;
 	int right;
 	int bottom;
+	int MOVEMENT;
+	int XOffset;
 	Column currColumn;
-	void create(int x, int y, int x1, int y1) {
+	void create(int x, int y) {
+		currColumn = Intro;
+		XOffset = (80 - (frog_Width + 1)) / 2;
+		MOVEMENT = 5;
 		left = x;
-		right = x1;
+		right = x+80;
 		top = y;
-		bottom = y1;
+		bottom = y+80;
 		draw();
 	}
-
+	void repos(int x, int y) {
+		left = x;
+		right = x + 80;
+		top = y;
+		bottom = y + 80;
+		draw();
+	}
 	void draw() {
-		setcolor(2);
-		bar(left, top, right, bottom);
+		for (int i = 0; i < frog_Width; i++)
+			for (int j = 0; j < frog_Height; j++)
+				if (frog_ARRY[j][i] != 99)
+					if (currColumn == Tenth && frog_ARRY[j][i] == GREEN) {
+						putpixel(left + XOffset + i, top + j, WHITE);
+					}
+					else
+					putpixel(left + XOffset + i, top + j, frog_ARRY[j][i]);
 	}
 	void remove() {
 		setcolor(getColumn());
 		bar(left, top, right, bottom);
 	}
-	void adjust() {
-
+	void Moveleft() { // Back
+		if (currColumn != First && currColumn != Tenth) {
+			currColumn = (Column)((int)currColumn - 1);
+		}
+		columnSetX();
+	}
+	void up() { // Up
+		if (currColumn != Tenth) {
+			top -= MOVEMENT;
+			bottom -= MOVEMENT;
+		}
+	}
+	void down() { // Down
+		if (currColumn != Tenth) {
+			top += MOVEMENT;
+			bottom += MOVEMENT;
+		}
+	}
+	void Moveright() { // Forward
+		if (currColumn != Tenth) {
+			currColumn = (Column)((int)currColumn + 1);
+		}
+		columnSetX();
 	}
 	void tick() {
 		if (GLOBAL.isPressed) {
 			remove();
 			adjust();
+			draw();
+			do { Sleep(14); } while (ActionListener(GLOBAL.VirtualKey));
+			GLOBAL.resetKey();
 		}
-		draw();
+		
+	}
+	void adjust() {
+		if (GLOBAL.isPressed) {
+			switch (GLOBAL.Significance[0]) {
+			case 'L':
+				Moveleft();
+				break;
+			case 'R':
+				Moveright();
+				break;
+			case 'U':
+				up();
+				break;
+			case 'D':
+				down();
+				break;
+			}
+			GLOBAL.resetKey();
+		}
+	}
+	void intro() {
+
+
+	}
+	void columnSetX() {
+		cout << "currColumn : " << currColumn << "\n";
+		switch (currColumn) {
+		case First:
+			left = (int)(5.5 * UNIT);
+			break;
+		case Second:
+			left = (int)(8.1 * UNIT);
+			break;
+		case Third:
+			left = (int)(12 * (UNIT));
+			break;
+		case Fourth:
+			left = (int)(17 * (UNIT));
+			break;
+		case Fifth:
+			left = (int)(21.25 * UNIT);
+			break;
+		case Sixth:
+			left = (int)(25 * UNIT);
+			break;		
+		case Seventh:
+			left = (int)(28 * UNIT);
+			break;
+		case Eight:
+			left = (int)(31 * UNIT);
+			break;
+		case Ninth:
+			left = (int)(34 * UNIT);
+			break;
+		case Tenth:
+			left = (int)(37 * UNIT);
+			break;
+		default:
+			break;
+		}
+
+		right = left + 80;
+	}
+	void boundingBox() {
+		setcolor(GREEN);
+		rectangle(left, top, right, bottom);
 	}
 	int getColumn() {
 		switch (currColumn) {
@@ -77,7 +212,10 @@ struct NotFrogger {
 		case Sixth:
 		case Seventh:
 		case Eight:
+		case Ninth:
 			return BROWN;
+		case Tenth:
+			return GREEN;
 		default:
 			return BLACK;
 		}
@@ -124,6 +262,36 @@ struct Car {
 	}
 
 }EnemyType1;
+struct Road {
+	int top, bottom, left, right;
+	int firstStripeX, secondStripeX, space, itteration;
+	void init() {
+		top = 0;
+		bottom = maxY;
+		left = (int)(8.1 * UNIT);
+		right = (int)(19.9 * UNIT);
+		firstStripeX = (int)(10.5 * UNIT);
+		secondStripeX = (int)(14.5 * UNIT);
+		space = 2 * UNIT;
+		itteration = 5 * UNIT;
+		draw();
+	}
+	void draw() {
+		setcolor(LIGHTGRAY);
+		bar(left, top, right, bottom);
+		drawLines();
+	}
+	void drawLines() {
+		setcolor(YELLOW);
+		bar(firstStripeX, top, firstStripeX + UNIT, bottom);
+		bar(secondStripeX, top, secondStripeX + UNIT, bottom);
+		setcolor(LIGHTGRAY);
+		for (int i = 0; i < (maxY / UNIT) / 4; i++) {
+			bar(firstStripeX, UNIT + (i * itteration), firstStripeX + UNIT, UNIT + (i * itteration) + space);
+			bar(secondStripeX, UNIT + (i * itteration), secondStripeX + UNIT, UNIT + (i * itteration) + space);
+		}
+	}
+}ROAD;
 struct Log {
 	int top;
 	int left;
@@ -131,9 +299,9 @@ struct Log {
 	int bottom;
 	int dy;
 	void create(int x, int y) {
-		left = x;
+		left = x * UNIT;
 		right = x + 80;
-		top = y;
+		top = y * UNIT;
 		bottom = y + 250;
 		dy = -6;
 		draw();
@@ -163,57 +331,96 @@ struct Lilypad {
 	int left;
 	int right;
 	int bottom;
-	void create(int x, int y, int x1, int y1) {
-		left = x;
-		right = x1;
-		top = y;
-		bottom = y1;
+	bool container;
+	void create(int x, int y) {
+		left = x*UNIT;
+		right = left+80;
+		top = y*UNIT;
+		bottom = top + 80;
+		container = false;
 		draw();
 	}
 
 	void draw() {
-		setcolor(2);
+		setcolor(GREEN);
 		bar(left, top, right, bottom);
+		setcolor(CYAN);
+		for (int i = 0; i < 4; i++) {
+			rectangle(left+i, top+i, right-i, bottom-i);
+		}
+	}
+	bool containsFrog() {
+		if (frog.currColumn == Tenth && frog.top < (top + UNIT) && frog.bottom >(bottom + UNIT)) {
+			return true;
+		}
+		return false;
+	}
+	void tick() {
+		if (!container)
+		{
+			container = containsFrog();
+		}
+	}
+
+}pads[4];
+struct WiseFrog {
+	int top;
+	int left;
+	int right;
+	int bottom;
+	void create(int x, int y) {
+		left = x;
+		right = x + MAINSCREEN_Width;
+		top = y;
+		bottom = y + MAINSCREEN_Height;
+		draw();
 	}
 	void remove() {
 		setcolor(BLACK);
 		bar(left, top, right, bottom);
 	}
-	void tick() {
-		remove();
-		draw();
+	void draw() {
+		/* BOUNDING BOX : WHITE
+		setcolor(WHITE);
+		rectangle(left, top, right, bottom);
+		*/
+		int bluegreen = 0;
+		bool yellowgreen = true;
+		for (int i = 0; i < MAINSCREEN_Width; i++)
+			for (int j = 0; j < MAINSCREEN_Height; j++)
+				switch (MAINSCREEN_ARRY[j][i]) {
+				case 99:
+					break;
+				case 1:
+					if (j < MAINSCREEN_Height / 2)
+						break;
+				case 2:
+					if (bluegreen % 3 == 0)
+						putpixel(left + i, top + j, 1);
+					else
+						putpixel(left + i, top + j, 2);
+					bluegreen++;
+					break;
+				case 8:
+					putpixel(left + i, top + j, 8);
+					break;
+				
+				case 14:
+					if(yellowgreen)
+						putpixel(left + i, top + j, 14);
+					else
+						putpixel(left + i, top + j, 2);
+					yellowgreen = !yellowgreen;
+					break;
+				default:
+					putpixel(left + i, top + j, 0);
+					break;
+				}
 	}
-
-}pads[3];
-struct KeyState {
-	int VirtualKey;
-	bool isAlpha;
-	bool isNumeric;
-	bool isMove;
-	bool isClicked;
-	string Significance;
-	bool isPressed;
-	POINT Cursor;
-	void reset() {
-		Significance = "";
-		isPressed = false;
-		isClicked = false;
-		isAlpha = false;
-		isNumeric = false;
-		VirtualKey = 0;
-		Cursor = POINT();
-	}
-	void resetKey() {
-		Significance = "";
-		isPressed = false;
-		isAlpha = false;
-		isNumeric = false;
-		VirtualKey = 0;
-	}
-}GLOBAL;
-
+}notfrogger;
 int main() {
-
+	//CREATE("frog.bmp"); // To Create Froger PixelMap
+	//CREATE("MAINSCREEN.bmp"); // To Create WiseFrog PixelMap
 	thread FROGGER(game);
 	thread LISTENER(Listener);
 	FROGGER.join();
@@ -226,38 +433,42 @@ int main() {
 void game() {
 
 	gr_Start(GrDriver, GrMode, ErrorCode);
-
-	StringBuilder();
-
+	bool debug = true;
 	maxX = getmaxx();
 	maxY = getmaxy();
-	/*River*/
-	setcolor(1);
-	rectangle(960, 0, 1680, 1080);
-	bar(960, 0, 1680, 1080);
-	/*Sidewalk*/
-	setcolor(11);
-	rectangle(800, 0, 960, 1080);
-	bar(800, 0, 960, 1080);
-	/*Road*/
-	setcolor(0);
-	rectangle(200, 0, 800, 1080);
-	bar(200, 0, 800, 1080);
-	/*SafeZone*/
-	setcolor(8);
-	rectangle(200, 0, 280, 1080);
-	bar(200, 0, 280, 1080);
-	pads[0].create(1520, 80, 1640, 200);
-	pads[1].create(1520, 320, 1640, 440);
-	pads[2].create(1520, 560, 1640, 720);
-	frog.create(200, 600, 280, 680);
-	EnemyType1.create(9 * 40, 1050);
-	while (EnemyType1.top > 0) {
-		EnemyType1.tick();
-		Sleep(32);
+	if (!debug) {
+		INTRO();
+		QuestLog();
+		string name = StringBuilder();
+		cleardevice();
+		settextstyle(0, 3, 72);
+		/// Draws CHAR NAME ON SIDE GETS RID OF UNUSED SPACE
+		outtextxy(43 * UNIT, 5 * UNIT + textwidth(name.c_str()), name.c_str());
+	}
+	
+	/// Setup Side Menu
+	notfrogger.create( (int)(1.7 * UNIT), 3 * UNIT);
+	
+	/// GAME SETUP
+	RIVER(); 
+	SIDEWALK();
+	SAFEZONE();
+	LILYPAD();
+	ROAD.init(); /// Possibly need to redraw Lines when Frogger Jumps
 
+	/// WHOLE CREATION OF FROG
+	frog.create(220, 600);
+	frog.currColumn = First;
+	while (isRunning) {
+
+		frog.tick();
+		Sleep(15);
 
 	}
+	getch();
+	
+
+
 	/*
 	blue.create(13 * 40, 1050);
 	while (blue.bottom < getmaxy()) {
@@ -315,7 +526,7 @@ void game() {
 	line(120, 1000, 160, 1000);
 	line(120, 960, 160, 960);
 	line(120, 920, 160, 920);
-
+	/*
 	setcolor(7);
 	rectangle(200, 0, 800, 1080);
 	bar(200, 0, 800, 1080);
@@ -333,38 +544,7 @@ void game() {
 	setcolor(6);
 	rectangle(680, 80, 800, 560);
 	bar(680, 80, 800, 560);
-	/*Sidewalk*/
-	setcolor(11);
-	rectangle(800, 0, 960, 1080);
-	bar(800, 0, 960, 1080);
-	/*NotFrogger*/
-	setcolor(2);
-	line(200, 600, 200, 680);
-	line(200, 600, 280, 640);
-	line(280, 640, 200, 680);
-	/*River*/
-	setcolor(1);
-	rectangle(960, 0, 1680, 1080);
-	bar(960, 0, 1680, 1080);
-	/*Logs*/
-	setcolor(6);
-	rectangle(1000, 200, 1080, 600);
-	bar(1000, 200, 1080, 600);
-	rectangle(1360, 200, 1440, 360);
-	bar(1360, 200, 1440, 360);
-	rectangle(1360, 680, 1440, 1120);
-	bar(1360, 680, 1440, 1120);
-	rectangle(1120, 680, 1280, 1200);
-	bar(1120, 680, 1280, 1200);
-	/*Lilypad*/
-	setcolor(2);
-	rectangle(1520, 80, 1640, 200);
-	bar(1520, 80, 1640, 200);
-	rectangle(1520, 320, 1640, 440);
-	bar(1520, 320, 1640, 440);
-	rectangle(1520, 560, 1640, 720);
-	bar(1520, 560, 1640, 720);
-	rectangle(1520, 1120, 1640, 1200);
+	*/
 	/*NotFrogger movements*/
 }
 void gr_Start(int &GrDriver, int&GrMode, int&ErrorCode) {
@@ -382,6 +562,10 @@ string StringBuilder() {
 	string NAME = "";
 	isName = true;
 	string BufferedReader = "";
+	int left, top, right, bottom;
+	left = top = right = bottom = 0;
+	int OFFSET = UNIT * 2;
+	settextstyle(0, 0, 72);
 	while (BufferedReader != "RETURN") {
 		if (GLOBAL.isPressed) {
 			BufferedReader = GLOBAL.Significance;
@@ -395,7 +579,16 @@ string StringBuilder() {
 			}
 			do { Sleep(3); } while (ActionListener(GLOBAL.VirtualKey));
 			GLOBAL.resetKey();
+			setcolor(BLACK);
+			bar(left, top, right, bottom);
+			setcolor(WHITE);
+			left = (maxX - textwidth(NAME.c_str())) / 2;
+			right = left + textwidth(NAME.c_str());
+			top = (maxY - OFFSET - textheight(NAME.c_str())) / 2;
+			bottom = top + textheight(NAME.c_str());
+			outtextxy(left, top, NAME.c_str());
 			cout << NAME << "\n";
+			
 		}
 		
 		Sleep(15);
@@ -685,4 +878,156 @@ void Listener() {
 /// AsynKeyState
 bool ActionListener(int VirtualKey) {
 	return ((GetAsyncKeyState(VirtualKey) & 0x8000) != 0);
+}
+void RIVER() {
+	setcolor(BLUE);
+	bar(24 * UNIT, 0, 42 * UNIT, maxY);
+}
+void SIDEWALK() {
+	setcolor(DARKGRAY);
+	bar(20 * UNIT, 0, 24 * UNIT, maxY);
+}
+void SAFEZONE() {
+	setcolor(DARKGRAY);
+	bar(5 * UNIT, 0, 8 * UNIT, maxY);
+}
+void LILYPAD() {
+	pads[0].create(37, 7);
+	pads[1].create(37, 11);
+	pads[2].create(37, 15);
+	pads[3].create(37, 19);
+}
+void introColorSet(char value) {
+	switch (value) {
+	case 'B':
+		setcolor(BLACK);
+		break;
+	case 'W':
+		setcolor(WHITE);
+		break;
+	case 'G':
+		setcolor(GREEN);
+		break;
+	case 'Y':
+		setcolor(YELLOW);
+		break;
+	}
+}
+void INTRO(){
+	setcolor(RED);
+	bar(0, 0, maxX, maxY);
+	int Sx = (maxX - (17 * UNIT * 2)) / 2;
+	int Sy = (maxY - (12 * UNIT * 2)) / 2;
+	bool yg = false;
+	for (int i = 0; i < Title_Height; i++) {
+		for (int j = 0; j < Title_Width; j++) {
+			if (Title[i][j] != 'D') {
+				if (Title[i][j] != 'Y') {
+					introColorSet(Title[i][j]);
+					bar(Sx + (j * 2 * UNIT), Sy + (i * 2 * UNIT), Sx + (j * 2 * UNIT) + (2 * UNIT), Sy + (i * 2 * UNIT) + (2 * UNIT));
+					bar(maxX - (Sx + (j * 2 * UNIT) + (2 * UNIT)), Sy + (i * 2 * UNIT), maxX - (Sx + (j * 2 * UNIT)), Sy + (i * 2 * UNIT) + (2 * UNIT));
+				}
+				else {
+					for (int k = Sx + (j * 2 * UNIT); k <= Sx + (j * 2 * UNIT) + (2 * UNIT); k++) {
+						for (int l = Sy + (i * 2 * UNIT); l <= Sy + (i * 2 * UNIT) + (2 * UNIT); l++) {
+							if (yg)
+							{
+								putpixel(k, l, YELLOW);
+								putpixel(maxX - (k), (l), GREEN);
+							}
+							else {
+								putpixel(k, l, GREEN);
+								putpixel(maxX - (k), (l), YELLOW);
+							}
+							yg = !yg;
+								
+						}
+					}
+				}
+				Sleep(10);
+			}
+		}
+	}
+	Sleep(200);
+	GLOBAL.reset();
+	do {
+		Sleep(10);
+	} while (GLOBAL.isClicked == false);
+	GLOBAL.reset();
+	cleardevice();
+}
+void QuestLog() {
+	string Dialogue[] = {
+		"RIBIT! Watch it!",
+		"Oh, you there. . .",
+		"Where are you headed?",
+		" . . . ",
+		"You don't say!?",
+		"Once I was your age",
+		"I jumped everywhere",
+		"Many, many places",
+		"Jumped over things",
+		"Jumped around them",
+		"Jumped over them",
+		"Jumped under . . .",
+		"but today. . .",
+		"Well old frogs",
+		"we could never make it.",
+		"The world,",
+		"it's a changing!",
+		"Cars! Trucks!",
+		"Why some of my best",
+		"friends never made it",
+		"to the Lilly Pads",
+		"YOU go out there and", 
+		"Show the world what",
+		"Frogs are really made of",
+		"Try not to get smashed,",
+		"and make a name for yourself",
+		"Say. . . ",
+		"What was your name?",
+		" "
+	};
+	notfrogger.create(maxX / 2, maxY / 2 + 35);
+	int x = 0;
+	int y = notfrogger.bottom - 80;
+	int limitX = notfrogger.left - 130;
+	int sleepTimer = 350;
+	frog.create(x, y);
+	Sleep(sleepTimer);
+	int addition = limitX / 5;
+	for (int i = 0; i < 5; i++) {
+		frog.remove();
+		if (i % 2 == 0) {
+			frog.repos((i+1)*addition, y - 40);
+		}
+		else {
+			frog.repos((i+1)*addition, y);
+		}
+		Sleep(sleepTimer);
+	}
+	frog.remove();
+	frog.repos(limitX, y);
+	string NAME;
+	int left, top, right, bottom;
+	left = top = right = bottom = 0;
+	int OFFSET = UNIT * 2;
+	settextstyle(0, 0, 72);
+	for (int i = 0; i < sizeof(Dialogue)/sizeof(string); i++) {
+		NAME = "";
+		for (int j = 0; j < (int) Dialogue[i].length(); j++) {
+			NAME += Dialogue[i][j];
+			setcolor(BLACK);
+			bar(left, top, right, bottom);
+			setcolor(WHITE);
+			left = (maxX - textwidth(NAME.c_str())) / 2;
+			right = left + textwidth(NAME.c_str());
+			top = (maxY - OFFSET - textheight(NAME.c_str())) / 2;
+			bottom = top + textheight(NAME.c_str());
+			outtextxy(left, top, NAME.c_str());
+			Sleep(sleepTimer);
+		}
+		Sleep(1000);
+	}
+	Sleep(1000);
 }

@@ -113,6 +113,8 @@
     <ClCompile Include="FROGGER.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LoadBMP.h" />
+    <ClInclude Include="Pixel.h" />
     <ClInclude Include="VirtualKeyList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -23,5 +23,11 @@
     <ClInclude Include="VirtualKeyList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Pixel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadBMP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
