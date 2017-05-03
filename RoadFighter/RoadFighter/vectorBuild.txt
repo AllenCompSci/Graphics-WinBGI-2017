@@ -1,0 +1,7 @@
+colors.at(0).init( 237, 28, 36, ); 
+colors.at(1).init( 153, 217, 234, ); 
+colors.at(2).init( 181, 230, 29, ); 
+colors.at(3).init( 0, 0, 0, ); 
+colors.at(4).init( 127, 127, 127, ); 
+colors.at(5).init( 255, 255, 255, ); 
+colors.at(6).init( 255, 242, 0, ); 
