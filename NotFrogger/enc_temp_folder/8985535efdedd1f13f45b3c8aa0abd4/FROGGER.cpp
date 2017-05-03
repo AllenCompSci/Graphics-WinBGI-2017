@@ -994,7 +994,7 @@ void QuestLog() {
 		"Try not to get smashed,",
 		"TIRE Tread lightly!",
 		"RIBIT! *CHUCKLE",
-		"Sorry Croak joke.",
+		"Sorry Croak joke."
 		"You make a name",
 		"for yourself",
 		"Say. . . ",

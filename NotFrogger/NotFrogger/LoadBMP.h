@@ -157,8 +157,7 @@ void CREATE(string test) {
 	colors.at(1).init(71, 213, 0, 2);
 	colors.at(2).init(255, 255, 0, 14);
 	colors.at(3).init(255, 0, 255, 5);
-	*/
-	/* WISE FROG
+/* WISE FROG
 	colors.at(3).init(0, 0, 0, 0);        // BLACK
 	colors.at(4).init(255, 255, 255, 99); // BACKGROUND
 	colors.at(5).init(153, 229, 80, 14);    // YELLOWGREEN
