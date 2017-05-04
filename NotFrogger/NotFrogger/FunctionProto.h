@@ -19,23 +19,24 @@ enum Column { First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eight, Ninth,
 void Listener();
 bool ActionListener(int);
 string StringBuilder();
-void gr_Start(int &GrDriver, int&GrMode, int&ErrorCode);
+void gr_Start(int&, int&, int&);
 void game();
-void introColorSet(char value);
+void introColorSet(char);
 void INTRO();
 void QuestLog();
 void RIVER();
 void SIDEWALK();
 void SAFEZONE();
 void LILYPAD();
-void CREATE(string test);
-int adjust(CARTYPE color, int value);
-void drawTruck(int x, int y, CARTYPE vehicle);
-void drawCar(int x, int y, CARTYPE vehicle);
-void drawMasterCar(int x, int y);
+void CREATE(string);
+int adjust(CARTYPE, int);
+void drawTruck(int, int, CARTYPE);
+void drawCar(int, int, CARTYPE);
+void drawMasterCar(int, int);
 void drawRevCar(int, int, CARTYPE);
-void draw(int x, int y, CARTYPE vehicle);
+void draw(int, int, CARTYPE);
 void establishGAME();
+void updateCREATE(int);
 #pragma endregion
 
 int GrDriver, GrMode, ErrorCode;
@@ -47,9 +48,11 @@ bool firstRun = true;
 bool swap1 = true;
 bool swap2 = true;
 bool debug = true;
+bool lillied = true;
 const int NUMVECTOR = 6; /// HERE 
 int w, h;
-
+int CREATION[] = { 0, 0, 0, 0, 0, 0, 0 };
+const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
 struct KeyState {
 	int VirtualKey;
 	bool isAlpha;
@@ -75,7 +78,7 @@ struct KeyState {
 		isNumeric = false;
 		VirtualKey = 0;
 	}
-}GLOBAL;
+}GLOBAL; 
 
 ///  LEFT    200    9*40	13*40  17*40    800   25*40  28*40    31*40  34*40	37*40
 ///  TOP	   0							  0                                  7*40
@@ -94,7 +97,7 @@ struct NotFrogger {
 	void create(int x, int y) {
 		currColumn = Intro;
 		XOffset = (80 - (frog_Width + 1)) / 2;
-		MOVEMENT = 5;
+		MOVEMENT = 15;
 		left = x;
 		right = x + 80;
 		top = y;
@@ -150,9 +153,11 @@ struct NotFrogger {
 		if (GLOBAL.isPressed) {
 			remove();
 			adjust();
+			/*
 			draw();
 			do { Sleep(14); } while (ActionListener(GLOBAL.VirtualKey));
 			GLOBAL.resetKey();
+			*/
 		}
 
 	}
@@ -211,6 +216,7 @@ struct NotFrogger {
 			break;
 		case Tenth:
 			left = (int)(37 * UNIT);
+			lillied = true;
 			break;
 		default:
 			break;
@@ -269,21 +275,21 @@ struct Car {
 			right = left + CAR_Width;
 			top = (maxY - (CAR_Height / 4));
 			bottom = top + CAR_Height;
-			dy = -6;
+			dy = -15;
 			break;
 		case Third:
 			left = 12 * UNIT - 6;
 			right = left + CAR_Width;
 			bottom = CAR_Height/4;
 			top = bottom - CAR_Height;
-			dy = 7;
+			dy = 16;
 			break;
 		case Fourth:
 			left = 17 * UNIT - 6;
 			right = left + TRUCK_Width;
 			top = (maxY - (TRUCK_Height / 4));
 			bottom = top + TRUCK_Height;
-			dy = -3;
+			dy = -12;
 			break;
 		}
 		type = genType();
@@ -316,6 +322,7 @@ struct Car {
 			}
 			break;
 		}
+		return MASTERCAR;
 	}
 	void render() {
 		if (position == Third) {
@@ -536,7 +543,7 @@ struct RGB {
 		return r == t.r && g == t.g && b == t.b;
 	}
 };
-
+vector <NotFrogger> GOLDENFROGS;
 vector <Car> CARCOL2;
 vector <Car> CARCOL3;
 vector <Car> CARCOL4;

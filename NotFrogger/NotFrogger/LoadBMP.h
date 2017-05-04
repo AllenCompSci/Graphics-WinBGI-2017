@@ -168,7 +168,7 @@ void game() {
 	srand((unsigned int)time(NULL));
 	gr_Start(GrDriver, GrMode, ErrorCode);
 		
-	if (!debug) {
+	if (debug) {
 		INTRO();
 		QuestLog();
 		string name = StringBuilder();
@@ -185,44 +185,87 @@ void game() {
 	RIVER();
 	SIDEWALK();
 	SAFEZONE();
-	LILYPAD();
+	
 	ROAD.init(); /// Possibly need to redraw Lines when Frogger Jumps
 
 				 /// WHOLE CREATION OF FROG
-	frog.create(220, 600);
-	frog.currColumn = First;
 	GLOBAL.reset();
 	GLOBAL.resetKey();
+	
 	while (isRunning) {
-		RIVER();
-		//ROAD.draw();
+		if (lillied) {
+			if (!firstRun && (int)GOLDENFROGS.size() < 3) {
+				GOLDENFROGS.push_back(frog);
+				frog.create(220, 600);
+				frog.currColumn = First;
+			}
+			else if (firstRun) {
+				frog.create(220, 600);
+				frog.currColumn = First;
+			}
+			lillied = false;
+		}
+
 #pragma region RENDER
+		frog.tick();
 		ROAD.render(Second);
+		if (frog.currColumn == First) {
+			frog.draw();
+		}
+		if (frog.currColumn == Second) {
+			frog.draw();
+		}
 		for (int i = 0; i < (int)CARCOL2.size(); i++) {
 			CARCOL2[i].tick();
 		}
+		
 		ROAD.render(Third);
+		if (frog.currColumn == Third) {
+			frog.draw();
+		}
 		for (int i = 0; i < (int)CARCOL3.size(); i++) {
 			CARCOL3[i].tick();
 		}
 		ROAD.render(Fourth);
+
+		if (frog.currColumn == Fourth || frog.currColumn == Fifth) {
+			frog.draw();
+		}
 		for (int i = 0; i < (int)CARCOL4.size(); i++) {
 			CARCOL4[i].tick();
 		}
+		RIVER();
+		LILYPAD();
+		for (int i = 0; i < (int)GOLDENFROGS.size(); i++) {
+			GOLDENFROGS[i].draw();
+		}
+		
 		for (int i = 0; i < (int)LOGCOL6.size(); i++) {
 			LOGCOL6[i].tick();
+		}
+		if (frog.currColumn == Sixth) {
+			frog.draw();
 		}
 		for (int i = 0; i < (int)LOGCOL7.size(); i++) {
 			LOGCOL7[i].tick();
 		}
+		if (frog.currColumn == Seventh) {
+			frog.draw();
+		}
 		for (int i = 0; i < (int)LOGCOL8.size(); i++) {
 			LOGCOL8[i].tick();
 		}
-		for (int i = 0; i < (int)LOGCOL8.size(); i++) {
+		if (frog.currColumn == Eight) {
+			frog.draw();
+		}
+		for (int i = 0; i < (int)LOGCOL9.size(); i++) {
 			LOGCOL9[i].tick();
 		}
+		if (frog.currColumn == Ninth) {
+			frog.draw();
+		}
 #pragma endregion
-		frog.tick();
+		
 		Sleep(150);
 		establishGAME();
 	}
@@ -870,7 +913,10 @@ void drawRevCar(int x, int y, CARTYPE vehicle) {
 	for (int i = 0; i < CAR_Height; i++)
 		for (int j = 0; j < CAR_Width; j++) {
 			if (CAR_ARRY[i][j] != 99)
+				if(vehicle != MASTERCAR)
 				putpixel(x + j, y + CAR_Height - i - 1, adjust(vehicle, CAR_ARRY[i][j]));
+				else
+					putpixel(x + j, y + CAR_Height - i - 1, MasterCAR_ARRY[i][j]);
 		}
 }
 /*x,y are the top left corner of the image*/
@@ -917,15 +963,43 @@ void establishGAME() {
 		Type1.create(Fourth);
 		CARCOL4.push_back(Type1);
 		firstRun = false;
+		/*
+		int CREATION[] = { 0, 0, 0, 0, 0, 0, 0 };
+const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
+		*/
+		for (int i = 0; i < 7; i++) {
+			updateCREATE(i);
+		}
 	}
-	if ((int)CARCOL2.size() > 0 && CARCOL2[0].bottom < 6) {
-		CARCOL2.erase(CARCOL2.begin());
+	if ((int)CARCOL2.size() > 0){
+		if (CARCOL2[0].bottom < 6) {
+			CARCOL2.erase(CARCOL2.begin());
+		}
+		if (CARCOL2[(int)CARCOL2.size() - 1].bottom < maxY - (CAR_Height / 4) - (CREATION[0] * CAR_Height)) {
+			Type1.create(Second);
+			CARCOL2.push_back(Type1);
+			updateCREATE(0);
+		}
 	}
-	if ((int)CARCOL3.size() > 0 && CARCOL3[0].top > (maxY - 6)) {
-		CARCOL3.erase(CARCOL3.begin());
+	if ((int)CARCOL3.size() > 0){
+		if (CARCOL3[0].top > (maxY - 6)) {
+			CARCOL3.erase(CARCOL3.begin());
+		}
+		if (CARCOL3[(int)CARCOL3.size() - 1].top > CAR_Height / 4 + (CREATION[1] * CAR_Height)) {
+			Type1.create(Third);
+			CARCOL3.push_back(Type1);
+			updateCREATE(1);
+		}
 	}
-	if ((int)CARCOL4.size() > 0 && CARCOL4[0].bottom < 6) {
-		CARCOL4.erase(CARCOL4.begin());
+	if ((int)CARCOL4.size() > 0){
+		if (CARCOL4[0].bottom < 6) {
+			CARCOL4.erase(CARCOL4.begin());
+		}
+		if (CARCOL4[(int)CARCOL4.size() - 1].bottom < maxY - (TRUCK_Height / 4) - (CREATION[2] * TRUCK_Height)) {
+			Type1.create(Fourth);
+			CARCOL4.push_back(Type1);
+			updateCREATE(2);
+		}
 	}
 	/*
 	LOGCOL6;
@@ -933,4 +1007,7 @@ void establishGAME() {
 	LOGCOL8;
 	LOGCOL9;
 	*/
+}
+void updateCREATE(int index) {
+	CREATION[index] = rand() % RANDOMIZER[index];
 }
