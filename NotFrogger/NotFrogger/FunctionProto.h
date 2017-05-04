@@ -79,13 +79,6 @@ struct KeyState {
 		VirtualKey = 0;
 	}
 }GLOBAL; 
-
-///  LEFT    200    9*40	13*40  17*40    800   25*40  28*40    31*40  34*40	37*40
-///  TOP	   0							  0                                  7*40
-///  WIDTH	  80	 80      80    100      160      80                            80
-///  HEIGHT 1080	120     150    300     1080                                    80
-///  SPEED	   0	 -9      +6     -6        0
-///  COLOR     8    4/3       1     15       11                                 GREEN
 struct NotFrogger {
 	int top;
 	int left;
@@ -93,6 +86,8 @@ struct NotFrogger {
 	int bottom;
 	int MOVEMENT;
 	int XOffset;
+	bool alive;
+	int deathAnimation;
 	Column currColumn;
 	void create(int x, int y) {
 		currColumn = Intro;
@@ -102,6 +97,8 @@ struct NotFrogger {
 		right = x + 80;
 		top = y;
 		bottom = y + 80;
+		alive = true;
+		deathAnimation = 0;
 		draw();
 	}
 	void repos(int x, int y) {
@@ -112,14 +109,50 @@ struct NotFrogger {
 		draw();
 	}
 	void draw() {
-		for (int i = 0; i < frog_Width; i++)
-			for (int j = 0; j < frog_Height; j++)
-				if (frog_ARRY[j][i] != 99)
-					if (currColumn == Tenth && frog_ARRY[j][i] == GREEN) {
-						putpixel(left + XOffset + i, top + j, WHITE);
-					}
-					else
-						putpixel(left + XOffset + i, top + j, frog_ARRY[j][i]);
+		if (alive) {
+			for (int i = 0; i < frog_Width; i++)
+				for (int j = 0; j < frog_Height; j++)
+					if (frog_ARRY[j][i] != 99)
+						if (currColumn == Tenth && frog_ARRY[j][i] == GREEN) {
+							putpixel(left + XOffset + i, top + j, WHITE);
+						}
+						else
+							putpixel(left + XOffset + i, top + j, frog_ARRY[j][i]);
+		}
+		else {
+			/// WATER DEATH NEED ROAD DEATH
+			if (currColumn == Sixth || currColumn == Seventh || currColumn == Eight || currColumn == Ninth || currColumn == Tenth && deathAnimation < 10) {
+				/// AQUA
+				int Cx = left + 35;
+				int Cy = top + 40 ;
+				int radius1 = UNIT - (deathAnimation++ * 2);
+				int radius2 = UNIT - (deathAnimation * 3);
+				setcolor(CYAN);
+				circle(Cx, Cy, radius1);
+				circle(Cx, Cy, radius2);
+				setcolor(WHITE);
+				switch (rand() % 3) {
+				case 0:
+					Cx -= 2;
+					break;
+				case 1:
+					Cy += 4;
+					break;
+				case 2:
+					Cx += 3;
+					Cy -= 5;
+				}
+				if (deathAnimation < 6)
+				fillellipse(Cx, Cy, 3, 3);
+			}
+			if (deathAnimation == 11) {
+				lillied = true;
+			}
+		}
+	}
+	void kill() {
+		deathAnimation = 0; 
+		alive = false;
 	}
 	void remove() {
 		setcolor(getColumn());
@@ -175,6 +208,9 @@ struct NotFrogger {
 				break;
 			case 'D':
 				down();
+				break;
+			case 'F':
+				kill();
 				break;
 			}
 			GLOBAL.resetKey();

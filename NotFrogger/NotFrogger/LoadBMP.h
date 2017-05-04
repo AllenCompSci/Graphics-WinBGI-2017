@@ -167,7 +167,15 @@ void CREATE(string test) {
 void game() {
 	srand((unsigned int)time(NULL));
 	gr_Start(GrDriver, GrMode, ErrorCode);
-		
+
+	//							GAME MAP CONCEPT BY COLUMNS
+	///  LEFT    200    9*40	13*40  17*40    800   25*40  28*40    31*40  34*40	37*40
+	///  TOP	   0							  0                                  7*40
+	///  WIDTH	  80	 80      80    100      160      80                            80
+	///  HEIGHT 1080	120     150    300     1080                                    80
+	///  SPEED	   0	 -9      +6     -6        0
+	///  COLOR     8    4/3       1     15       11                                 GREEN
+
 	if (debug) {
 		INTRO();
 		QuestLog();
@@ -195,7 +203,8 @@ void game() {
 	while (isRunning) {
 		if (lillied) {
 			if (!firstRun && (int)GOLDENFROGS.size() < 3) {
-				GOLDENFROGS.push_back(frog);
+				if(frog.alive)
+					GOLDENFROGS.push_back(frog);
 				frog.create(220, 600);
 				frog.currColumn = First;
 			}
@@ -215,7 +224,7 @@ void game() {
 		if (frog.currColumn == Second) {
 			frog.draw();
 		}
-		for (int i = 0; i < (int)CARCOL2.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)CARCOL2.size(); i++) {
 			CARCOL2[i].tick();
 		}
 		
@@ -223,7 +232,7 @@ void game() {
 		if (frog.currColumn == Third) {
 			frog.draw();
 		}
-		for (int i = 0; i < (int)CARCOL3.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)CARCOL3.size(); i++) {
 			CARCOL3[i].tick();
 		}
 		ROAD.render(Fourth);
@@ -231,7 +240,7 @@ void game() {
 		if (frog.currColumn == Fourth || frog.currColumn == Fifth) {
 			frog.draw();
 		}
-		for (int i = 0; i < (int)CARCOL4.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)CARCOL4.size(); i++) {
 			CARCOL4[i].tick();
 		}
 		RIVER();
@@ -240,25 +249,25 @@ void game() {
 			GOLDENFROGS[i].draw();
 		}
 		
-		for (int i = 0; i < (int)LOGCOL6.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)LOGCOL6.size(); i++) {
 			LOGCOL6[i].tick();
 		}
 		if (frog.currColumn == Sixth) {
 			frog.draw();
 		}
-		for (int i = 0; i < (int)LOGCOL7.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)LOGCOL7.size(); i++) {
 			LOGCOL7[i].tick();
 		}
 		if (frog.currColumn == Seventh) {
 			frog.draw();
 		}
-		for (int i = 0; i < (int)LOGCOL8.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)LOGCOL8.size(); i++) {
 			LOGCOL8[i].tick();
 		}
 		if (frog.currColumn == Eight) {
 			frog.draw();
 		}
-		for (int i = 0; i < (int)LOGCOL9.size(); i++) {
+		for (int i = 0; frog.alive && i < (int)LOGCOL9.size(); i++) {
 			LOGCOL9[i].tick();
 		}
 		if (frog.currColumn == Ninth) {
@@ -641,6 +650,11 @@ void Listener() {
 				else if (ActionListener(VK_DOWN) || ActionListener(VK_S)) {
 					GLOBAL.VirtualKey = VK_DOWN;
 					GLOBAL.Significance = "DOWN";
+					GLOBAL.isPressed = true;
+				}
+				else if (ActionListener(VK_F6)) {
+					GLOBAL.VirtualKey = VK_F6;
+					GLOBAL.Significance = "F6";
 					GLOBAL.isPressed = true;
 				}
 
