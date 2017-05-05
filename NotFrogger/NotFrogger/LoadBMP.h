@@ -1100,6 +1100,7 @@ void updateCREATE(int index) {
 	CREATION[index] = rand() % RANDOMIZER[index];
 }
 bool isSafe(Column frog, int top, int h) {
+	bool safe = true;
 	if (frog == Second) {
 	for (int i = 0; i < (int)CARCOL2.size(); i++) {
 			if (CARCOL2[i].top - 80 < top && CARCOL2[i].bottom > top)
@@ -1107,7 +1108,44 @@ bool isSafe(Column frog, int top, int h) {
 		}
 	}
 	else if (frog == Third) {
-
+		for (int i = 0; i < (int)CARCOL3.size(); i++) {
+			if (CARCOL3[i].top + 80 < top && CARCOL3[i].bottom > top)
+				return false;
+		}
 	}
-	return true;
+	else if (frog == Fourth) {
+		for (int i = 0; i < (int)CARCOL4.size(); i++) {
+			if (CARCOL4[i].top - 80 < top && CARCOL4[i].bottom > top)
+				return false;
+		}
+	}
+	else if (frog == Sixth) {
+		safe = false;
+		for (int i = 0; i < (int) LOGCOL6.size(); i++) {
+			if ( LOGCOL6[i].top - 80 < top &&  LOGCOL6[i].bottom > top)
+				return true;
+		}
+	}
+	else if (frog == Seventh) {
+		safe = false;
+		for (int i = 0; i < (int) LOGCOL7.size(); i++) {
+			if ( LOGCOL7[i].top + 80 < top &&  LOGCOL7[i].bottom > top)
+				return true;
+		}
+	}
+	else if (frog == Eight) {
+		safe = false;
+		for (int i = 0; i < (int) LOGCOL8.size(); i++) {
+			if ( LOGCOL8[i].top + 80 < top &&  LOGCOL8[i].bottom > top)
+				return true;
+		}
+	}
+	else if (frog == Ninth) {
+		safe = false;
+		for (int i = 0; i < (int) LOGCOL9.size(); i++) {
+			if ( LOGCOL9[i].top - 80 < top &&  LOGCOL9[i].bottom > top)
+				return true;
+		}
+	}
+	return safe;
 }
