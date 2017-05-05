@@ -137,11 +137,26 @@ void CREATE(string test) {
 	colors.at(1).init(55, 148, 110, 1);    // BLUEGREEN?
 	colors.at(2).init(50, 60, 57, 8);     // DARKGRAY
 	*/
+	/* LOG
 	colors.at(0).init(0, 0, 0, 99);
 	colors.at(1).init(252, 71, 25, BROWN);
 	colors.at(2).init(106, 190, 48, CYAN);
 	colors.at(3).init(255, 255, 255, WHITE);
-
+	*/
+	//const int LIGHTGREEN = 98;
+	//const int GRAYGREEN = 97;
+	//const int GRAYBLUE = 96;
+	/* Lily Pad DINORIKO SCREEN SHOT 
+	colors.at(5).init(0, 0, 0, CYAN + 16);
+	colors.at(6).init(0, 0, 168, 99);
+	colors.at(7).init(50, 60, 57, DARKGRAY + 16);
+	colors.at(8).init(0, 148, 0, GREEN+16);
+	colors.at(4).init(39, 175, 38, LIGHTGREENE);
+	colors.at(0).init(153, 217, 234, CYAN+16);
+	colors.at(1).init(0, 104, 94, GRAYGREEN);
+	colors.at(2).init(255, 255, 255, WHITE);
+	colors.at(3).init(34, 105, 156, GRAYBLUE);
+	*/
 	/*
 	*/
 #pragma endregion
@@ -181,7 +196,7 @@ void game() {
 	///  SPEED	   0	 -9      +6     -6        0
 	///  COLOR     8    4/3       1     15       11                                 GREEN
 
-	if (!debug) {
+	if (debug) {
 		INTRO();
 		QuestLog();
 		string name = StringBuilder();
@@ -215,6 +230,7 @@ void game() {
 			}
 			else if (firstRun) {
 				RIVER();
+				LILYPAD();
 				frog.create(220, 600);
 				frog.currColumn = First;
 			}
@@ -251,7 +267,7 @@ void game() {
 			CARCOL4[i].tick();
 		}
 		
-		LILYPAD();
+		
 		for (int i = 0; i < (int)GOLDENFROGS.size(); i++) {
 			GOLDENFROGS[i].draw();
 		}

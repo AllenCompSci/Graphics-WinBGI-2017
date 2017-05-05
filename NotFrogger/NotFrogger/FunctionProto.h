@@ -49,7 +49,10 @@ bool swap1 = true;
 bool swap2 = true;
 bool debug = true;
 bool lillied = true;
-const int NUMVECTOR = 6; /// HERE 
+const int LIGHTGREENE = 98;
+const int GRAYGREEN = 97;
+const int GRAYBLUE = 96;
+const int NUMVECTOR = 9; /// HERE 
 int w, h;
 int CREATION[] = { 0, 0, 0, 0, 0, 0, 0 };
 const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
@@ -141,8 +144,8 @@ struct NotFrogger {
 				remove();
 				int Cx = left + 35;
 				int Cy = top + 40 ;
-				int radius1 = UNIT - (deathAnimation * 2);
-				int radius2 = UNIT - (deathAnimation * 3);
+				int radius1 = UNIT - 5 - (deathAnimation * 2);
+				int radius2 = UNIT - 5 - (deathAnimation * 3);
 				setcolor(CYAN);
 				circle(Cx, Cy, radius1);
 				circle(Cx, Cy, radius2);
@@ -172,8 +175,8 @@ struct NotFrogger {
 		alive = false;
 	}
 	void remove() {
-		setcolor(getColumn());
-		bar(left, top, right, bottom);
+			setcolor(getColumn());
+			bar(left, top, right, bottom);
 	}
 	void Moveleft() { // Back
 		if (currColumn != First && currColumn != Tenth) {
@@ -201,7 +204,9 @@ struct NotFrogger {
 	}
 	void tick() {
 		if (GLOBAL.isPressed) {
-			remove();
+			if (currColumn != Sixth && currColumn != Seventh && currColumn != Eight && currColumn != Ninth && currColumn != Tenth) {
+				remove();
+			}
 			adjust();
 			/*
 			draw();
@@ -295,7 +300,7 @@ struct NotFrogger {
 		case Seventh:
 		case Eight:
 		case Ninth:
-			return BROWN;
+			return BLUE;
 		case Tenth:
 			return GREEN;
 		default:
@@ -561,14 +566,43 @@ struct Lilypad {
 		container = false;
 		draw();
 	}
-
+	bool LGREEN = true;
+	bool GGREEN = false;
+	bool GYBLUE = true;
 	void draw() {
+		for(int i = 0; i < lily_Height; i++)
+			for (int j = 0; j < lily_Width; j++) {
+				if (lily_ARRY[i][j] != 99)
+					putpixel(left + j, top + i, returnColor(lily_ARRY[i][j]));
+			}
+		/* SQUARE - No Pic
 		setcolor(GREEN);
 		bar(left, top, right, bottom);
 		setcolor(CYAN);
 		for (int i = 0; i < 4; i++) {
 			rectangle(left + i, top + i, right - i, bottom - i);
 		}
+		*/
+	}
+	int returnColor(int value) {
+		switch (value) {
+		case LIGHTGREENE:
+			LGREEN = !LGREEN;
+			if (LGREEN)
+				return WHITE;
+			return GREEN;
+		case GRAYGREEN:
+			GGREEN = !GGREEN;
+			if (GGREEN)
+				return DARKGRAY;
+			return GREEN;
+		case GRAYBLUE:
+			GYBLUE = !GYBLUE;
+			if (GYBLUE)
+				return LIGHTGRAY;
+			return BLUE;
+		}
+		return value;
 	}
 	bool containsFrog() {
 		if (frog.currColumn == Tenth && frog.top < (top + UNIT) && frog.bottom >(bottom + UNIT)) {
