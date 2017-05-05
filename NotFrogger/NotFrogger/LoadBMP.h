@@ -790,7 +790,7 @@ void QuestLog() {
 		"Cars! Trucks!",
 		"Why some of my best",
 		"friends never made it",
-		"to the Lilly Pads",
+		"to the Lily Pads",
 		"YOU go out there and",
 		"Show the world what",
 		"Frogs are really made of",
@@ -1098,4 +1098,16 @@ const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
 }
 void updateCREATE(int index) {
 	CREATION[index] = rand() % RANDOMIZER[index];
+}
+bool isSafe(Column frog, int top, int h) {
+	if (frog == Second) {
+	for (int i = 0; i < (int)CARCOL2.size(); i++) {
+			if (CARCOL2[i].top - 80 < top && CARCOL2[i].bottom > top)
+				return false;
+		}
+	}
+	else if (frog == Third) {
+
+	}
+	return true;
 }

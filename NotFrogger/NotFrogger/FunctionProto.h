@@ -37,6 +37,7 @@ void drawRevCar(int, int, CARTYPE);
 void draw(int, int, CARTYPE);
 void establishGAME();
 void updateCREATE(int);
+bool isSafe(Column, int top, int h);
 #pragma endregion
 
 int GrDriver, GrMode, ErrorCode;
@@ -123,7 +124,7 @@ struct NotFrogger {
 							putpixel(left + XOffset + i, top + j, frog_ARRY[j][i]);
 		}
 		else {
-			
+
 			deathAnimation++;
 			if ((currColumn == Second || currColumn == Third || currColumn == Fourth) && deathAnimation < 10) {
 				int deathUNIT = 4;
@@ -132,8 +133,8 @@ struct NotFrogger {
 				for (int i = 0; i < Smashed_Height; i++) {
 					for (int j = 0; j < Smashed_Width; j++) {
 						if (Smashed[i][j] != 'D') {
-							bar(left + (j+1) * deathUNIT, top + (i+2) * deathUNIT, left + (j + 2) * deathUNIT, top + (3 + i) * deathUNIT);
-							bar(left + ((Smashed_Height - j - 1) * deathUNIT), top + (i+2) * deathUNIT, left + ((Smashed_Height - j)* deathUNIT), top + (3 + i) * deathUNIT);
+							bar(left + (j + 1) * deathUNIT, top + (i + 2) * deathUNIT, left + (j + 2) * deathUNIT, top + (3 + i) * deathUNIT);
+							bar(left + ((Smashed_Height - j - 1) * deathUNIT), top + (i + 2) * deathUNIT, left + ((Smashed_Height - j)* deathUNIT), top + (3 + i) * deathUNIT);
 						}
 					}
 				}
@@ -143,7 +144,7 @@ struct NotFrogger {
 				/// AQUA
 				remove();
 				int Cx = left + 35;
-				int Cy = top + 40 ;
+				int Cy = top + 40;
 				int radius1 = UNIT - 5 - (deathAnimation * 2);
 				int radius2 = UNIT - 5 - (deathAnimation * 3);
 				setcolor(CYAN);
@@ -162,7 +163,7 @@ struct NotFrogger {
 					Cy -= 5;
 				}
 				if (deathAnimation < 6)
-				fillellipse(Cx, Cy, 3, 3);
+					fillellipse(Cx, Cy, 3, 3);
 			}
 			if (deathAnimation == 15) {
 				remove();
@@ -171,12 +172,13 @@ struct NotFrogger {
 		}
 	}
 	void kill() {
-		deathAnimation = 0; 
+		remove();
+		deathAnimation = 0;
 		alive = false;
 	}
 	void remove() {
-			setcolor(getColumn());
-			bar(left, top, right, bottom);
+		setcolor(getColumn());
+		bar(left, top, right, bottom);
 	}
 	void Moveleft() { // Back
 		if (currColumn != First && currColumn != Tenth) {
@@ -203,17 +205,20 @@ struct NotFrogger {
 		columnSetX();
 	}
 	void tick() {
-		if (GLOBAL.isPressed) {
-			if (currColumn != Sixth && currColumn != Seventh && currColumn != Eight && currColumn != Ninth && currColumn != Tenth) {
-				remove();
-			}
-			adjust();
-			/*
-			draw();
-			do { Sleep(14); } while (ActionListener(GLOBAL.VirtualKey));
-			GLOBAL.resetKey();
-			*/
+		if (alive && !isSafe(currColumn, top, 80)) {
+			kill();
 		}
+			if (GLOBAL.isPressed && alive) {
+				if (currColumn != Sixth && currColumn != Seventh && currColumn != Eight && currColumn != Ninth) {
+					remove();
+				}
+				adjust();
+				/*
+				draw();
+				do { Sleep(14); } while (ActionListener(GLOBAL.VirtualKey));
+				GLOBAL.resetKey();
+				*/
+			}
 
 	}
 	void adjust() {
@@ -618,6 +623,7 @@ struct Lilypad {
 	}
 
 }pads[4];
+
 struct WiseFrog {
 	int top;
 	int left;
@@ -694,10 +700,10 @@ struct RGB {
 	}
 };
 vector <NotFrogger> GOLDENFROGS;
-vector <Car> CARCOL2;
-vector <Car> CARCOL3;
-vector <Car> CARCOL4;
-vector <Log> LOGCOL6;
-vector <Log> LOGCOL7;
-vector <Log> LOGCOL8;
-vector <Log> LOGCOL9;
+vector <Car> CARCOL2; // Column 2
+vector <Car> CARCOL3; // Column 3
+vector <Car> CARCOL4; // Column 4
+vector <Log> LOGCOL6; // Column 6
+vector <Log> LOGCOL7; // Column 7
+vector <Log> LOGCOL8; // Column 8
+vector <Log> LOGCOL9; // Column 9

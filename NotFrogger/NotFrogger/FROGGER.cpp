@@ -4,6 +4,7 @@ Frogger Games Clean
 
 #include "LoadBMP.h"
 int main() {
+	debug = false;
 	//CREATE("frog.bmp"); // To Create Froger PixelMap /// 
 	//CREATE("MAINSCREEN.bmp"); // To Create WiseFrog PixelMap //
 	//CREATE("LOG.bmp"); // To Create LOG (PIXELMAP) // Prescaled /// LOG GARYcXJK
