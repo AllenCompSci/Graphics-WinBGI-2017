@@ -26,10 +26,10 @@
     <ClInclude Include="Pixel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LoadBMP.h">
+    <ClInclude Include="FunctionProto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FunctionProto.h">
+    <ClInclude Include="RPGUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

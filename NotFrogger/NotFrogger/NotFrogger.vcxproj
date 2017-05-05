@@ -114,7 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FunctionProto.h" />
-    <ClInclude Include="LoadBMP.h" />
+    <ClInclude Include="RPGUtility.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="VirtualKeyList.h" />
   </ItemGroup>

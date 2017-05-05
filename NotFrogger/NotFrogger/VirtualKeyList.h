@@ -1,3 +1,4 @@
+#pragma region Virtual_Key_Definitions
 #define VK_0 0x30// ('0')	0
 #define VK_1 0x31// ('1')	1
 #define VK_2 0x32// ('2')	2
@@ -34,7 +35,8 @@
 #define VK_X 0x58// ('X')	X
 #define VK_Y 0x59// ('Y')	Y
 #define VK_Z 0x5A// ('Z')	Z
-
 /*
 http://www.kbdedit.com/manual/low_level_vk_list.html
 */
+#pragma endregion
+/// Line 42

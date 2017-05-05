@@ -11,10 +11,11 @@
 #include "VirtualKeyList.h"
 #include "Pixel.h"
 using namespace std;
-
+#pragma region ENUMs
 enum CARTYPE { BLUECAR, REDCAR, GREENCAR, REDTRUCK, BLUETRUCK, MASTERCAR, BLACKCAR, YELLOWTRUCK };
 ///           Safe   Car1    Car2   Car3    Safe   Log1   Log2     Log3   Log4   LilyPad
 enum Column { First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eight, Ninth, Tenth, Intro };
+#pragma endregion
 #pragma region PROTOTYPE
 void Listener();
 bool ActionListener(int);
@@ -39,24 +40,53 @@ void establishGAME();
 void updateCREATE(int);
 bool isSafe(Column, int top, int h);
 #pragma endregion
-
-int GrDriver, GrMode, ErrorCode;
-int maxX, maxY;
-bool isRunning = true;
-bool isName = false;
-int UNIT = 40;
+#pragma region GLOBAL_VARS
+const int NUMVECTOR = 9; /// LoadBMP VECTORSIZE
+const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 }; // GAME Frequency 
+const int UNIT = 40; /// Might be able to set as const should never change
+#pragma region Height_Width
+const int frog_Height = 80;
+const int frog_Width = 69;
+const int MAINSCREEN_Height = 154;
+const int MAINSCREEN_Width = 109;
+const int Title_Height = 12;
+const int Title_Width = 9;
+const int Smashed_Height = 16;
+const int Smashed_Width = 8;
+const int CAR_Height = 132;
+const int CAR_Width = 110;
+const int TRUCK_Height = 255;
+const int TRUCK_Width = 122;
+const int LOG_Height = 10;
+const int LOG_Width = 42;
+const int lily_Height = 80;
+const int lily_Width = 80;
+#pragma endregion
+/// DRAWING Helper
+const int black = 16;
+const int background = 99;
+const int secondaryColor = 19;
+const int primaryColor = 17;
+const int cabColor = 20;
+const int trailer = 23;
+const int LIGHTGREENE = 98;
+const int GRAYGREEN = 97;
+const int GRAYBLUE = 96;
+/// BOOL TOGGLE VARIABLES
 bool firstRun = true;
 bool swap1 = true;
 bool swap2 = true;
 bool debug = true;
 bool lillied = true;
-const int LIGHTGREENE = 98;
-const int GRAYGREEN = 97;
-const int GRAYBLUE = 96;
-const int NUMVECTOR = 9; /// HERE 
-int w, h;
-int CREATION[] = { 0, 0, 0, 0, 0, 0, 0 };
-const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
+bool isRunning = true;
+bool isName = false;
+/// Global basic ints 
+int GrDriver, GrMode, ErrorCode;
+int maxX, maxY;
+int w, h; /// BMP using for passing through functions 
+int CREATION[] = { 0, 0, 0, 0, 0, 0, 0 }; // Updating Values storing since created
+#pragma endregion;
+#pragma region RECORDS
 struct KeyState {
 	int VirtualKey;
 	bool isAlpha;
@@ -406,9 +436,9 @@ struct Car {
 		bottom += dy;
 	}
 	void remove() {
-		setcolor(LIGHTGRAY);
-		if (position != Second)
-			bar(left, bottom, right, bottom - dy);
+		setcolor(DARKGRAY);
+
+		bar(left + 6, top, right - 6, bottom - dy);
 	}
 	void tick() {
 		//remove();
@@ -623,7 +653,6 @@ struct Lilypad {
 	}
 
 }pads[4];
-
 struct WiseFrog {
 	int top;
 	int left;
@@ -699,6 +728,9 @@ struct RGB {
 		return r == t.r && g == t.g && b == t.b;
 	}
 };
+#pragma endregion
+#pragma region RECORD_VECTOR(CONTAINERS)
+vector <RGB> colors(NUMVECTOR);
 vector <NotFrogger> GOLDENFROGS;
 vector <Car> CARCOL2; // Column 2
 vector <Car> CARCOL3; // Column 3
@@ -707,3 +739,5 @@ vector <Log> LOGCOL6; // Column 6
 vector <Log> LOGCOL7; // Column 7
 vector <Log> LOGCOL8; // Column 8
 vector <Log> LOGCOL9; // Column 9
+#pragma endregion
+/// LINE 742
