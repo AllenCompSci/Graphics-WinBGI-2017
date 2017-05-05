@@ -92,7 +92,7 @@ struct NotFrogger {
 	void create(int x, int y) {
 		currColumn = Intro;
 		XOffset = (80 - (frog_Width + 1)) / 2;
-		MOVEMENT = 15;
+		MOVEMENT = 20;
 		left = x;
 		right = x + 80;
 		top = y;
@@ -525,7 +525,7 @@ struct Log {
 						if (!invert)
 							bar(left + xOFFSET + (j)* logUNIT, bottom - yOFFSET - (i+1)* logUNIT, xOFFSET + left + (j + 1) * logUNIT, bottom - yOFFSET - (i) * logUNIT);
 						else
-							bar(right - xOFFSET - (j + 1)* logUNIT, yOFFSET + top + (i)* logUNIT, right - xOFFSET - (j)* logUNIT, yOFFSET + top + (1 + i) * logUNIT);
+							bar(right - xOFFSET - (j + 1)* logUNIT, bottom - yOFFSET - (i+1)* logUNIT, right - xOFFSET - (j)* logUNIT, bottom - yOFFSET - (i) * logUNIT);
 
 					}
 				}

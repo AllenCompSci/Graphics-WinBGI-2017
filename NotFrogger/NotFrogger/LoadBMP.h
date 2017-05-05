@@ -181,7 +181,7 @@ void game() {
 	///  SPEED	   0	 -9      +6     -6        0
 	///  COLOR     8    4/3       1     15       11                                 GREEN
 
-	if (debug) {
+	if (!debug) {
 		INTRO();
 		QuestLog();
 		string name = StringBuilder();
@@ -1036,7 +1036,7 @@ const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
 		if (LOGCOL6[0].bottom < 6) {
 			LOGCOL6.erase(LOGCOL6.begin());
 		}
-		if (LOGCOL6[(int)LOGCOL6.size() - 1].bottom < maxY - (250 / 4) - (CREATION[3] * 250)) {
+		if (LOGCOL6[(int)LOGCOL6.size() - 1].bottom < maxY - (250 / 3) - (CREATION[3] * 250 - (20*CREATION[3] + 20))) {
 			platform.create(Sixth);
 			LOGCOL6.push_back(platform);
 			updateCREATE(3);
@@ -1046,7 +1046,7 @@ const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
 		if (LOGCOL7[0].top > maxY - 20) {
 			LOGCOL7.erase(LOGCOL7.begin());
 		}
-		if (LOGCOL7[(int)LOGCOL7.size() - 1].top > (250 / 4) - (CREATION[4] * 250)) {
+		if (LOGCOL7[(int)LOGCOL7.size() - 1].top > (250 / 3) + (CREATION[4] * 250) - (20 * CREATION[3])) {
 			platform.create(Seventh);
 			LOGCOL7.push_back(platform);
 			updateCREATE(4);
@@ -1056,7 +1056,7 @@ const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
 		if (LOGCOL8[0].top > maxY - 20) {
 			LOGCOL8.erase(LOGCOL8.begin());
 		}
-		if (LOGCOL8[(int)LOGCOL8.size() - 1].top > (250 / 4) - (CREATION[5] * 250)) {
+		if (LOGCOL8[(int)LOGCOL8.size() - 1].top > (250 / 4) + (CREATION[5] * 250) - (20 * CREATION[3] )) {
 			platform.create(Eight);
 			LOGCOL8.push_back(platform);
 			updateCREATE(5);
