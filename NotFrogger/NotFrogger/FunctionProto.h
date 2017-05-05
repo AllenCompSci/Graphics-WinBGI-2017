@@ -120,12 +120,28 @@ struct NotFrogger {
 							putpixel(left + XOffset + i, top + j, frog_ARRY[j][i]);
 		}
 		else {
+			
+			deathAnimation++;
+			if ((currColumn == Second || currColumn == Third || currColumn == Fourth) && deathAnimation < 10) {
+				int deathUNIT = 4;
+				setcolor(YELLOW);
+				right = 80 + left;
+				for (int i = 0; i < Smashed_Height; i++) {
+					for (int j = 0; j < Smashed_Width; j++) {
+						if (Smashed[i][j] != 'D') {
+							bar(left + (j+1) * deathUNIT, top + (i+2) * deathUNIT, left + (j + 2) * deathUNIT, top + (3 + i) * deathUNIT);
+							bar(left + ((Smashed_Height - j - 1) * deathUNIT), top + (i+2) * deathUNIT, left + ((Smashed_Height - j)* deathUNIT), top + (3 + i) * deathUNIT);
+						}
+					}
+				}
+			}
 			/// WATER DEATH NEED ROAD DEATH
-			if (currColumn == Sixth || currColumn == Seventh || currColumn == Eight || currColumn == Ninth || currColumn == Tenth && deathAnimation < 10) {
+			if ((currColumn == Sixth || currColumn == Seventh || currColumn == Eight || currColumn == Ninth || currColumn == Tenth) && deathAnimation < 10) {
 				/// AQUA
+				remove();
 				int Cx = left + 35;
 				int Cy = top + 40 ;
-				int radius1 = UNIT - (deathAnimation++ * 2);
+				int radius1 = UNIT - (deathAnimation * 2);
 				int radius2 = UNIT - (deathAnimation * 3);
 				setcolor(CYAN);
 				circle(Cx, Cy, radius1);
@@ -145,7 +161,8 @@ struct NotFrogger {
 				if (deathAnimation < 6)
 				fillellipse(Cx, Cy, 3, 3);
 			}
-			if (deathAnimation == 11) {
+			if (deathAnimation == 15) {
+				remove();
 				lillied = true;
 			}
 		}
@@ -361,6 +378,9 @@ struct Car {
 		return MASTERCAR;
 	}
 	void render() {
+		setcolor(DARKGRAY);
+
+		bar(left + 6, top - dy, right - 6, bottom - dy);
 		if (position == Third) {
 			drawRevCar(left, top, type);
 			return;
@@ -424,11 +444,11 @@ struct Road {
 	}
 	void drawLines() {
 		setcolor(YELLOW);
-		bar(firstStripeX, top, firstStripeX + UNIT, bottom);
+		bar(firstStripeX+2, top, firstStripeX + UNIT, bottom);
 		bar(secondStripeX, top, secondStripeX + UNIT, bottom);
 		setcolor(DARKGRAY);
 		for (int i = 0; i < (maxY / UNIT) / 4; i++) {
-			bar(firstStripeX, UNIT + (i * itteration), firstStripeX + UNIT, UNIT + (i * itteration) + space);
+			bar(firstStripeX + 2, UNIT + (i * itteration), firstStripeX + UNIT, UNIT + (i * itteration) + space);
 			bar(secondStripeX, UNIT + (i * itteration), secondStripeX + UNIT, UNIT + (i * itteration) + space);
 		}
 	}
@@ -439,18 +459,78 @@ struct Log {
 	int right;
 	int bottom;
 	int dy;
+	int xOFFSET, yOFFSET;
+	int logUNIT;
+	bool up, invert;
 	void create(int x, int y) {
+		xOFFSET = 15;
+		yOFFSET = 20;
+		logUNIT = 5; // 5x5 each Pixel
 		left = x * UNIT;
 		right = x + 80;
 		top = y * UNIT;
 		bottom = y + 250;
 		dy = -6;
+		invert = false;
+		up = true;
 		draw();
 	}
-
+	void create(Column pos) {
+		xOFFSET = 15;
+		yOFFSET = 20;
+		logUNIT = 5; // 5x5 each Pixel
+		up = false;
+		dy = -15;
+		switch (pos) {
+		case Sixth:
+			left = (int)(25 * UNIT);
+			top = maxY - 45;
+			up = true;
+			break;
+		case Seventh:
+			left = (int)(28 * UNIT);
+			dy = abs(dy);
+			top = 0 - 250 + 45;
+			break;
+		case Eight:
+			left = (int)(31 * UNIT);
+			dy = abs(dy);
+			top = 0 - 250 + 45;
+			break;
+		case Ninth:
+			up = true;
+			left = (int)(34 * UNIT);
+			top = maxY - 45;
+			break;
+		}
+		invert = rand() % 3 == 0;
+		right = left + 80;
+		bottom = top + 250;
+		
+		draw();
+	}
 	void draw() {
-		setcolor(6);
-		bar(left, top, right, bottom);
+		remove();
+		for (int i = 0; i < LOG_Width; i++) {
+			for (int j = 0; j < LOG_Height; j++) {
+				if (LOG_ARRY[j][i] != 99) {
+					setcolor(LOG_ARRY[j][i]);
+					if (up) {
+						if(!invert)
+							bar(left + xOFFSET + (j) * logUNIT, yOFFSET + top + (i) * logUNIT, xOFFSET + left + (j + 1) * logUNIT, yOFFSET + top + (1 + i) * logUNIT);
+						else
+							bar(right - xOFFSET - (j+1)* logUNIT, yOFFSET + top + (i)* logUNIT, right - xOFFSET - (j) * logUNIT, yOFFSET + top + (1 + i) * logUNIT);
+					}
+					else {
+						if (!invert)
+							bar(left + xOFFSET + (j)* logUNIT, bottom - yOFFSET - (i+1)* logUNIT, xOFFSET + left + (j + 1) * logUNIT, bottom - yOFFSET - (i) * logUNIT);
+						else
+							bar(right - xOFFSET - (j + 1)* logUNIT, yOFFSET + top + (i)* logUNIT, right - xOFFSET - (j)* logUNIT, yOFFSET + top + (1 + i) * logUNIT);
+
+					}
+				}
+			}
+		}
 	}
 	void move() {
 		top += dy;

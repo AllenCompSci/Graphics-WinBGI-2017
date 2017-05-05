@@ -137,6 +137,11 @@ void CREATE(string test) {
 	colors.at(1).init(55, 148, 110, 1);    // BLUEGREEN?
 	colors.at(2).init(50, 60, 57, 8);     // DARKGRAY
 	*/
+	colors.at(0).init(0, 0, 0, 99);
+	colors.at(1).init(252, 71, 25, BROWN);
+	colors.at(2).init(106, 190, 48, CYAN);
+	colors.at(3).init(255, 255, 255, WHITE);
+
 	/*
 	*/
 #pragma endregion
@@ -209,6 +214,7 @@ void game() {
 				frog.currColumn = First;
 			}
 			else if (firstRun) {
+				RIVER();
 				frog.create(220, 600);
 				frog.currColumn = First;
 			}
@@ -217,7 +223,8 @@ void game() {
 
 #pragma region RENDER
 		frog.tick();
-		ROAD.render(Second);
+		//ROAD.drawLines(); // Adjusted lines so we don't have to redraw and have flickering lines all re-rendering phase
+		//ROAD.render(Second);
 		if (frog.currColumn == First) {
 			frog.draw();
 		}
@@ -228,14 +235,14 @@ void game() {
 			CARCOL2[i].tick();
 		}
 		
-		ROAD.render(Third);
+		//ROAD.render(Third);
 		if (frog.currColumn == Third) {
 			frog.draw();
 		}
 		for (int i = 0; frog.alive && i < (int)CARCOL3.size(); i++) {
 			CARCOL3[i].tick();
 		}
-		ROAD.render(Fourth);
+		//ROAD.render(Fourth);
 
 		if (frog.currColumn == Fourth || frog.currColumn == Fifth) {
 			frog.draw();
@@ -243,7 +250,7 @@ void game() {
 		for (int i = 0; frog.alive && i < (int)CARCOL4.size(); i++) {
 			CARCOL4[i].tick();
 		}
-		RIVER();
+		
 		LILYPAD();
 		for (int i = 0; i < (int)GOLDENFROGS.size(); i++) {
 			GOLDENFROGS[i].draw();
@@ -926,10 +933,12 @@ void drawTruck(int x, int y, CARTYPE vehicle) {
 void drawRevCar(int x, int y, CARTYPE vehicle) {
 	for (int i = 0; i < CAR_Height; i++)
 		for (int j = 0; j < CAR_Width; j++) {
-			if (CAR_ARRY[i][j] != 99)
-				if(vehicle != MASTERCAR)
-				putpixel(x + j, y + CAR_Height - i - 1, adjust(vehicle, CAR_ARRY[i][j]));
-				else
+			if (vehicle != MASTERCAR) {
+				if (CAR_ARRY[i][j] != 99)
+					putpixel(x + j, y + CAR_Height - i - 1, adjust(vehicle, CAR_ARRY[i][j]));
+			}
+			else
+				if(MasterCAR_ARRY[i][j] != 99)
 					putpixel(x + j, y + CAR_Height - i - 1, MasterCAR_ARRY[i][j]);
 		}
 }
@@ -976,6 +985,14 @@ void establishGAME() {
 		CARCOL3.push_back(Type1);
 		Type1.create(Fourth);
 		CARCOL4.push_back(Type1);
+		platform.create(Sixth);
+		LOGCOL6.push_back(platform);
+		platform.create(Seventh);
+		LOGCOL7.push_back(platform);
+		platform.create(Eight);
+		LOGCOL8.push_back(platform);
+		platform.create(Ninth);
+		LOGCOL9.push_back(platform);
 		firstRun = false;
 		/*
 		int CREATION[] = { 0, 0, 0, 0, 0, 0, 0 };
@@ -1015,6 +1032,47 @@ const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 };
 			updateCREATE(2);
 		}
 	}
+	if ((int)LOGCOL6.size() > 0) {
+		if (LOGCOL6[0].bottom < 6) {
+			LOGCOL6.erase(LOGCOL6.begin());
+		}
+		if (LOGCOL6[(int)LOGCOL6.size() - 1].bottom < maxY - (250 / 4) - (CREATION[3] * 250)) {
+			platform.create(Sixth);
+			LOGCOL6.push_back(platform);
+			updateCREATE(3);
+		}
+	}
+	if ((int)LOGCOL7.size() > 0) {
+		if (LOGCOL7[0].top > maxY - 20) {
+			LOGCOL7.erase(LOGCOL7.begin());
+		}
+		if (LOGCOL7[(int)LOGCOL7.size() - 1].top > (250 / 4) - (CREATION[4] * 250)) {
+			platform.create(Seventh);
+			LOGCOL7.push_back(platform);
+			updateCREATE(4);
+		}
+	}
+	if ((int)LOGCOL8.size() > 0) {
+		if (LOGCOL8[0].top > maxY - 20) {
+			LOGCOL8.erase(LOGCOL8.begin());
+		}
+		if (LOGCOL8[(int)LOGCOL8.size() - 1].top > (250 / 4) - (CREATION[5] * 250)) {
+			platform.create(Eight);
+			LOGCOL8.push_back(platform);
+			updateCREATE(5);
+		}
+	}
+	if ((int)LOGCOL9.size() > 0) {
+		if (LOGCOL9[0].bottom < 6) {
+			LOGCOL9.erase(LOGCOL9.begin());
+		}
+		if (LOGCOL9[(int)LOGCOL9.size() - 1].bottom < maxY - (250 / 4) - (CREATION[6] * 250)) {
+			platform.create(Ninth);
+			LOGCOL9.push_back(platform);
+			updateCREATE(6);
+		}
+	}
+
 	/*
 	LOGCOL6;
 	LOGCOL7;
