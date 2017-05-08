@@ -384,6 +384,14 @@ void CREATE(string test) {
 	colors.at(2).init(255, 255, 255, WHITE);
 	colors.at(3).init(34, 105, 156, GRAYBLUE);
 	*/
+	colors.at(5).init(0, 0, 0, BLACK);
+	colors.at(6).init(254, 72, 25, 99);
+	colors.at(0).init(255, 255, 0, YELLOW);
+	colors.at(1).init(255, 187, 0, YELLOW);
+	colors.at(2).init(187, 187, 187, LIGHTGRAY);
+	colors.at(3).init(255, 255, 255, WHITE);
+	colors.at(4).init(255, 0, 0, RED);
+
 	/*
 	*/
 #pragma endregion
