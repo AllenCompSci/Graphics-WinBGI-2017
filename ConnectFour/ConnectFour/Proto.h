@@ -10,11 +10,15 @@
 #include <thread>
 #include "Pixel.h"
 #include "VirtualKeyList.h"
+#include "Minion.h"
+#include "Token.h"
+#include "Spell.h"
 using namespace std;
 
 
 #pragma region ENUMS
 enum Player {Black, Red, NA};
+
 #pragma endregion
 #pragma region PROTOTYPE
 bool ActionListener(int);
@@ -28,9 +32,14 @@ void boundedCircle(int, int, int, int, int, int, int, int);
 string toUpper(string);
 unsigned char* ReadBMP(char*);
 void CREATE(string);
+void cpyCard(const int[][IMGWidth]);
+void drawCard(int, int);
+void drawMinion(Minion,int, int);
+void drawSpell(Spell, int, int);
+void drawToken(Token, int, int);
 #pragma endregion
 #pragma region GLOBAL_VARS
-const int NUMVECTOR = 3; /// LoadBMP VECTORSIZE
+const int NUMVECTOR = 8; /// LoadBMP VECTORSIZE
 const int UNIT = 40; /// Might be able to set as const should never change
 const int NUMCOL = 8;
 const int NUMROW = 8;
@@ -41,6 +50,7 @@ Player WINNER = NA;
 /// Global basic ints 
 int GrDriver, GrMode, ErrorCode;
 int maxX, maxY;
+int BLANKCARD[IMGHeight][IMGWidth];
 int w, h; /// BMP using for passing through functions 
 #pragma endregion
 #pragma region RECORDS

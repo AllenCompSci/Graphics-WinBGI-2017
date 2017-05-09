@@ -113,8 +113,11 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Minion.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="Proto.h" />
+    <ClInclude Include="Spell.h" />
+    <ClInclude Include="Token.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="VirtualKeyList.h" />
   </ItemGroup>
