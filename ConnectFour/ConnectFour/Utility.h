@@ -168,33 +168,58 @@ void game() {
 	int y = 100;
 	int radius = 45;
 	int i;
-	for (int k = 0; k < 39; k++) {
-		setcolor(WHITE);
-		bar(0, 0, maxX, maxY);
-		drawMinion((Minion)k, (maxX - IMGWidth) / 2, (maxY - IMGHeight) / 2);
-		getch();
-		if (k < 19) {
+	bool cards = false;
+	if (cards) {
+		for (int k = 0; k < 39; k++) {
+			setcolor(WHITE);
 			bar(0, 0, maxX, maxY);
-			drawToken((Token)k, (maxX - IMGWidth) / 2, (maxY - IMGHeight) / 2);
+			drawMinion((Minion)k, (maxX - IMGWidth) / 2, (maxY - IMGHeight) / 2);
 			getch();
+			if (k < 19) {
+				bar(0, 0, maxX, maxY);
+				drawToken((Token)k, (maxX - IMGWidth) / 2, (maxY - IMGHeight) / 2);
+				getch();
+			}
+			if (k < 26) {
+				bar(0, 0, maxX, maxY);
+				drawSpell((Spell)k, (maxX - IMGWidth) / 2, (maxY - IMGHeight) / 2);
+				getch();
+			}
+
 		}
-		if (k < 26) {
-			bar(0, 0, maxX, maxY);
-			drawSpell((Spell)k, (maxX - IMGWidth) / 2, (maxY - IMGHeight) / 2);
-			getch();
-		}
-		
 	}
 	setcolor(YELLOW);
 	bar(0, 0, maxX, maxY);
+	setcolor(BLACK);
+	int UNIT = 100;
+	x = (maxX - 800) / 2;
 
-	for (i = 0; i < 600; i+=3) {
+	for (i = 0; i < 8; i++)
+		for (int j = 1; j < 7; j++) {
+			rectangle(x + i*UNIT, y + j*UNIT, x + (i + 1)*UNIT, y + (j + 1)*UNIT);
+			draw(x + 50 + i*UNIT, y + 50 + j*UNIT, 45, BLACK);
+		}
+
+	x += 50;
+	y += 50;
+	for (i = 0; i < 247; i += 3){
+		topCircle(x, i, 45, RED, x, y, x, y + 100);
+	Sleep(50);
+	setcolor(BLACK);
+	topCircle(x, i, 45, YELLOW, x, y, x, y + 100);
+	draw(x, y + 100, 45, BLACK);
+}
+	y += 100;
+	for (i = 250; i < 750; i+=3) {
 		boundedCircle(x, i, 45, RED, x, y, x, y + 100);
 		Sleep(50);
 		setcolor(BLACK);
+		boundedCircle(x, i, 45, BLACK, x, y, x, y + 100);
+		/*
 		draw(x, y, 45, BLACK);
 		draw(x, y+100, 45, BLACK);
-		if (i > y + radius * 2 && y < 500)
+		*/
+		if (i > y + radius * 2 && y <= 550)
 			y += 100;
 	}
 	i -= 3;
@@ -512,6 +537,14 @@ void boundedCircle(int centerX, int centerY, int Radius, int color, int topX, in
 	for (int i = -Radius; i <= Radius; i++)
 		for (int j = -Radius; j <= Radius; j++) {
 			if (Radius >= distance(centerX, centerY, centerX + i, centerY + j) && (Radius >= distance(topX, topY, centerX +i, centerY +j)) || (Radius >= distance(centerX, centerY, centerX + i, centerY + j)) && (Radius >= distance(bottomX, bottomY, centerX +i, centerY + j))){
+				putpixel(centerX + i, centerY + j, color);
+			}
+		}
+}
+void topCircle(int centerX, int centerY, int Radius, int color, int topX, int topY, int bottomX, int bottomY) {
+	for (int i = -Radius; i <= Radius; i++)
+		for (int j = -Radius; j <= Radius; j++) {
+			if (Radius >= distance(centerX, centerY, centerX + i, centerY + j) && (centerY + j < (topY + 50) && centerY + j > topY - 50)  || (Radius >= distance(centerX, centerY, centerX + i, centerY + j)) && (Radius >= distance(bottomX, bottomY, centerX + i, centerY + j))) {
 				putpixel(centerX + i, centerY + j, color);
 			}
 		}

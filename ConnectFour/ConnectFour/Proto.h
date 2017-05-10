@@ -29,6 +29,7 @@ void INTRO();
 float distance(int, int, int, int);
 void draw(int, int, int, int);
 void boundedCircle(int, int, int, int, int, int, int, int);
+void topCircle(int, int, int, int, int, int, int, int);
 string toUpper(string);
 unsigned char* ReadBMP(char*);
 void CREATE(string);
