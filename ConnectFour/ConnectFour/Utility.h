@@ -167,7 +167,7 @@ void game() {
 	int x = maxX / 2;
 	int y = 100;
 	int radius = 45;
-	int i;
+	string temp = "";
 	bool cards = false;
 	if (cards) {
 		for (int k = 0; k < 39; k++) {
@@ -188,6 +188,35 @@ void game() {
 
 		}
 	}
+	GAME.gamesetup();
+	GAME.drop((Column)0, Red);
+	GAME.drop((Column)1, Black);
+	GAME.drop((Column)1, Red);
+	GAME.drop((Column)1, Black);
+	GAME.drop((Column)1, Red);
+	GAME.drop((Column)1, Black);
+	GAME.drop((Column)1, Red);
+	GAME.drop((Column)1, Black);
+	Turn = Red;
+	for (int i = 0; i < 99; i++) {
+		GAME.drop((Column)(rand() % 8), Turn);
+		if (GAME.win(Turn)) {
+			temp = (Turn == Red) ? "RED" : "BLACK";
+			cout << temp << " wins!!! ";
+			getch();
+			GAME.gamesetup();
+		}
+		if (Turn == Red) {
+			Turn = Black;
+		}
+		else {
+			Turn = Red;
+		}
+		getch();
+	}
+	/*
+	int y = 100;
+	int x = maxX / 2;
 	setcolor(YELLOW);
 	bar(0, 0, maxX, maxY);
 	setcolor(BLACK);
@@ -200,30 +229,7 @@ void game() {
 			draw(x + 50 + i*UNIT, y + 50 + j*UNIT, 45, BLACK);
 		}
 
-	x += 50;
-	y += 50;
-	for (i = 0; i < 247; i += 3){
-		topCircle(x, i, 45, RED, x, y, x, y + 100);
-	Sleep(50);
-	setcolor(BLACK);
-	topCircle(x, i, 45, YELLOW, x, y, x, y + 100);
-	draw(x, y + 100, 45, BLACK);
-}
-	y += 100;
-	for (i = 250; i < 750; i+=3) {
-		boundedCircle(x, i, 45, RED, x, y, x, y + 100);
-		Sleep(50);
-		setcolor(BLACK);
-		boundedCircle(x, i, 45, BLACK, x, y, x, y + 100);
-		/*
-		draw(x, y, 45, BLACK);
-		draw(x, y+100, 45, BLACK);
-		*/
-		if (i > y + radius * 2 && y <= 550)
-			y += 100;
-	}
-	i -= 3;
-	boundedCircle(x, y+100, 45, RED, x, y, x, y + 100);
+	*/
 	/*
 	while (isRunning) {
 
