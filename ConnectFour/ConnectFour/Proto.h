@@ -19,6 +19,7 @@ using namespace std;
 #pragma region ENUMS
 enum Player {Black, Red, NA};
 enum Column {One, Two, Three, Four, Five, Six, Seven, Eight};
+enum AIMode{Easy, Medium, Hard};
 #pragma endregion
 #pragma region PROTOTYPE
 bool ActionListener(int);
@@ -38,13 +39,15 @@ void drawCard(int, int);
 void drawMinion(Minion,int, int);
 void drawSpell(Spell, int, int);
 void drawToken(Token, int, int);
+bool WIN(Player, vector<vector<Player>>);
+void printBoard(vector<vector<Player>>);
 #pragma endregion
 #pragma region GLOBAL_VARS
 const int NUMVECTOR = 8; /// LoadBMP VECTORSIZE
 const int UNIT = 100; /// Might be able to set as const should never change
 const int SPEED = 16;
 const int NUMCOL = 8;
-const int NUMROW = 8;
+const int NUMROW = 6;
 const int BOARDCOLOR = YELLOW;
 const int BACKGROUND = WHITE;
 const int OUTLINE = BLACK;
@@ -52,6 +55,7 @@ bool isRunning = true;
 bool isName = false;
 Player Turn = Red;
 Player WINNER = NA;
+AIMode SETTING = Hard;
 /// Global basic ints 
 int GrDriver, GrMode, ErrorCode;
 int maxX, maxY;
@@ -105,6 +109,183 @@ struct RGB {
 		return r == t.r && g == t.g && b == t.b;
 	}
 };
+struct AI {
+	vector<vector<Player>> BOARD;
+	vector<int>PARENTMOVE;
+	vector<int>deepDive;
+	vector<bool>WORTH;
+	vector<vector<vector<Player>>> ABOMINATION;
+	Player whoseTurn;
+	int APROX[NUMCOL];
+	int VALUE;
+	Column init(vector<vector<Player>>FROM) {
+		reset();
+		cpy(BOARD, FROM);
+		depthSearch();
+		return (Column) getVALUE();
+	}
+	void reset() {
+		for (int i = 0; i < NUMCOL; i++)
+			APROX[i] = 0;
+		VALUE = -1;
+		BOARD.clear();
+		ABOMINATION.clear();
+		WORTH.clear();
+		deepDive.clear();
+		PARENTMOVE.clear();
+		whoseTurn = Turn;
+	}
+	void cpy(vector<vector<Player>> &To, vector <vector<Player>>FROM) {
+		To.clear();
+		for (int i = 0; i < NUMCOL; i++)
+		{
+			vector<Player> Generic;
+			Generic.clear();
+			for (int j = 0; j < (int)FROM[i].size(); j++) {
+				Generic.push_back(FROM[i][j]);
+			}
+			To.push_back(Generic);
+		}
+	}
+	void depthSearch() {
+		int DEPTH = 1;
+		switch (SETTING) {
+		case Easy :
+			DEPTH = 1;
+			break;
+		case Medium:
+			DEPTH = 3;
+			break;
+		case Hard:
+			DEPTH = 5;
+			break;
+		}
+		int ABOMINATIONPREVIOUSSIZE = (int)ABOMINATION.size();
+		vector<vector<Player>> Previous;
+		cpy(Previous, BOARD);
+		ABOMINATION.push_back(Previous);
+		WORTH.push_back(false);
+		PARENTMOVE.push_back(-1);
+		deepDive.push_back(-1);
+		int ABOMINATIONSTARTSIZE = (int)ABOMINATION.size();
+
+		for (int i = 0; i <= DEPTH; i++) {
+			ABOMINATIONSTARTSIZE = (int)ABOMINATION.size();
+			for (int j = ABOMINATIONPREVIOUSSIZE; j < ABOMINATIONSTARTSIZE; j++) {
+				cpy(Previous, ABOMINATION[j]);
+				vector<vector<Player>>Heuristic;
+				if(!WORTH[j])
+				for (int k = 0; k < NUMCOL; k++) {
+					cpy(Heuristic, Previous);
+					pushROW(Heuristic, (Column)k, whoseTurn);
+					if ((int)Heuristic.size() != 0) {
+						ABOMINATION.push_back(Heuristic);
+						bool isWin = WIN(whoseTurn, Heuristic);
+						if (isWin && i < 2) {
+							if (i == 0) {
+								VALUE = k;
+								return;
+							}
+							if (i == 1) {
+								if (PARENTMOVE[j] == k) {
+									while (BOARD[k].size() < 6) {
+										pushROW(BOARD, (Column)k, whoseTurn);
+									}
+								}
+								else {
+									VALUE = k;
+									return;
+								}
+							}
+						}
+						WORTH.push_back(isWin);
+						deepDive.push_back(i);
+						if (PARENTMOVE[j] == -1) {
+							PARENTMOVE.push_back(k);
+						}
+						else
+						PARENTMOVE.push_back(PARENTMOVE[j]);
+					}
+				}
+			}
+			if (whoseTurn == Red)
+			{
+				whoseTurn = Black;
+			}
+			else {
+				whoseTurn = Red;
+			}
+			ABOMINATIONPREVIOUSSIZE = ABOMINATIONSTARTSIZE;
+		}
+		for (int i = 1; i < (int)WORTH.size(); i++) {
+			if (WORTH[i]) {
+				// even depth are my moves 
+				// odd depths are opponent moves
+				if (deepDive[i] % 2 == 0) {
+					
+					APROX[PARENTMOVE[i]] += 10000000 / (int)(pow(10, deepDive[i]));
+				}
+				else {
+					
+					APROX[PARENTMOVE[i]] -= 1000000 / (int)(pow(10, deepDive[i]));
+					
+				}
+			}
+		}
+		int max = 0;
+		int min = 0;
+		bool equal = false;
+		for (int i = 1; i < NUMCOL; i++) {
+			if (APROX[i] > APROX[max]) {
+				max = i;
+			}
+			if (APROX[i] < APROX[min]) {
+				min = i;
+			}
+			if (APROX[i] == APROX[max] && APROX[i] == APROX[min]) {
+				equal = true;
+			}
+		}
+		system("cls");
+		cout << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
+		if (equal) {
+			if (APROX[max] == APROX[0] && APROX[min] == APROX[0]) {
+				VALUE = -1;
+				return;
+			}
+			else {
+				equal = false;
+			}
+		}
+		if (abs(APROX[min]) > APROX[max]) {
+			VALUE = min;
+			cout << VALUE << " : Column Picked \n";
+			return;
+			 }
+		VALUE = max;
+		
+			
+		
+	}
+	void pushROW(vector<vector<Player>> &grid, Column selected, Player piece) {
+		if ((int)grid[(int)selected].size() < 6) {
+			grid[(int)selected].push_back(piece);
+		}
+		else {
+			grid.clear();
+		}
+	}
+	int getVALUE() {
+		if (VALUE == -1) {
+			int k = rand() % 8;
+			while ((int)BOARD[k].size() == 6) {
+				k = rand() % 8;
+			}
+			return k;
+		}
+		return VALUE;
+	}
+}enemy;
 struct CONNECT4BOARD {
 	vector<vector<Player>> BOARD;
 	vector <Player> Generic;
@@ -135,8 +316,9 @@ struct CONNECT4BOARD {
 	void drop(Column selected, Player piece) {
 		if (ROW(selected) < 6) {
 			drawDrop(selected, piece);
+			pushROW(selected, piece);
 		}
-
+		
 	}
 	void drawDrop(Column selected, Player piece) {
 		int y = UNIT + 50;
@@ -164,9 +346,9 @@ struct CONNECT4BOARD {
 			if (i > y + radius * 2 && y <= limit - 200)
 				y += 100;
 		}
-		cout << "limit : " << limit << " y : " << y + 100 << endl;
+		//cout << "limit : " << limit << " y : " << y + 100 << endl;
 		draw(x, limit, radius, PIECE(piece));
-		pushROW(selected, piece);
+		
 	}
 	int PIECE(Player piece) {
 		if (piece == Red){
@@ -180,7 +362,8 @@ struct CONNECT4BOARD {
 	void pushROW(Column selected, Player piece) {
 		BOARD[(int)selected].push_back(piece);
 	}
-	bool win(Player piece) {
+	/*
+	bool WIN(Player piece, vector<vector<Player>>BOARD) {
 		bool win = false;
 		for (int i = 0; i < 8; i++) {
 			if ((int)BOARD[i].size() > 0 && BOARD[i].at((int)BOARD[i].size() - 1) == piece){
@@ -244,6 +427,7 @@ struct CONNECT4BOARD {
 		}
 		return win;
 	}
+	*/
 }GAME;
 /*
 0  BLACK

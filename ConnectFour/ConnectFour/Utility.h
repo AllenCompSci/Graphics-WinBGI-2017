@@ -189,18 +189,11 @@ void game() {
 		}
 	}
 	GAME.gamesetup();
-	GAME.drop((Column)0, Red);
-	GAME.drop((Column)1, Black);
-	GAME.drop((Column)1, Red);
-	GAME.drop((Column)1, Black);
-	GAME.drop((Column)1, Red);
-	GAME.drop((Column)1, Black);
-	GAME.drop((Column)1, Red);
-	GAME.drop((Column)1, Black);
 	Turn = Red;
 	for (int i = 0; i < 99; i++) {
-		GAME.drop((Column)(rand() % 8), Turn);
-		if (GAME.win(Turn)) {
+		GAME.drop(enemy.init(GAME.BOARD), Turn);
+		printBoard(GAME.BOARD);
+		if (WIN(Turn, GAME.BOARD)) {
 			temp = (Turn == Red) ? "RED" : "BLACK";
 			cout << temp << " wins!!! ";
 			getch();
@@ -212,29 +205,9 @@ void game() {
 		else {
 			Turn = Red;
 		}
-		getch();
+		
 	}
-	/*
-	int y = 100;
-	int x = maxX / 2;
-	setcolor(YELLOW);
-	bar(0, 0, maxX, maxY);
-	setcolor(BLACK);
-	int UNIT = 100;
-	x = (maxX - 800) / 2;
-
-	for (i = 0; i < 8; i++)
-		for (int j = 1; j < 7; j++) {
-			rectangle(x + i*UNIT, y + j*UNIT, x + (i + 1)*UNIT, y + (j + 1)*UNIT);
-			draw(x + 50 + i*UNIT, y + 50 + j*UNIT, 45, BLACK);
-		}
-
-	*/
-	/*
-	while (isRunning) {
-
-	}
-	*/
+	
 	system("pause");
 }
 /// Thread 2
@@ -832,4 +805,86 @@ void drawSpell(Spell card, int x, int y) { // 25
 		break;
 	}
 	drawCard(x, y);
+}
+bool WIN(Player piece, vector<vector<Player>>BOARD) {
+	bool win = false;
+	for (int i = 0; i < NUMCOL; i++) {
+		if ((int)BOARD[i].size() > 0 && BOARD[i].at((int)BOARD[i].size() - 1) == piece) {
+			int index = (int)BOARD[i].size() - 1;
+			// RIGHT 
+			if ((i + 3) < 8) {
+				win = true;
+				for (int j = 1; j < 4 && win; j++) {
+					win = false;
+					if ((int)BOARD[i + j].size() > index) {
+						if (BOARD[i + j].at(index) == piece) {
+ 							win = true;
+						}
+					}
+				}
+				if (win) {
+ 					return win;
+				}
+			}
+			// DOWN
+			if (index > 2) {
+				win = true;
+				for (int j = 1; j < 4 && win; j++) {
+					win = false;
+					if (BOARD[i].at(index - j) == piece) {
+						win = true;
+					}
+				}
+				if (win) {
+					return win;
+				}
+				// DOWN RIGHT
+				if ((i + 3) < 8) {
+					win = true;
+					for (int j = 1; j < 4 && win; j++) {
+						win = false;
+						if ((int)BOARD[i + j].size() >(index - j) && BOARD[i + j].at(index - j) == piece) {
+							win = true;
+						}
+					}
+					if (win) {
+						return win;
+					}
+				}
+			}
+			// UP RIGHT
+			if ((i + 3) < 8 && index < 3) {
+				win = true;
+				for (int j = 1; j < 4 && win; j++) {
+					win = false;
+					if ((int)BOARD[i + j].size() >(index + j) && BOARD[i + j].at(index + j) == piece) {
+						win = true;
+					}
+				}
+				if (win) {
+					return win;
+				}
+			}
+
+		}
+	}
+	return win;
+}
+void printBoard(vector<vector<Player>> toString) {
+	for (int j = NUMROW - 1; j >= 0; j--) {
+			for (int i = 0; i < NUMCOL; i++) {
+			if ((int)toString[i].size() > j) {
+				if (toString[i][j] == Red) {
+					cout << "R";
+				}
+				else {
+					cout << "B";
+				}
+			}
+			else {
+				cout << ".";
+			}
+		}
+		cout << "\n";
+	}
 }
