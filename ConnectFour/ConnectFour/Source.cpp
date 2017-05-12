@@ -1,8 +1,5 @@
 #include "Utility.h"
 
 void main() {
-
-	game();
-
-
+	game(); /// CHECK GAME PROTOCHECK 
 }

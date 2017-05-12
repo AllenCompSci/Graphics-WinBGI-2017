@@ -14,8 +14,6 @@
 #include "Token.h"
 #include "Spell.h"
 using namespace std;
-
-
 #pragma region ENUMS
 enum Player {Black, Red, NA};
 enum Column {One, Two, Three, Four, Five, Six, Seven, Eight};
@@ -111,6 +109,7 @@ struct RGB {
 	}
 };
 struct AI {
+	vector<vector<Player>> currGAME;
 	vector<vector<Player>> BOARD;
 	vector<int>PARENTMOVE;
 	vector<int>deepDive;
@@ -122,6 +121,7 @@ struct AI {
 	Column init(vector<vector<Player>>FROM) {
 		reset();
 		cpy(BOARD, FROM);
+		cpy(currGAME, FROM);
 		depthSearch();
 		cout << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
 		cout << "BOARD Post depthSearch() : \n";
@@ -138,6 +138,7 @@ struct AI {
 		ABOMINATION.clear();
 		WORTH.clear();
 		deepDive.clear();
+		currGAME.clear();
 		PARENTMOVE.clear();
 		whoseTurn = Turn;
 	}
@@ -263,7 +264,6 @@ struct AI {
 				equal = true;
 			}
 		}
-		system("cls");
 		
 		if (equal) {
 			if (APROX[max] == APROX[0] && APROX[min] == APROX[0]) {
@@ -294,11 +294,22 @@ struct AI {
 	}
 	int getVALUE() {
 		if (VALUE == -1) {
-			
 			VALUE = rand() % 8;
 		}
-		while ((int)BOARD[VALUE].size() == 6) {
-			VALUE = rand() % 8;
+		bool SpecialCase = true;
+		for (int i = 0; i < NUMCOL && SpecialCase; i++) {
+			if (BOARD[i].size() != NUMCOL) {
+				SpecialCase = false;
+			}
+		}
+		if (SpecialCase) {
+			cpy(BOARD, currGAME);
+			cout << "**********************\n";
+			printBoard();
+			cout << "**********************\n";
+		}
+		while ((int)BOARD[VALUE].size() == NUMCOL) {
+			VALUE = rand() % NUMROW;
 		}
 		cout << VALUE << " : Column Picked \n";
 		pushROW(BOARD, (Column)VALUE, Turn);

@@ -190,7 +190,7 @@ void game() {
 	}
 	GAME.gamesetup();
 	Turn = Red;
-	for (int i = 0; i < 99; i++) {
+	for (int i = 0; i >=0 ; i++) {
 		if (i % 4 == 0) {
 			GAME.drawBoard();
 		}
@@ -200,6 +200,7 @@ void game() {
 			temp = (Turn == Red) ? "RED" : "BLACK";
 			cout << temp << " wins!!! ";
 			getch();
+			system("cls");
 			GAME.gamesetup();
 		}
 		if (piecesOnBoard == (NUMCOL * NUMROW)) {
@@ -815,12 +816,15 @@ void drawSpell(Spell card, int x, int y) { // 25
 }
 bool WIN(Player piece, vector<vector<Player>>BOARD) {
 	bool win = false;
+	int INAROW = 4;
 	for (int i = 0; i < NUMCOL; i++) {
-		if ((int)BOARD[i].size() > 0 && BOARD[i].at((int)BOARD[i].size() - 1) == piece) {
-			int index = (int)BOARD[i].size() - 1;
+		for(int j = (int)BOARD[i].size() - 1; j >= 0; j--)
+		if (BOARD[i][j] == piece) {
+			int index = j;
 			// RIGHT 
 			if ((i + 3) < 8) {
 				win = true;
+				
 				for (int j = 1; j < 4 && win; j++) {
 					win = false;
 					if ((int)BOARD[i + j].size() > index) {
@@ -879,6 +883,7 @@ bool WIN(Player piece, vector<vector<Player>>BOARD) {
 }
 void printBoard(vector<vector<Player>> toString) {
 	for (int j = NUMROW - 1; j >= 0; j--) {
+		cout << " ";
 			for (int i = 0; i < NUMCOL; i++) {
 			if ((int)toString[i].size() > j) {
 				if (toString[i][j] == Red) {
