@@ -191,11 +191,19 @@ void game() {
 	GAME.gamesetup();
 	Turn = Red;
 	for (int i = 0; i < 99; i++) {
+		if (i % 4 == 0) {
+			GAME.drawBoard();
+		}
 		GAME.drop(enemy.init(GAME.BOARD), Turn);
 		printBoard(GAME.BOARD);
-		if (WIN(Turn, GAME.BOARD)) {
+		if (WIN(Turn, GAME.BOARD)){
 			temp = (Turn == Red) ? "RED" : "BLACK";
 			cout << temp << " wins!!! ";
+			getch();
+			GAME.gamesetup();
+		}
+		if (piecesOnBoard == (NUMCOL * NUMROW)) {
+			cout << "DRAW!!";
 			getch();
 			GAME.gamesetup();
 		}
@@ -494,7 +502,6 @@ void Listener() {
 		Sleep(15);
 	}
 }
-///
 /// Draws Intro
 void INTRO() {
 

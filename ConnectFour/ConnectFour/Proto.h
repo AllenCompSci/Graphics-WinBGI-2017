@@ -56,7 +56,8 @@ bool isName = false;
 Player Turn = Red;
 Player WINNER = NA;
 AIMode SETTING = Hard;
-/// Global basic ints 
+/// Global basic ints
+int piecesOnBoard = 0;
 int GrDriver, GrMode, ErrorCode;
 int maxX, maxY;
 int BLANKCARD[IMGHeight][IMGWidth];
@@ -122,6 +123,11 @@ struct AI {
 		reset();
 		cpy(BOARD, FROM);
 		depthSearch();
+		cout << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
+		cout << "BOARD Post depthSearch() : \n";
+		cout << "**********************\n";
+		printBoard();
+		cout << "**********************\n";
 		return (Column) getVALUE();
 	}
 	void reset() {
@@ -148,7 +154,12 @@ struct AI {
 		}
 	}
 	void depthSearch() {
+		if (piecesOnBoard / 2 < 2) {
+			VALUE = -1;
+			return;
+		}
 		int DEPTH = 1;
+		bool terminate = false;
 		switch (SETTING) {
 		case Easy :
 			DEPTH = 1;
@@ -160,6 +171,10 @@ struct AI {
 			DEPTH = 5;
 			break;
 		}
+		if ((piecesOnBoard / 2) < 6)
+			DEPTH = 1;
+		else if (DEPTH > 3 && (piecesOnBoard / 2) < 12)
+			DEPTH = 3;
 		int ABOMINATIONPREVIOUSSIZE = (int)ABOMINATION.size();
 		vector<vector<Player>> Previous;
 		cpy(Previous, BOARD);
@@ -169,7 +184,7 @@ struct AI {
 		deepDive.push_back(-1);
 		int ABOMINATIONSTARTSIZE = (int)ABOMINATION.size();
 
-		for (int i = 0; i <= DEPTH; i++) {
+		for (int i = 0; i <= DEPTH && (piecesOnBoard + i) < (NUMCOL * NUMROW); i++) {
 			ABOMINATIONSTARTSIZE = (int)ABOMINATION.size();
 			for (int j = ABOMINATIONPREVIOUSSIZE; j < ABOMINATIONSTARTSIZE; j++) {
 				cpy(Previous, ABOMINATION[j]);
@@ -194,7 +209,7 @@ struct AI {
 								}
 								else {
 									VALUE = k;
-									return;
+									terminate = true;
 								}
 							}
 						}
@@ -205,6 +220,9 @@ struct AI {
 						}
 						else
 						PARENTMOVE.push_back(PARENTMOVE[j]);
+					}
+					if (terminate) {
+						return;
 					}
 				}
 			}
@@ -222,13 +240,12 @@ struct AI {
 				// even depth are my moves 
 				// odd depths are opponent moves
 				if (deepDive[i] % 2 == 0) {
-					
+					if((int)BOARD[PARENTMOVE[i]].size() < 6)
 					APROX[PARENTMOVE[i]] += 10000000 / (int)(pow(10, deepDive[i]));
 				}
-				else {
-					
+				else {					
+					if ((int)BOARD[PARENTMOVE[i]].size() < 6)
 					APROX[PARENTMOVE[i]] -= 1000000 / (int)(pow(10, deepDive[i]));
-					
 				}
 			}
 		}
@@ -247,7 +264,7 @@ struct AI {
 			}
 		}
 		system("cls");
-		cout << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
+		
 		if (equal) {
 			if (APROX[max] == APROX[0] && APROX[min] == APROX[0]) {
 				VALUE = -1;
@@ -277,13 +294,38 @@ struct AI {
 	}
 	int getVALUE() {
 		if (VALUE == -1) {
-			int k = rand() % 8;
-			while ((int)BOARD[k].size() == 6) {
-				k = rand() % 8;
-			}
-			return k;
+			
+			VALUE = rand() % 8;
 		}
+		while ((int)BOARD[VALUE].size() == 6) {
+			VALUE = rand() % 8;
+		}
+		cout << VALUE << " : Column Picked \n";
+		pushROW(BOARD, (Column)VALUE, Turn);
+		printBoard();
+		cout << "**********************\n";
 		return VALUE;
+	}
+	void printBoard() {
+		cout << "**********\n";
+		for (int j = NUMROW - 1; j >= 0; j--) {
+			cout << "*";
+			for (int i = 0; i < NUMCOL; i++) {
+				if ((int)BOARD[i].size() > j) {
+					if (BOARD[i][j] == Red) {
+						cout << "R";
+					}
+					else {
+						cout << "B";
+					}
+				}
+				else {
+					cout << ".";
+				}
+			}
+			cout << "*\n";
+		}
+		cout << "**********\n";
 	}
 }enemy;
 struct CONNECT4BOARD {
@@ -292,24 +334,36 @@ struct CONNECT4BOARD {
 	void gamesetup() {
 		Generic.clear();
 		BOARD.clear();
+		piecesOnBoard = 0;
 		// Force the board to be empty
 		for (int i = 0; i < NUMCOL; i++){
 			BOARD.push_back(Generic);
 		}
 
-		clearBoard();
+		drawBoard();
 	}
-	void clearBoard() {
-		
+	void drawBoard() {
+		int COLOR = BACKGROUND;
 		int y = UNIT;
 		setcolor(BOARDCOLOR);
 		bar(0, 0, maxX, maxY);
 		setcolor(OUTLINE);
 		int x = (maxX - 800) / 2;
-		for (int i = 0; i < 8; i++)
-			for (int j = 1; j < 7; j++) {
+		for (int i = 0; i < NUMCOL; i++)
+			for (int j = 1; j <= NUMROW; j++) {
 				rectangle(x + i*UNIT, y + j*UNIT, x + (i + 1)*UNIT, y + (j + 1)*UNIT);
-				draw(x + 50 + i*UNIT, y + 50 + j*UNIT, 45, BACKGROUND);
+				COLOR = BACKGROUND;
+				if (NUMROW - j < (int)BOARD[i].size()) {
+					switch (BOARD[i][NUMROW - j]) {
+					case Red:
+						COLOR = RED;
+						break;
+					case Black:
+						COLOR = BLACK;
+						break;
+					}
+				}
+				draw(x + 50 + i*UNIT, y + 50 + j*UNIT, 45, COLOR);
 			}
 
 	}
@@ -360,6 +414,7 @@ struct CONNECT4BOARD {
 		return (int)BOARD[(int)selected].size();
 	}
 	void pushROW(Column selected, Player piece) {
+		piecesOnBoard++;
 		BOARD[(int)selected].push_back(piece);
 	}
 	/*
