@@ -20,45 +20,53 @@ enum Column {One, Two, Three, Four, Five, Six, Seven, Eight};
 enum AIMode{Easy, Medium, Hard};
 #pragma endregion
 #pragma region PROTOTYPE
-bool ActionListener(int);
-void gr_Start(int&, int&, int&); 
+
+bool ActionListener(int); /// Key Listener Attribute
+void gr_Start(int&, int&, int&);  /// Creates Graphics Window
 void game(); // Thread 1
 void Listener(); // Thread 2
-void INTRO();
-float distance(int, int, int, int);
-void draw(int, int, int, int);
-void boundedCircle(int, int, int, int, int, int, int, int);
-void topCircle(int, int, int, int, int, int, int, int);
+void INTRO(); /// Draws an Intro for Connect 4
+float distance(int, int, int, int); /// Application of Distance Forumula
+void draw(int, int, int, int); /// Draws a Circle using putpixel
+void boundedCircle(int, int, int, int, int, int, int, int); // Allows the Circle to be drawn in only visible areas of two other circles maintaint its shape
+void topCircle(int, int, int, int, int, int, int, int); // As bounded, except the top Circle is a Rectangle increaseing the area of its range from being inside two circles to a rectangle and then a circle offset from the radius of the rectangle (VISUAL)
+bool WIN(Player, vector<vector<Player>>);  // Checks Left to Right
+void printBoard(vector<vector<Player>>); // Displays to console the game. 
+/// LOAD BMP SETTINGS
 string toUpper(string);
 unsigned char* ReadBMP(char*);
 void CREATE(string);
+/// CARD FUNCTIONS
 void cpyCard(const int[][IMGWidth]);
 void drawCard(int, int);
 void drawMinion(Minion,int, int);
 void drawSpell(Spell, int, int);
 void drawToken(Token, int, int);
-bool WIN(Player, vector<vector<Player>>);
-void printBoard(vector<vector<Player>>);
 #pragma endregion
 #pragma region GLOBAL_VARS
 const int NUMVECTOR = 8; /// LoadBMP VECTORSIZE
 const int UNIT = 100; /// Might be able to set as const should never change
 const int SPEED = 16;
+/// BOARD SIZE
 const int NUMCOL = 8;
 const int NUMROW = 6;
+/// COLOR SCHEMA
 const int BOARDCOLOR = YELLOW;
 const int BACKGROUND = WHITE;
 const int OUTLINE = BLACK;
+/// GLOBAL LIFETIME
 bool isRunning = true;
+/// GLOBAL ASSET for KEYLISTENER
 bool isName = false;
+/// GAME ENUMS TURN, WHO WINS, AISETTING
 Player Turn = Red;
 Player WINNER = NA;
 AIMode SETTING = Hard;
 /// Global basic ints
-int piecesOnBoard = 0;
+int piecesOnBoard = 0; // Count of Pieces Played
 int GrDriver, GrMode, ErrorCode;
-int maxX, maxY;
-int BLANKCARD[IMGHeight][IMGWidth];
+int maxX, maxY; // Size of canvas
+int BLANKCARD[IMGHeight][IMGWidth]; /// CARD SPECIFIC FUNCTION.
 int w, h; /// BMP using for passing through functions 
 #pragma endregion
 #pragma region RECORDS
@@ -147,10 +155,14 @@ struct AI {
 		for (int i = 0; i < NUMCOL; i++)
 		{
 			vector<Player> Generic;
-			Generic.clear();
+			Generic.clear();	
+		/*
+			copy(FROM[i].begin(), FROM[i].end(), Generic.begin());
+		*/
 			for (int j = 0; j < (int)FROM[i].size(); j++) {
 				Generic.push_back(FROM[i][j]);
 			}
+			
 			To.push_back(Generic);
 		}
 	}
@@ -200,17 +212,17 @@ struct AI {
 						if (isWin && i < 2) {
 							if (i == 0) {
 								VALUE = k;
-								return;
+								return; // prioritize win
 							}
 							if (i == 1) {
 								if (PARENTMOVE[j] == k) {
 									while (BOARD[k].size() < 6) {
-										pushROW(BOARD, (Column)k, whoseTurn);
+										pushROW(BOARD, (Column)k, whoseTurn); // TRY TO BLOCK LOOSE PIECE FROM GOING IN k COLUMN
 									}
 								}
 								else {
 									VALUE = k;
-									terminate = true;
+									terminate = true; // Terminates based on the fact that this isn't an end move. 
 								}
 							}
 						}
@@ -227,7 +239,7 @@ struct AI {
 					}
 				}
 			}
-			if (whoseTurn == Red)
+			if (whoseTurn == Red) /// Changes Whose Turn is simualted 
 			{
 				whoseTurn = Black;
 			}
@@ -236,16 +248,16 @@ struct AI {
 			}
 			ABOMINATIONPREVIOUSSIZE = ABOMINATIONSTARTSIZE;
 		}
-		for (int i = 1; i < (int)WORTH.size(); i++) {
+		for (int i = 1; i < (int)WORTH.size(); i++) { // Evaluates ABOMINATION a vector of all possible moves
 			if (WORTH[i]) {
 				// even depth are my moves 
 				// odd depths are opponent moves
 				if (deepDive[i] % 2 == 0) {
-					if((int)BOARD[PARENTMOVE[i]].size() < 6)
+					if((int)BOARD[PARENTMOVE[i]].size() < 6) /// If this is a possible move
 					APROX[PARENTMOVE[i]] += 10000000 / (int)(pow(10, deepDive[i]));
 				}
 				else {					
-					if ((int)BOARD[PARENTMOVE[i]].size() < 6)
+					if ((int)BOARD[PARENTMOVE[i]].size() < 6) // Same
 					APROX[PARENTMOVE[i]] -= 1000000 / (int)(pow(10, deepDive[i]));
 				}
 			}
@@ -253,7 +265,7 @@ struct AI {
 		int max = 0;
 		int min = 0;
 		bool equal = false;
-		for (int i = 1; i < NUMCOL; i++) {
+		for (int i = 1; i < NUMCOL; i++) { // Judge Evaluation
 			if (APROX[i] > APROX[max]) {
 				max = i;
 			}
@@ -274,9 +286,8 @@ struct AI {
 				equal = false;
 			}
 		}
-		if (abs(APROX[min]) > APROX[max]) {
+		if (abs(APROX[min]) > APROX[max]) { // Set
 			VALUE = min;
-			cout << VALUE << " : Column Picked \n";
 			return;
 			 }
 		VALUE = max;
@@ -289,15 +300,15 @@ struct AI {
 			grid[(int)selected].push_back(piece);
 		}
 		else {
-			grid.clear();
+			grid.clear(); /// Clears solution 
 		}
 	}
 	int getVALUE() {
 		if (VALUE == -1) {
-			VALUE = rand() % 8;
+			VALUE = rand() % 8; /// Random 
 		}
-		bool SpecialCase = true;
-		for (int i = 0; i < NUMCOL && SpecialCase; i++) {
+		bool SpecialCase = true; /// When maybe you block the only possible move
+		for (int i = 0; i < NUMCOL && SpecialCase; i++) { /// Checks that special case
 			if (BOARD[i].size() != NUMCOL) {
 				SpecialCase = false;
 			}
@@ -315,7 +326,7 @@ struct AI {
 		pushROW(BOARD, (Column)VALUE, Turn);
 		printBoard();
 		cout << "**********************\n";
-		return VALUE;
+		return VALUE; // Returns a column selected and evaluated 
 	}
 	void printBoard() {
 		cout << "**********\n";

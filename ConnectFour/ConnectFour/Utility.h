@@ -190,22 +190,23 @@ void game() {
 	}
 	GAME.gamesetup();
 	Turn = Red;
-	for (int i = 0; i >=0 ; i++) {
+	for (int i = 0; i >=0 ; i++) { /// i always true. Need to fix. Here is the program
 		if (i % 4 == 0) {
 			GAME.drawBoard();
 		}
-		GAME.drop(enemy.init(GAME.BOARD), Turn);
+		GAME.drop(enemy.init(GAME.BOARD), Turn); /// THE ENTIRE GAME AICall
 		printBoard(GAME.BOARD);
-		if (WIN(Turn, GAME.BOARD)){
+		if (WIN(Turn, GAME.BOARD)){ /// CHECKS TO SEE IF GAME IS OVER
 			temp = (Turn == Red) ? "RED" : "BLACK";
 			cout << temp << " wins!!! ";
 			getch();
 			system("cls");
-			GAME.gamesetup();
+			GAME.gamesetup(); // resets board and piecesOnBoard
 		}
-		if (piecesOnBoard == (NUMCOL * NUMROW)) {
+		if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
 			cout << "DRAW!!";
 			getch();
+			system("cls");
 			GAME.gamesetup();
 		}
 		if (Turn == Red) {
