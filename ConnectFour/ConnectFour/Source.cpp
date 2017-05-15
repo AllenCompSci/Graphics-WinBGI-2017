@@ -1,5 +1,8 @@
 #include "Utility.h"
 
 void main() {
-	game(); /// CHECK GAME PROTOCHECK 
+	thread Connect4(game); /// CHECK GAME PROTOCHECK 
+	thread KeyListener(Listener);
+	KeyListener.join();
+	Connect4.join();
 }

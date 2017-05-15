@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <stdio.h>
 #include <Windows.h> // KEY PRESS MOUSE LISTENER NECESSITY
@@ -32,6 +33,8 @@ void boundedCircle(int, int, int, int, int, int, int, int); // Allows the Circle
 void topCircle(int, int, int, int, int, int, int, int); // As bounded, except the top Circle is a Rectangle increaseing the area of its range from being inside two circles to a rectangle and then a circle offset from the radius of the rectangle (VISUAL)
 bool WIN(Player, vector<vector<Player>>);  // Checks Left to Right
 void printBoard(vector<vector<Player>>); // Displays to console the game. 
+string increaseSTR(string);
+void GAMELog();
 /// LOAD BMP SETTINGS
 string toUpper(string);
 unsigned char* ReadBMP(char*);
@@ -58,6 +61,7 @@ const int OUTLINE = BLACK;
 bool isRunning = true;
 /// GLOBAL ASSET for KEYLISTENER
 bool isName = false;
+bool isRefresh = false;
 /// GAME ENUMS TURN, WHO WINS, AISETTING
 Player Turn = Red;
 Player WINNER = NA;
@@ -68,6 +72,8 @@ int GrDriver, GrMode, ErrorCode;
 int maxX, maxY; // Size of canvas
 int BLANKCARD[IMGHeight][IMGWidth]; /// CARD SPECIFIC FUNCTION.
 int w, h; /// BMP using for passing through functions 
+vector <int> XColBounds;
+ofstream outfile;
 #pragma endregion
 #pragma region RECORDS
 struct KeyState {
@@ -131,11 +137,11 @@ struct AI {
 		cpy(BOARD, FROM);
 		cpy(currGAME, FROM);
 		depthSearch();
-		cout << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
-		cout << "BOARD Post depthSearch() : \n";
-		cout << "**********************\n";
+		outfile << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
+		outfile << "BOARD Post depthSearch() : \n";
+		outfile << "**********************\n";
 		printBoard();
-		cout << "**********************\n";
+		outfile << "**********************\n";
 		return (Column) getVALUE();
 	}
 	void reset() {
@@ -154,15 +160,16 @@ struct AI {
 		To.clear();
 		for (int i = 0; i < NUMCOL; i++)
 		{
-			vector<Player> Generic;
-			Generic.clear();	
-		/*
-			copy(FROM[i].begin(), FROM[i].end(), Generic.begin());
-		*/
+			vector<Player> Generic(FROM[i]);
+			//Generic.clear();	
+		/*	
+		if (!FROM[i].empty())
+				copy(FROM[i].begin(), FROM[i].end(), Generic.begin());
+		
 			for (int j = 0; j < (int)FROM[i].size(); j++) {
 				Generic.push_back(FROM[i][j]);
 			}
-			
+		*/	
 			To.push_back(Generic);
 		}
 	}
@@ -315,39 +322,39 @@ struct AI {
 		}
 		if (SpecialCase) {
 			cpy(BOARD, currGAME);
-			cout << "**********************\n";
+			outfile << "**********************\n";
 			printBoard();
-			cout << "**********************\n";
+			outfile << "**********************\n";
 		}
 		while ((int)BOARD[VALUE].size() == NUMCOL) {
 			VALUE = rand() % NUMROW;
 		}
-		cout << VALUE << " : Column Picked \n";
+		outfile << VALUE << " : Column Picked \n";
 		pushROW(BOARD, (Column)VALUE, Turn);
 		printBoard();
-		cout << "**********************\n";
+		outfile << "**********************\n";
 		return VALUE; // Returns a column selected and evaluated 
 	}
 	void printBoard() {
-		cout << "**********\n";
+		outfile << "**********\n";
 		for (int j = NUMROW - 1; j >= 0; j--) {
-			cout << "*";
+			outfile << "*";
 			for (int i = 0; i < NUMCOL; i++) {
 				if ((int)BOARD[i].size() > j) {
 					if (BOARD[i][j] == Red) {
-						cout << "R";
+						outfile << "R";
 					}
 					else {
-						cout << "B";
+						outfile << "B";
 					}
 				}
 				else {
-					cout << ".";
+					outfile << ".";
 				}
 			}
-			cout << "*\n";
+			outfile << "*\n";
 		}
-		cout << "**********\n";
+		outfile << "**********\n";
 	}
 }enemy;
 struct CONNECT4BOARD {
@@ -361,7 +368,7 @@ struct CONNECT4BOARD {
 		for (int i = 0; i < NUMCOL; i++){
 			BOARD.push_back(Generic);
 		}
-
+		GAMELog();
 		drawBoard();
 	}
 	void drawBoard() {
@@ -439,73 +446,29 @@ struct CONNECT4BOARD {
 		piecesOnBoard++;
 		BOARD[(int)selected].push_back(piece);
 	}
-	/*
-	bool WIN(Player piece, vector<vector<Player>>BOARD) {
-		bool win = false;
-		for (int i = 0; i < 8; i++) {
-			if ((int)BOARD[i].size() > 0 && BOARD[i].at((int)BOARD[i].size() - 1) == piece){
-				int index = (int)BOARD[i].size() - 1;
-				// RIGHT 
-				if ((i + 3) < 8) {
-					win = true;
-					for (int j = 1; j < 4 && win; j++) {
-						win = false;
-						if ((int)BOARD[i + j].size() > index) {
-							if (BOARD[i + j].at(index) == piece) {
-								win = true;
-							}
-						}
-					}
-					if (win) {
-						return win;
-					}
-				}
-				// DOWN
-				if (index > 2) {
-					win = true;
-					for (int j = 1; j < 4 && win; j++) {
-						win = false;
-						if (BOARD[i].at(index-j) == piece) {
-								win = true;
-						}
-					}
-					if (win) {
-						return win;
-					}
-					// DOWN RIGHT
-					if ((i + 3) < 8) {
-						win = true;
-						for (int j = 1; j < 4 && win; j++) {
-							win = false;
-							if ((int)BOARD[i + j].size() > (index - j) && BOARD[i + j].at(index - j) == piece) {
-								win = true;
-							}
-						}
-						if (win) {
-							return win;
-						}
-					}
-				}
-				// UP RIGHT
-				if ((i + 3) < 8 && index < 3) {
-					win = true;
-					for (int j = 1; j < 4 && win; j++) {
-						win = false;
-						if ((int)BOARD[i + j].size() > (index + j) && BOARD[i+j].at(index + j) == piece) {
-							win = true;
-						}
-					}
-					if (win) {
-						return win;
-					}
-				}
-				
-			}
-		}
-		return win;
-	}
-	*/
 }GAME;
+struct PLAYERCLICK {
+	void setup() {
+		int x = (maxX - 800) / 2;
+		for (int i = 0; i <= NUMCOL; i++)
+			XColBounds.push_back(x + i*UNIT); /// DEFINES THE BOUNDS.
+	}
+	Column mouseCHECK() {
+		bool PLAYERTURN = true;
+		while (PLAYERTURN) {
+			for(int i = 0; i < NUMCOL; i++)
+				if (GLOBAL.isClicked && GLOBAL.Cursor.x >= XColBounds[i] && GLOBAL.Cursor.x < XColBounds[i + 1]) {
+					GLOBAL.reset();
+					if (GAME.ROW((Column)i) < 6) {
+						return (Column)i;
+					}
+				}
+
+			Sleep(10);
+		}
+		return rand() % 2 == 0 ? Three : Four;
+	}
+}Human;
 /*
 0  BLACK
 1  BLUE

@@ -189,30 +189,35 @@ void game() {
 		}
 	}
 	GAME.gamesetup();
+	Human.setup();
 	Turn = Red;
 	for (int i = 0; i >=0 ; i++) { /// i always true. Need to fix. Here is the program
-		if (i % 4 == 0) {
+		if (isRefresh) {
 			GAME.drawBoard();
+			isRefresh = false;
 		}
-		GAME.drop(enemy.init(GAME.BOARD), Turn); /// THE ENTIRE GAME AICall
+		
+
+		
 		printBoard(GAME.BOARD);
-		if (WIN(Turn, GAME.BOARD)){ /// CHECKS TO SEE IF GAME IS OVER
+		if (piecesOnBoard > 7 && WIN(Turn, GAME.BOARD)){ /// CHECKS TO SEE IF GAME IS OVER
 			temp = (Turn == Red) ? "RED" : "BLACK";
-			cout << temp << " wins!!! ";
+			outfile << temp << " wins!!! ";
 			getch();
-			system("cls");
 			GAME.gamesetup(); // resets board and piecesOnBoard
 		}
 		if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
-			cout << "DRAW!!";
+			outfile << "DRAW!!";
 			getch();
-			system("cls");
-			GAME.gamesetup();
+			GAME.gamesetup(); // resets board and piecesOnBoard
 		}
 		if (Turn == Red) {
+			GLOBAL.reset();
+			GAME.drop(Human.mouseCHECK(), Turn);
 			Turn = Black;
 		}
 		else {
+			GAME.drop(enemy.init(GAME.BOARD), Turn); /// THE ENTIRE AICall
 			Turn = Red;
 		}
 		
@@ -498,6 +503,9 @@ void Listener() {
 				else if (ActionListener(VK_ESCAPE)) {
 					isRunning = false;
 					exit(0);
+				}
+				else if (ActionListener(VK_PRINT)) {
+					isRefresh = true;
 				}
 			}
 		}
@@ -884,20 +892,57 @@ bool WIN(Player piece, vector<vector<Player>>BOARD) {
 }
 void printBoard(vector<vector<Player>> toString) {
 	for (int j = NUMROW - 1; j >= 0; j--) {
-		cout << " ";
+		outfile << " ";
 			for (int i = 0; i < NUMCOL; i++) {
 			if ((int)toString[i].size() > j) {
 				if (toString[i][j] == Red) {
-					cout << "R";
+					outfile << "R";
 				}
 				else {
-					cout << "B";
+					outfile << "B";
 				}
 			}
 			else {
-				cout << ".";
+				outfile << ".";
 			}
 		}
-		cout << "\n";
+		outfile << "\n";
 	}
+}
+void GAMELog() {
+	string gameID = "";
+	if (outfile.is_open()) {
+		outfile.close();
+	}
+	ifstream infile("log//log.txt");
+	if (infile.is_open()) {
+		infile >> gameID;
+		infile.close();
+	}
+	else {
+		gameID = "0000";
+	}
+	outfile.open("log//log.txt");
+	if (outfile.is_open()) {
+		string temp = gameID;
+		outfile << increaseSTR(temp);
+		outfile.close();
+	}
+	gameID = "log//" + gameID + ".txt";
+	outfile.open(gameID.c_str());
+}
+string increaseSTR(string temp) {
+	int carry = 1; 
+	string tempStrCpy = temp;
+	for (int i = (int)temp.length() - 1; i >= 0; i--) {
+		tempStrCpy[i] = (char)(tempStrCpy[i] + carry);
+		carry = 0;
+		if (tempStrCpy[i] == (char)((int)'9' + 1)) {
+			carry = 1;
+			tempStrCpy[i] = '0';
+		}
+	}
+	if (carry == 1)
+		tempStrCpy = "1" + tempStrCpy;
+	return tempStrCpy;
 }
