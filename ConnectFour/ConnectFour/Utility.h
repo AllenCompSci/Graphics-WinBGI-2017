@@ -1,5 +1,5 @@
 #include "Proto.h"
-
+#pragma region FUNCTIONS
 /// READBMP Utility
 string toUpper(string s) {
 	for (int i = 0; i < (int)s.length(); i++) {
@@ -946,3 +946,5 @@ string increaseSTR(string temp) {
 		tempStrCpy = "1" + tempStrCpy;
 	return tempStrCpy;
 }
+#pragma endregion
+/// 950
