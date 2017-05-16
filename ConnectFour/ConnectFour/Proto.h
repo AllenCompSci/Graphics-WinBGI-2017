@@ -21,7 +21,6 @@ enum Column {One, Two, Three, Four, Five, Six, Seven, Eight};
 enum AIMode{Easy, Medium, Hard};
 #pragma endregion
 #pragma region PROTOTYPE
-
 bool ActionListener(int); /// Key Listener Attribute
 void gr_Start(int&, int&, int&);  /// Creates Graphics Window
 void game(); // Thread 1
@@ -49,7 +48,7 @@ void drawToken(Token, int, int);
 #pragma region GLOBAL_VARS
 const int NUMVECTOR = 8; /// LoadBMP VECTORSIZE
 const int UNIT = 100; /// Might be able to set as const should never change
-const int SPEED = 16;
+const int SPEED = 38; // PLAYABLE 16
 /// BOARD SIZE
 const int NUMCOL = 8;
 const int NUMROW = 6;
@@ -72,6 +71,7 @@ int GrDriver, GrMode, ErrorCode;
 int maxX, maxY; // Size of canvas
 int BLANKCARD[IMGHeight][IMGWidth]; /// CARD SPECIFIC FUNCTION.
 int w, h; /// BMP using for passing through functions 
+bool AIHeadsUp = true;
 vector <int> XColBounds;
 ofstream outfile;
 #pragma endregion
@@ -132,10 +132,32 @@ struct AI {
 	Player whoseTurn;
 	int APROX[NUMCOL];
 	int VALUE;
+	bool NOGO[NUMCOL];
 	Column init(vector<vector<Player>>FROM) {
 		reset();
 		cpy(BOARD, FROM);
 		cpy(currGAME, FROM);
+		int count = 0;
+		for (int i = 0; i < NUMCOL; i++) {
+			NOGO[i] = (int)BOARD[i].size() == 6;
+			if (!NOGO[i])
+				count++;
+		}
+		if (count == 1) {
+			for (int i = 0; i < NUMCOL; i++)
+				if (!NOGO[i]) {
+					outfile << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
+					outfile << "BOARD Post depthSearch() : \n";
+					outfile << "**********************\n";
+					printBoard();
+					outfile << "**********************\n";
+					outfile << VALUE << " : Column Picked \n";
+					pushROW(BOARD, (Column)i, Turn);
+					printBoard();
+					outfile << "**********************\n";
+					return (Column)i;
+				}
+		}
 		depthSearch();
 		outfile << (int)WORTH.size() << " : Data Points 5 itterations Deep Dive \n";
 		outfile << "BOARD Post depthSearch() : \n";
@@ -175,7 +197,7 @@ struct AI {
 	}
 	void depthSearch() {
 		if (piecesOnBoard / 2 < 2) {
-			VALUE = -1;
+			VALUE = rand() % 3 + 3;
 			return;
 		}
 		int DEPTH = 1;
@@ -211,38 +233,40 @@ struct AI {
 				vector<vector<Player>>Heuristic;
 				if(!WORTH[j])
 				for (int k = 0; k < NUMCOL; k++) {
-					cpy(Heuristic, Previous);
-					pushROW(Heuristic, (Column)k, whoseTurn);
-					if ((int)Heuristic.size() != 0) {
-						ABOMINATION.push_back(Heuristic);
-						bool isWin = WIN(whoseTurn, Heuristic);
-						if (isWin && i < 2) {
-							if (i == 0) {
-								VALUE = k;
-								return; // prioritize win
-							}
-							if (i == 1) {
-								if (PARENTMOVE[j] == k) {
-									while (BOARD[k].size() < 6) {
-										pushROW(BOARD, (Column)k, whoseTurn); // TRY TO BLOCK LOOSE PIECE FROM GOING IN k COLUMN
+					if (!NOGO[k]) {
+						cpy(Heuristic, Previous);
+						pushROW(Heuristic, (Column)k, whoseTurn);
+						if ((int)Heuristic.size() != 0) {
+							ABOMINATION.push_back(Heuristic);
+							bool isWin = WIN(whoseTurn, Heuristic);
+							if (isWin && i < 2) {
+								if (i == 0) {
+									VALUE = k;
+									return; // prioritize win
+								}
+								if (i == 1) {
+									if (PARENTMOVE[j] == k) {
+										while (BOARD[k].size() < 6) {
+											pushROW(BOARD, (Column)k, whoseTurn); // TRY TO BLOCK LOOSE PIECE FROM GOING IN k COLUMN
+										}
+									}
+									else {
+										VALUE = k;
+										terminate = true; // Terminates based on the fact that this isn't an end move. 
 									}
 								}
-								else {
-									VALUE = k;
-									terminate = true; // Terminates based on the fact that this isn't an end move. 
-								}
 							}
+							WORTH.push_back(isWin);
+							deepDive.push_back(i);
+							if (PARENTMOVE[j] == -1) {
+								PARENTMOVE.push_back(k);
+							}
+							else
+								PARENTMOVE.push_back(PARENTMOVE[j]);
 						}
-						WORTH.push_back(isWin);
-						deepDive.push_back(i);
-						if (PARENTMOVE[j] == -1) {
-							PARENTMOVE.push_back(k);
+						if (terminate) {
+							return;
 						}
-						else
-						PARENTMOVE.push_back(PARENTMOVE[j]);
-					}
-					if (terminate) {
-						return;
 					}
 				}
 			}
@@ -316,18 +340,19 @@ struct AI {
 		}
 		bool SpecialCase = true; /// When maybe you block the only possible move
 		for (int i = 0; i < NUMCOL && SpecialCase; i++) { /// Checks that special case
-			if (BOARD[i].size() != NUMCOL) {
+			if (!NOGO[i]) {
 				SpecialCase = false;
 			}
 		}
 		if (SpecialCase) {
+			BOARD.clear();
 			cpy(BOARD, currGAME);
 			outfile << "**********************\n";
 			printBoard();
 			outfile << "**********************\n";
 		}
-		while ((int)BOARD[VALUE].size() == NUMCOL) {
-			VALUE = rand() % NUMROW;
+		while (NOGO[VALUE]) {
+			VALUE = rand() % NUMCOL;
 		}
 		outfile << VALUE << " : Column Picked \n";
 		pushROW(BOARD, (Column)VALUE, Turn);
@@ -336,6 +361,9 @@ struct AI {
 		return VALUE; // Returns a column selected and evaluated 
 	}
 	void printBoard() {
+		if (BOARD.empty()) {
+			cpy(BOARD, currGAME);
+		}
 		outfile << "**********\n";
 		for (int j = NUMROW - 1; j >= 0; j--) {
 			outfile << "*";
@@ -492,4 +520,4 @@ struct PLAYERCLICK {
 #pragma region RECORD_VECTOR(CONTAINERS)
 vector <RGB> colors(NUMVECTOR);
 #pragma endregion
-// 495
+// 499

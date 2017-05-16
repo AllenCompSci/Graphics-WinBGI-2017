@@ -190,39 +190,53 @@ void game() {
 	}
 	GAME.gamesetup();
 	Human.setup();
-	Turn = Red;
+	Turn = Black;
 	for (int i = 0; i >=0 ; i++) { /// i always true. Need to fix. Here is the program
 		if (isRefresh) {
 			GAME.drawBoard();
 			isRefresh = false;
 		}
-		
-
-		
 		printBoard(GAME.BOARD);
 		if (piecesOnBoard > 7 && WIN(Turn, GAME.BOARD)){ /// CHECKS TO SEE IF GAME IS OVER
 			temp = (Turn == Red) ? "RED" : "BLACK";
 			outfile << temp << " wins!!! ";
-			getch();
-			GAME.gamesetup(); // resets board and piecesOnBoard
-		}
-		if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
-			outfile << "DRAW!!";
-			getch();
+			if (!AIHeadsUp)
+				getch();
+			else {
+				Sleep(100);
+			}
 			GAME.gamesetup(); // resets board and piecesOnBoard
 		}
 		if (Turn == Red) {
-			GLOBAL.reset();
-			GAME.drop(Human.mouseCHECK(), Turn);
 			Turn = Black;
 		}
 		else {
-			GAME.drop(enemy.init(GAME.BOARD), Turn); /// THE ENTIRE AICall
 			Turn = Red;
 		}
+		if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
+			outfile << "DRAW!!";
+			if(!AIHeadsUp)
+				getch();
+			else {
+				Sleep(100);
+			}
+			GAME.gamesetup(); // resets board and piecesOnBoard
+		}
+		if (Turn == Red) {
+			if (!AIHeadsUp) {
+				GLOBAL.reset();
+				GAME.drop(Human.mouseCHECK(), Turn);
+			}
+			else {
+				GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+			}
+		}
+		else {
+			GAME.drop(enemy.init(GAME.BOARD), Turn); /// THE ENTIRE AICall
+		}
+		
 		
 	}
-	
 	system("pause");
 }
 /// Thread 2
@@ -504,8 +518,9 @@ void Listener() {
 					isRunning = false;
 					exit(0);
 				}
-				else if (ActionListener(VK_PRINT)) {
+				else if (ActionListener(VK_SNAPSHOT)) {
 					isRefresh = true;
+					cout << "REFRESH" << endl;
 				}
 			}
 		}
@@ -947,4 +962,4 @@ string increaseSTR(string temp) {
 	return tempStrCpy;
 }
 #pragma endregion
-/// 950
+/// 959

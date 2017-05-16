@@ -1,0 +1,1457 @@
+0 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*........*
+*........*
+**********
+**********************
+4 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*........*
+*....R...*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ........
+ ....R...
+0 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*........*
+*....R...*
+**********
+**********************
+5 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*........*
+*....RB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ........
+ ....RB..
+0 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*........*
+*....RB..*
+**********
+**********************
+5 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*.....R..*
+*....RB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ .....R..
+ ....RB..
+0 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*.....R..*
+*....RB..*
+**********
+**********************
+3 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*.....R..*
+*...BRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ .....R..
+ ...BRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*.....R..*
+*...BRB..*
+**********
+**********************
+4 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*...BRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ....RR..
+ ...BRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*...BRB..*
+**********
+**********************
+2 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*..BBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ....RR..
+ ..BBRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*..BBRB..*
+**********
+**********************
+1 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*.RBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ....RR..
+ .RBBRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*.RBBRB..*
+**********
+**********************
+0 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ....RR..
+ BRBBRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*....RR..*
+*BRBBRB..*
+**********
+**********************
+2 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*..R.RR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ..R.RR..
+ BRBBRB..
+13 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*..R.RR..*
+*BRBBRB..*
+**********
+**********************
+3 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*........*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ........
+ ..RBRR..
+ BRBBRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*........*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+2 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*..R.....*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ..R.....
+ ..RBRR..
+ BRBBRB..
+73 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*..R.....*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+4 : Column Picked 
+**********
+*........*
+*........*
+*........*
+*..R.B...*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ..R.B...
+ ..RBRR..
+ BRBBRB..
+4439 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.....B..*
+*.....B..*
+*.....B..*
+*..R.BB..*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+3 : Column Picked 
+**********
+*.....B..*
+*.....B..*
+*.....B..*
+*..RRBB..*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ........
+ ..RRB...
+ ..RBRR..
+ BRBBRB..
+14 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*........*
+*..RRB...*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+4 : Column Picked 
+**********
+*........*
+*........*
+*....B...*
+*..RRB...*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ....B...
+ ..RRB...
+ ..RBRR..
+ BRBBRB..
+4521 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.....B..*
+*.....B..*
+*....BB..*
+*..RRBB..*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+2 : Column Picked 
+**********
+*.....B..*
+*.....B..*
+*..R.BB..*
+*..RRBB..*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ........
+ ..R.B...
+ ..RRB...
+ ..RBRR..
+ BRBBRB..
+12 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*........*
+*..R.B...*
+*..RRB...*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+2 : Column Picked 
+**********
+*........*
+*..B.....*
+*..R.B...*
+*..RRB...*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ..B.....
+ ..R.B...
+ ..RRB...
+ ..RBRR..
+ BRBBRB..
+4233 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.....B..*
+*..B..B..*
+*..R.BB..*
+*..RRBB..*
+*..RBRR..*
+*BRBBRB..*
+**********
+**********************
+0 : Column Picked 
+**********
+*.....B..*
+*..B..B..*
+*..R.BB..*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ..B.....
+ ..R.B...
+ ..RRB...
+ R.RBRR..
+ BRBBRB..
+4146 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*..B.....*
+*..R.B...*
+*..RRB...*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+4 : Column Picked 
+**********
+*........*
+*..B.B...*
+*..R.B...*
+*..RRB...*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ........
+ ..B.B...
+ ..R.B...
+ ..RRB...
+ R.RBRR..
+ BRBBRB..
+14 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*........*
+*..B.B...*
+*..R.B...*
+*..RRB...*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+4 : Column Picked 
+**********
+*....R...*
+*..B.B...*
+*..R.B...*
+*..RRB...*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ....R...
+ ..B.B...
+ ..R.B...
+ ..RRB...
+ R.RBRR..
+ BRBBRB..
+2457 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*....R...*
+*..B.B...*
+*..R.B...*
+*..RRB...*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+5 : Column Picked 
+**********
+*....R...*
+*..B.B...*
+*..R.B...*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ....R...
+ ..B.B...
+ ..R.B...
+ ..RRBB..
+ R.RBRR..
+ BRBBRB..
+13 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*....R...*
+*..B.B...*
+*..R.B...*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+5 : Column Picked 
+**********
+*....R...*
+*..B.B...*
+*..R.BR..*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ....R...
+ ..B.B...
+ ..R.BR..
+ ..RRBB..
+ R.RBRR..
+ BRBBRB..
+2493 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*....R...*
+*..B.B...*
+*..R.BR..*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+2 : Column Picked 
+**********
+*..B.R...*
+*..B.B...*
+*..R.BR..*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ..B.R...
+ ..B.B...
+ ..R.BR..
+ ..RRBB..
+ R.RBRR..
+ BRBBRB..
+1485 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..BBR...*
+*..BBB...*
+*..RBBR..*
+*..RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+0 : Column Picked 
+**********
+*..BBR...*
+*..BBB...*
+*..RBBR..*
+*R.RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ..B.R...
+ ..B.B...
+ ..R.BR..
+ R.RRBB..
+ R.RBRR..
+ BRBBRB..
+1423 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*.RB.B...*
+*.RR.BR..*
+*RRRRBB..*
+*RRRBRR..*
+*BRBBRB..*
+**********
+**********************
+3 : Column Picked 
+**********
+*.RB.R...*
+*.RB.B...*
+*.RRBBR..*
+*RRRRBB..*
+*RRRBRR..*
+*BRBBRB..*
+**********
+**********************
+ ..B.R...
+ ..B.B...
+ ..RBBR..
+ R.RRBB..
+ R.RBRR..
+ BRBBRB..
+10 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R...*
+*..B.B...*
+*..RBBR..*
+*R.RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+3 : Column Picked 
+**********
+*..B.R...*
+*..BRB...*
+*..RBBR..*
+*R.RRBB..*
+*R.RBRR..*
+*BRBBRB..*
+**********
+**********************
+ ..B.R...
+ ..BRB...
+ ..RBBR..
+ R.RRBB..
+ R.RBRR..
+ BRBBRB..
+32661 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*.RBRB...*
+*.RRBBR..*
+*RRRRBB..*
+*RRRBRR..*
+*BRBBRB..*
+**********
+**********************
+7 : Column Picked 
+**********
+*.RB.R...*
+*.RBRB...*
+*.RRBBR..*
+*RRRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+ ..B.R...
+ ..BRB...
+ ..RBBR..
+ R.RRBB..
+ R.RBRR..
+ BRBBRB.B
+27164 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R.B.*
+*..BRB.B.*
+*..RBBRB.*
+*R.RRBBB.*
+*R.RBRRB.*
+*BRBBRBBB*
+**********
+**********************
+0 : Column Picked 
+**********
+*..B.R.B.*
+*..BRB.B.*
+*R.RBBRB.*
+*R.RRBBB.*
+*R.RBRRB.*
+*BRBBRBBB*
+**********
+**********************
+ ..B.R...
+ ..BRB...
+ R.RBBR..
+ R.RRBB..
+ R.RBRR..
+ BRBBRB.B
+14 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R...*
+*..BRB...*
+*R.RBBR..*
+*R.RRBB..*
+*R.RBRR..*
+*BRBBRB.B*
+**********
+**********************
+0 : Column Picked 
+**********
+*..B.R...*
+*B.BRB...*
+*R.RBBR..*
+*R.RRBB..*
+*R.RBRR..*
+*BRBBRB.B*
+**********
+**********************
+ ..B.R...
+ B.BRB...
+ R.RBBR..
+ R.RRBB..
+ R.RBRR..
+ BRBBRB.B
+19516 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R.B.*
+*B.BRB.B.*
+*R.RBBRB.*
+*R.RRBBB.*
+*R.RBRRB.*
+*BRBBRBBB*
+**********
+**********************
+1 : Column Picked 
+**********
+*..B.R.B.*
+*B.BRB.B.*
+*R.RBBRB.*
+*R.RRBBB.*
+*RRRBRRB.*
+*BRBBRBBB*
+**********
+**********************
+ ..B.R...
+ B.BRB...
+ R.RBBR..
+ R.RRBB..
+ RRRBRR..
+ BRBBRB.B
+8 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R...*
+*B.BRB...*
+*R.RBBR..*
+*R.RRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+1 : Column Picked 
+**********
+*..B.R...*
+*B.BRB...*
+*R.RBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+ ..B.R...
+ B.BRB...
+ R.RBBR..
+ RBRRBB..
+ RRRBRR..
+ BRBBRB.B
+19209 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R.B.*
+*B.BRB.B.*
+*R.RBBRB.*
+*RBRRBBB.*
+*RRRBRRB.*
+*BRBBRBBB*
+**********
+**********************
+1 : Column Picked 
+**********
+*..B.R.B.*
+*B.BRB.B.*
+*RRRBBRB.*
+*RBRRBBB.*
+*RRRBRRB.*
+*BRBBRBBB*
+**********
+**********************
+ ..B.R...
+ B.BRB...
+ RRRBBR..
+ RBRRBB..
+ RRRBRR..
+ BRBBRB.B
+8 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R...*
+*B.BRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+1 : Column Picked 
+**********
+*..B.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+ ..B.R...
+ BBBRB...
+ RRRBBR..
+ RBRRBB..
+ RRRBRR..
+ BRBBRB.B
+8 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*..B.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+1 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBR..
+ RBRRBB..
+ RRRBRR..
+ BRBBRB.B
+5195 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRB.B*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBR..
+ RBRRBB..
+ RRRBRR..
+ BRBBRBBB
+9 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRR..*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRRR.*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBR..
+ RBRRBB..
+ RRRBRRR.
+ BRBBRBBB
+10 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRRR.*
+*BRBBRBBB*
+**********
+**********************
+7 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBR..
+ RBRRBB..
+ RRRBRRRB
+ BRBBRBBB
+5601 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBB..*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBR..*
+*RBRRBBR.*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBR..
+ RBRRBBR.
+ RRRBRRRB
+ BRBBRBBB
+4419 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R..R*
+*BBBRB..R*
+*RRRBBR.R*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RB.R..R*
+*BBBRB..R*
+*RRRBBRBR*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBRB.
+ RBRRBBR.
+ RRRBRRRB
+ BRBBRBBB
+4047 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBRB.*
+*RBRRBBR.*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+7 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBRB.*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBRB.
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+10 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBRB.*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+7 : Column Picked 
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RB.R...
+ BBBRB...
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+4375 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RB.R...*
+*BBBRB...*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+3 : Column Picked 
+**********
+*.RBRR...*
+*BBBRB...*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRR...
+ BBBRB...
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+1157 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRR...*
+*BBBRB...*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+7 : Column Picked 
+**********
+*.RBRR...*
+*BBBRB..B*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRR...
+ BBBRB..B
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+479 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRR...*
+*BBBRB..B*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+5 : Column Picked 
+**********
+*.RBRR...*
+*BBBRBR.B*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRR...
+ BBBRBR.B
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+165 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRR...*
+*BBBRBR.B*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RBRR...*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRR...
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+61 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRR...*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+5 : Column Picked 
+**********
+*.RBRRR..*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRR..
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+5 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRR..*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRRB.
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+5 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+3 : Column Picked 
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRRB.
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+5 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+4 : Column Picked 
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRRB.
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+5 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRRB.
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+5 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+6 : Column Picked 
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRRB.
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+5 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRRB.*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+7 : Column Picked 
+**********
+*.RBRRRBR*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ .RBRRRBR
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+0 : Data Points 5 itterations Deep Dive 
+BOARD Post depthSearch() : 
+**********************
+**********
+*.RBRRRBR*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+-1 : Column Picked 
+**********
+*BRBRRRBR*
+*BBBRBRBB*
+*RRRBBRBB*
+*RBRRBBRR*
+*RRRBRRRB*
+*BRBBRBBB*
+**********
+**********************
+ BRBRRRBR
+ BBBRBRBB
+ RRRBBRBB
+ RBRRBBRR
+ RRRBRRRB
+ BRBBRBBB
+DRAW!!
