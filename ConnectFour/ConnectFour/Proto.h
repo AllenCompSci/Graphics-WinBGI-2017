@@ -19,6 +19,7 @@ using namespace std;
 enum Player {Black, Red, NA};
 enum Column {One, Two, Three, Four, Five, Six, Seven, Eight};
 enum AIMode{Easy, Medium, Hard};
+enum GameMode{TwoPlayer, OnePlayer, AIBattle};
 #pragma endregion
 #pragma region PROTOTYPE
 bool ActionListener(int); /// Key Listener Attribute
@@ -65,6 +66,7 @@ bool isRefresh = false;
 Player Turn = Red;
 Player WINNER = NA;
 AIMode SETTING = Hard;
+GameMode PlayStyle = AIBattle;
 /// Global basic ints
 int piecesOnBoard = 0; // Count of Pieces Played
 int GrDriver, GrMode, ErrorCode;

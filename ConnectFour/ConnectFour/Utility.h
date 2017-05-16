@@ -191,6 +191,7 @@ void game() {
 	GAME.gamesetup();
 	Human.setup();
 	Turn = Black;
+	PlayStyle = OnePlayer;
 	for (int i = 0; i >=0 ; i++) { /// i always true. Need to fix. Here is the program
 		if (isRefresh) {
 			GAME.drawBoard();
@@ -222,26 +223,42 @@ void game() {
 			}
 			GAME.gamesetup(); // resets board and piecesOnBoard
 		}
+		/*
+		enum GameMode{TwoPlayer, OnePlayer, AIBattle};
+		PlayStyle = AIBattle;
+		*/
 		if (Turn == Red) {
-			if (!AIHeadsUp) {
+			switch (PlayStyle) {
+			case OnePlayer:
+			case TwoPlayer:
 				GLOBAL.reset();
 				GAME.drop(Human.mouseCHECK(), Turn);
-			}
-			else {
+				break;
+			case AIBattle:
 				GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+				break;
 			}
 		}
 		else {
-			GAME.drop(enemy.init(GAME.BOARD), Turn); /// THE ENTIRE AICall
+			switch (PlayStyle) {
+			case TwoPlayer:
+				GLOBAL.reset();
+				GAME.drop(Human.mouseCHECK(), Turn);
+				break;
+			case OnePlayer:
+			case AIBattle:
+				GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+				break;
+			}
 		}
-		
-		
+
 	}
 	system("pause");
 }
 /// Thread 2
 void Listener() {
 	GLOBAL.reset();
+	bool Konami = false;
 	while (isRunning) {
 		if (!GLOBAL.isPressed) {
 			/// Mouse Listener
@@ -489,22 +506,22 @@ void Listener() {
 			}
 			/// Regular Movements for FROGGER
 			else {
-				if (ActionListener(VK_LEFT) || ActionListener(VK_A)) {
+				if (ActionListener(VK_LEFT)) {
 					GLOBAL.VirtualKey = VK_LEFT;
 					GLOBAL.Significance = "LEFT";
 					GLOBAL.isPressed = true;
 				}
-				else if (ActionListener(VK_RIGHT) || ActionListener(VK_D)) {
+				else if (ActionListener(VK_RIGHT)) {
 					GLOBAL.VirtualKey = VK_RIGHT;
 					GLOBAL.Significance = "RIGHT";
 					GLOBAL.isPressed = true;
 				}
-				else if (ActionListener(VK_UP) || ActionListener(VK_W)) {
+				else if (ActionListener(VK_UP)) {
 					GLOBAL.VirtualKey = VK_UP;
 					GLOBAL.Significance = "UP";
 					GLOBAL.isPressed = true;
 				}
-				else if (ActionListener(VK_DOWN) || ActionListener(VK_S)) {
+				else if (ActionListener(VK_DOWN)) {
 					GLOBAL.VirtualKey = VK_DOWN;
 					GLOBAL.Significance = "DOWN";
 					GLOBAL.isPressed = true;
@@ -513,6 +530,7 @@ void Listener() {
 					GLOBAL.VirtualKey = VK_F6;
 					GLOBAL.Significance = "F6";
 					GLOBAL.isPressed = true;
+					Konami = true;
 				}  /// Novelty EASTER EGG insta kill yourself button
 				else if (ActionListener(VK_ESCAPE)) {
 					isRunning = false;
@@ -521,6 +539,21 @@ void Listener() {
 				else if (ActionListener(VK_SNAPSHOT)) {
 					isRefresh = true;
 					cout << "REFRESH" << endl;
+				}
+				else if (ActionListener(VK_1) && Konami) {
+					PlayStyle = OnePlayer;
+					Konami = false;
+				}
+				else if (ActionListener(VK_2) && Konami) {
+					PlayStyle = TwoPlayer;
+					Konami = false;
+				}
+				else if (ActionListener(VK_A) && Konami) {
+					PlayStyle = AIBattle;
+					Konami = false;
+				}
+				else if (ActionListener(VK_F7)) {
+					Konami = false;
 				}
 			}
 		}
