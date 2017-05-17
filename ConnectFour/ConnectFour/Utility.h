@@ -188,72 +188,242 @@ void game() {
 
 		}
 	}
-	GAME.gamesetup();
+	
 	Human.setup();
 	Turn = Black;
-	PlayStyle = OnePlayer;
-	for (int i = 0; i >=0 ; i++) { /// i always true. Need to fix. Here is the program
-		if (isRefresh) {
-			GAME.drawBoard();
-			isRefresh = false;
-		}
-		printBoard(GAME.BOARD);
-		if (piecesOnBoard > 7 && WIN(Turn, GAME.BOARD)){ /// CHECKS TO SEE IF GAME IS OVER
-			temp = (Turn == Red) ? "RED" : "BLACK";
-			outfile << temp << " wins!!! ";
-			if (!AIHeadsUp)
-				getch();
-			else {
-				Sleep(100);
-			}
-			GAME.gamesetup(); // resets board and piecesOnBoard
-		}
-		if (Turn == Red) {
-			Turn = Black;
-		}
-		else {
-			Turn = Red;
-		}
-		if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
-			outfile << "DRAW!!";
-			if(!AIHeadsUp)
-				getch();
-			else {
-				Sleep(100);
-			}
-			GAME.gamesetup(); // resets board and piecesOnBoard
-		}
-		/*
-		enum GameMode{TwoPlayer, OnePlayer, AIBattle};
-		PlayStyle = AIBattle;
-		*/
-		if (Turn == Red) {
-			switch (PlayStyle) {
-			case OnePlayer:
-			case TwoPlayer:
-				GLOBAL.reset();
-				GAME.drop(Human.mouseCHECK(), Turn);
-				break;
-			case AIBattle:
-				GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
-				break;
-			}
-		}
-		else {
-			switch (PlayStyle) {
-			case TwoPlayer:
-				GLOBAL.reset();
-				GAME.drop(Human.mouseCHECK(), Turn);
-				break;
-			case OnePlayer:
-			case AIBattle:
-				GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
-				break;
-			}
-		}
+	PlayStyle = AIBattle; /// For Testing Purposes
+	Connect4 = CONNECT4GAME; /// For Testing Purposes
+	Connect4 = StartMenu;
+	bool changingState = true;
+	BUTTON onePlayer, twoPlayer, AI;
+	BUTTON easy, med, hard;
+	BUTTON exit, restart;
+	int width = (getmaxx() - 200 - 20) / 3;
+	int height = (int)(width * .85);
+	int T = (getmaxy() - height) / 2;
+	int diff = getmaxx() - 220 - width * 3;
+	int L = 100 + (diff + 1) / 2;
+	/*gapbetween = 10;
 
+	100 width 10 width 10 width 100
+
+	*/
+	button.init(L, T, L + width, T + height, "1 vs 1");
+	twoPlayer.init(button);
+	button.text = "EASY";
+	easy.init(button);
+	button.left = 10 + button.right;
+	button.right = button.left + width;
+	button.text = "1 vs COMP";
+	onePlayer.init(button);
+	button.text = "MED";
+	med.init(button);	
+	button.left = 10 + button.right;
+	button.right = button.left + width;
+	button.text = "AI vs AI";
+	AI.init(button);
+	button.text = "HARD";
+	hard.init(button);
+	width = (int)(height * 1.8);
+	L = (int)(getmaxx() - width) / 2;
+	T = (int)(getmaxy() - (2 * height + 10));
+	button.init(L, T, L + width, T + height, "START MENU");
+	restart.init(button);
+	T = T + height + 10;
+	button.init(L, T, L + width, T + height, "EXIT");
+	exit.init(button);
+	while (isRunning) { /// i always true. Need to fix. Here is the program
+
+		/*
+		
+enum GameState{StartMenu, AIMODESELECT, CONNECT4GAME, GameOver, Draw};
+		*/
+		switch (Connect4) {
+		case StartMenu:
+			if (changingState) {
+				/*
+				BUTTON onePlayer, twoPlayer, AI;
+				
+				*/
+				cleardevice();
+				setcolor(YELLOW);
+				bar(0, 0, maxX, maxY);
+				onePlayer.draw();
+				twoPlayer.draw();
+				AI.draw();
+				int bottom = onePlayer.top;
+				settextstyle(3, 0, 72);
+				string title = "CONNECT 4 (8 x 6)";
+				int top = (bottom - textheight(title.c_str()))/2;
+				int left = (maxX - textwidth(title.c_str())) / 2;
+				setbkcolor(YELLOW);
+				setcolor(WHITE);
+				outtextxy(left, top, title.c_str());
+				setbkcolor(BLACK);
+				changingState = false;
+			}
+			if (GLOBAL.isClicked && onePlayer.isClicked(GLOBAL.Cursor)) {
+				PlayStyle = OnePlayer;
+				Connect4 = AIMODESELECT;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			else if(GLOBAL.isClicked && twoPlayer.isClicked(GLOBAL.Cursor)) {
+				PlayStyle = TwoPlayer;
+				Connect4 = CONNECT4GAME;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			else if(GLOBAL.isClicked && AI.isClicked(GLOBAL.Cursor)) {
+				PlayStyle = AIBattle;
+				Connect4 = AIMODESELECT;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			break;
+		case AIMODESELECT:
+			if (changingState) {
+				/*
+				BUTTON easy, med, hard;
+				*/
+				cleardevice();
+				setcolor(YELLOW);
+				bar(0, 0, maxX, maxY);
+				easy.draw();
+				med.draw();
+				hard.draw();
+				int bottom = easy.top;
+				settextstyle(3, 0, 72);
+				string title = "CONNECT 4 (8 x 6)";
+				int top = (bottom - textheight(title.c_str())) / 2;
+				int left = (maxX - textwidth(title.c_str())) / 2;
+				setbkcolor(YELLOW);
+				setcolor(WHITE);
+				outtextxy(left, top, title.c_str());
+				setbkcolor(BLACK);
+				changingState = false;
+			}
+			if (GLOBAL.isClicked && easy.isClicked(GLOBAL.Cursor)) {
+				SETTING = Easy;
+				Connect4 = CONNECT4GAME;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			else if (GLOBAL.isClicked && med.isClicked(GLOBAL.Cursor)) {
+				SETTING = Medium;
+				Connect4 = CONNECT4GAME;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			else if (GLOBAL.isClicked && hard.isClicked(GLOBAL.Cursor)) {
+				SETTING = Hard;
+				Connect4 = CONNECT4GAME;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			break;
+		case CONNECT4GAME:
+			if (changingState) {
+				cleardevice();
+				setcolor(YELLOW);
+				bar(0, 0, maxX, maxY);
+				changingState = false;
+				GAME.gamesetup();
+			}
+			if (isRefresh) {
+				GAME.drawBoard();
+				isRefresh = false;
+			}
+			printBoard(GAME.BOARD);
+			if (piecesOnBoard > 6 && WIN(Turn, GAME.BOARD)) { /// CHECKS TO SEE IF GAME IS OVER
+				temp = (Turn == Red) ? "RED" : "BLACK";
+				outfile << temp << " wins!!! ";
+				if (!AIHeadsUp)
+					getch();
+				else {
+					Sleep(100);
+				}
+				changingState = true; // resets board and piecesOnBoard
+			}
+			if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
+				temp = "DRAW!!";
+				outfile << "DRAW!!";
+				if (!AIHeadsUp)
+					getch();
+				else {
+					Sleep(100);
+				}
+				changingState = true; // resets board and piecesOnBoard
+			}
+			/// Switches Turn from Red to Black
+			if (Turn == Red) {
+				Turn = Black;
+			}
+			else {
+				Turn = Red;
+			}
+			/// Controls Turn based on PlayStyle (OnePlayer, TwoPlayer, AIBattle)
+			if (Turn == Red) {
+				switch (PlayStyle) {
+				case OnePlayer:
+				case TwoPlayer:
+					GLOBAL.reset();
+					GAME.drop(Human.mouseCHECK(), Turn);
+					break;
+				case AIBattle:
+					GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+					break;
+				}
+			}
+			else {
+				switch (PlayStyle) {
+				case TwoPlayer:
+					GLOBAL.reset();
+					GAME.drop(Human.mouseCHECK(), Turn);
+					break;
+				case OnePlayer:
+				case AIBattle:
+					GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+					break;
+				}
+			}
+			break;
+
+		case GameOver:
+			if (changingState) {
+				/*
+				BUTTON exit, restart;
+				*/
+				cleardevice();
+				setcolor(YELLOW);
+				bar(0, 0, maxX, maxY);
+				exit.draw();
+				restart.draw();
+				int bottom = restart.top;
+				settextstyle(3, 0, 72);
+				string title = "CONNECT 4 (8 x 6)";
+				int top = (bottom - textheight(title.c_str())) / 2;
+				int left = (maxX - textwidth(title.c_str())) / 2;
+				setbkcolor(YELLOW);
+				setcolor(WHITE);
+				outtextxy(left, top, title.c_str());
+				setbkcolor(BLACK);
+				changingState = false;
+			}
+			if (GLOBAL.isClicked && exit.isClicked(GLOBAL.Cursor)) {
+				isRunning = false;
+				cleardevice();
+			}
+			else if (GLOBAL.isClicked && restart.isClicked(GLOBAL.Cursor)) {
+				Connect4 = StartMenu;
+				GLOBAL.reset();
+				changingState = true;
+			}
+			break;
+		}
+		Sleep(15);
 	}
-	system("pause");
+	//system("pause");
 }
 /// Thread 2
 void Listener() {
@@ -529,7 +699,6 @@ void Listener() {
 				else if (ActionListener(VK_F6)) {
 					GLOBAL.VirtualKey = VK_F6;
 					GLOBAL.Significance = "F6";
-					GLOBAL.isPressed = true;
 					Konami = true;
 				}  /// Novelty EASTER EGG insta kill yourself button
 				else if (ActionListener(VK_ESCAPE)) {
@@ -978,6 +1147,35 @@ void GAMELog() {
 	}
 	gameID = "log//" + gameID + ".txt";
 	outfile.open(gameID.c_str());
+	bool AI = false;
+	switch (PlayStyle) {
+	case OnePlayer:
+		gameID = "PLAYER vs AI";
+		AI = true;
+		break;
+	case AIBattle:
+		AI = true;
+		gameID = "AI vs AI";
+		break;
+	case TwoPlayer:
+		gameID = "PLAYER vs PLAYER";
+		break;
+	}
+	if (AI) {
+		gameID += " (AI Mode : ";
+		switch (SETTING) {
+		case Easy:
+			gameID += "Easy)";
+			break;
+		case Medium:
+			gameID += "Medium)";
+			break;
+		case Hard:
+			gameID += "Hard)";
+		}
+	}
+	gameID += "\n";
+	outfile << gameID;
 }
 string increaseSTR(string temp) {
 	int carry = 1; 

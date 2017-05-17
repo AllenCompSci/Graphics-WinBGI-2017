@@ -20,6 +20,7 @@ enum Player {Black, Red, NA};
 enum Column {One, Two, Three, Four, Five, Six, Seven, Eight};
 enum AIMode{Easy, Medium, Hard};
 enum GameMode{TwoPlayer, OnePlayer, AIBattle};
+enum GameState{StartMenu, AIMODESELECT, CONNECT4GAME, GameOver, Draw};
 #pragma endregion
 #pragma region PROTOTYPE
 bool ActionListener(int); /// Key Listener Attribute
@@ -67,6 +68,7 @@ Player Turn = Red;
 Player WINNER = NA;
 AIMode SETTING = Hard;
 GameMode PlayStyle = AIBattle;
+GameState Connect4 = CONNECT4GAME;
 /// Global basic ints
 int piecesOnBoard = 0; // Count of Pieces Played
 int GrDriver, GrMode, ErrorCode;
@@ -499,6 +501,64 @@ struct PLAYERCLICK {
 		return rand() % 2 == 0 ? Three : Four;
 	}
 }Human;
+struct BUTTON {
+	int top, left, right, bottom;
+	int border[3], color[5];
+	string text;
+	void init(int l, int t, int r, int b, string str) {
+		color[0] = OUTLINE;
+		color[1] = BACKGROUND;
+		color[2] = BOARDCOLOR;
+		color[3] = BOARDCOLOR;
+		color[4] = BACKGROUND;
+		border[0] = 0;
+		border[1] = 15;
+		border[2] = 25;
+		text = str;
+		left = l;
+		right = r;
+		bottom = b;
+		top = t;
+	}
+	void init(BUTTON t) {
+		color[0] = t.color[0];
+		color[1] = t.color[1];
+		color[2] = t.color[2];
+		color[3] = t.color[3];
+		color[4] = t.color[4];
+		border[0] = t.border[0];
+		border[1] = t.border[1];
+		border[2] = t.border[2];
+		text = t.text;
+		left = t.left;
+		right = t.right;
+		bottom = t.bottom;
+		top = t.top;
+	}
+	void draw() {
+		for (int i = 0; i < 3; i++) {
+			setcolor(color[i]);
+			bar(left + border[i], top + border[i], right - border[i], bottom - border[i]);
+		}
+		int temp = getbkcolor();
+		setbkcolor(color[3]);
+		setcolor(color[4]);
+		settextstyle(3, 0, 7);
+		int x = left + (right - left - textwidth(text.c_str()))/2;
+		int y = top + (bottom - top - textheight(text.c_str())) / 2;
+		outtextxy(x,y,text.c_str());
+		putpixel(0, 0, BOARDCOLOR);
+		setbkcolor(temp);
+	}
+	bool isClicked(POINT p) {
+		if (p.x >= left && p.x <= right) {
+			if (p.y >= top && p.y <= bottom) {
+				return true;
+			}
+		}
+		return false;
+	}
+}button;
 /*
 0  BLACK
 1  BLUE
@@ -522,4 +582,4 @@ struct PLAYERCLICK {
 #pragma region RECORD_VECTOR(CONTAINERS)
 vector <RGB> colors(NUMVECTOR);
 #pragma endregion
-// 499
+// 581
