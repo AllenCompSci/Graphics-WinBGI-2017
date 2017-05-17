@@ -225,8 +225,9 @@ void game() {
 	button.text = "HARD";
 	hard.init(button);
 	width = (int)(height * 1.8);
+	height -= 150;
 	L = (int)(getmaxx() - width) / 2;
-	T = (int)(getmaxy() - (2 * height + 10));
+	T = 150 + (int)(getmaxy() - (2 * height + 10 + 300));
 	button.init(L, T, L + width, T + height, "START MENU");
 	restart.init(button);
 	T = T + height + 10;
@@ -329,6 +330,7 @@ enum GameState{StartMenu, AIMODESELECT, CONNECT4GAME, GameOver, Draw};
 				bar(0, 0, maxX, maxY);
 				changingState = false;
 				GAME.gamesetup();
+				temp = "";
 			}
 			if (isRefresh) {
 				GAME.drawBoard();
@@ -338,54 +340,79 @@ enum GameState{StartMenu, AIMODESELECT, CONNECT4GAME, GameOver, Draw};
 			if (piecesOnBoard > 6 && WIN(Turn, GAME.BOARD)) { /// CHECKS TO SEE IF GAME IS OVER
 				temp = (Turn == Red) ? "RED" : "BLACK";
 				outfile << temp << " wins!!! ";
-				if (!AIHeadsUp)
-					getch();
-				else {
-					Sleep(100);
-				}
-				changingState = true; // resets board and piecesOnBoard
 			}
 			if (piecesOnBoard == (NUMCOL * NUMROW)) { /// CHECKS FOR DRAW CONDIDTION AFTER GAME IS OVER
-				temp = "DRAW!!";
+				temp = "DRAW";
 				outfile << "DRAW!!";
-				if (!AIHeadsUp)
-					getch();
+			}
+			if (temp == "") {
+				/// Switches Turn from Red to Black
+				if (Turn == Red) {
+					Turn = Black;
+				}
 				else {
-					Sleep(100);
+					Turn = Red;
 				}
-				changingState = true; // resets board and piecesOnBoard
-			}
-			/// Switches Turn from Red to Black
-			if (Turn == Red) {
-				Turn = Black;
+				/// Controls Turn based on PlayStyle (OnePlayer, TwoPlayer, AIBattle)
+				if (Turn == Red) {
+					switch (PlayStyle) {
+					case OnePlayer:
+					case TwoPlayer:
+						GLOBAL.reset();
+						GAME.drop(Human.mouseCHECK(), Turn);
+						break;
+					case AIBattle:
+						GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+						break;
+					}
+				}
+				else {
+					switch (PlayStyle) {
+					case TwoPlayer:
+						GLOBAL.reset();
+						GAME.drop(Human.mouseCHECK(), Turn);
+						break;
+					case OnePlayer:
+					case AIBattle:
+						GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
+						break;
+					}
+				}
 			}
 			else {
-				Turn = Red;
-			}
-			/// Controls Turn based on PlayStyle (OnePlayer, TwoPlayer, AIBattle)
-			if (Turn == Red) {
-				switch (PlayStyle) {
-				case OnePlayer:
-				case TwoPlayer:
-					GLOBAL.reset();
-					GAME.drop(Human.mouseCHECK(), Turn);
-					break;
-				case AIBattle:
-					GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
-					break;
+				/// Three States RED BLACK or DRAW
+				/// DRAW THE SCREEEN AND WAIT FOR MOUSECLICK? 
+				int color11 = (temp == "RED") ? RED : (temp == "BLACK") ? BLACK : WHITE;
+				setbkcolor(BLACK);
+				setcolor(YELLOW);
+				bar(0, 0, maxX, maxY);
+				if (color11 != WHITE) {
+					temp += " WINS!";
+					draw(maxX / 2, maxY / 2, 300, color11);
+
 				}
-			}
-			else {
-				switch (PlayStyle) {
-				case TwoPlayer:
-					GLOBAL.reset();
-					GAME.drop(Human.mouseCHECK(), Turn);
-					break;
-				case OnePlayer:
-				case AIBattle:
-					GAME.drop(enemy.init(GAME.BOARD), Turn); /// AIHeadsUp
-					break;
+				else {
+					temp += "!";
+					drawDRAW(maxX / 2, maxY / 2, 300, RED, BLACK);
 				}
+				int left = (maxX - textwidth(temp.c_str())) / 2;
+				int top = (maxY / 2 - 300 - textheight(temp.c_str())) / 2;
+				setbkcolor(YELLOW);
+				setcolor(WHITE);
+				outtextxy(left, top, temp.c_str());
+				setbkcolor(BLACK);
+				Sleep(1000);
+				if (!AIHeadsUp && PlayStyle == AIBattle) {
+
+					GLOBAL.reset();
+					do {
+						Sleep(10);
+					} while (GLOBAL.isClicked == false);
+					GLOBAL.reset();
+					Connect4 = GameOver;
+				}
+				changingState = true;
+
 			}
 			break;
 
@@ -743,6 +770,18 @@ void draw(int centerX, int centerY, int Radius, int color) {
 		for (int j = -Radius; j <= Radius; j++) {
 			if (Radius >= distance(centerX, centerY, centerX + i, centerY + j)) {
 				putpixel(centerX + i, centerY + j, color);
+			}
+		}
+}
+/// DRAW CIRCLE ENDCONDITION
+void drawDRAW(int centerX, int centerY, int Radius, int c1, int c2) {
+	for (int i = -Radius; i <= Radius; i++)
+		for (int j = -Radius; j <= Radius; j++) {
+			if (Radius >= distance(centerX, centerY, centerX + i, centerY + j)) {
+				if(i < 0 || (i == 0 && j %2 == 1))
+				putpixel(centerX + i, centerY + j, c1);
+				else
+					putpixel(centerX + i, centerY + j, c2);
 			}
 		}
 }

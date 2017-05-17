@@ -46,6 +46,7 @@ void drawCard(int, int);
 void drawMinion(Minion,int, int);
 void drawSpell(Spell, int, int);
 void drawToken(Token, int, int);
+void drawDRAW(int, int, int, int, int);
 #pragma endregion
 #pragma region GLOBAL_VARS
 const int NUMVECTOR = 8; /// LoadBMP VECTORSIZE
