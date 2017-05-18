@@ -756,10 +756,6 @@ void Listener() {
 		Sleep(15);
 	}
 }
-/// Draws Intro
-void INTRO() {
-
-}
 /// Distance Forumla
 float distance(int x1, int y1, int x2, int y2) {
 	return abs(sqrt((float)(pow((float)(x2 - x1),2.0)) + (float)(pow((float)(y2 - y1), 2.0))));
@@ -785,6 +781,7 @@ void drawDRAW(int centerX, int centerY, int Radius, int c1, int c2) {
 			}
 		}
 }
+/// Draws Circle when it falls through board, relative to the above and below circle
 void boundedCircle(int centerX, int centerY, int Radius, int color, int topX, int topY, int bottomX, int bottomY) {
 	for (int i = -Radius; i <= Radius; i++)
 		for (int j = -Radius; j <= Radius; j++) {
@@ -793,6 +790,7 @@ void boundedCircle(int centerX, int centerY, int Radius, int color, int topX, in
 			}
 		}
 }
+/// Draws Circle dropping into the board
 void topCircle(int centerX, int centerY, int Radius, int color, int topX, int topY, int bottomX, int bottomY) {
 	for (int i = -Radius; i <= Radius; i++)
 		for (int j = -Radius; j <= Radius; j++) {
@@ -801,6 +799,7 @@ void topCircle(int centerX, int centerY, int Radius, int color, int topX, int to
 			}
 		}
 }
+#pragma region JUMPSTONE
 void cpyCard(const int tbC[][IMGWidth]) {
 	for (int i = 0; i < IMGHeight; i++)
 		for (int j = 0; j < IMGWidth; j++)
@@ -1079,6 +1078,8 @@ void drawSpell(Spell card, int x, int y) { // 25
 	}
 	drawCard(x, y);
 }
+#pragma endregion
+/// Calculates if current player is in a win condition with the BOARD as-is
 bool WIN(Player piece, vector<vector<Player>>BOARD) {
 	bool win = false;
 	int INAROW = 4;
@@ -1146,6 +1147,7 @@ bool WIN(Player piece, vector<vector<Player>>BOARD) {
 	}
 	return win;
 }
+/// Prints the board to the log file
 void printBoard(vector<vector<Player>> toString) {
 	for (int j = NUMROW - 1; j >= 0; j--) {
 		outfile << " ";
@@ -1165,6 +1167,7 @@ void printBoard(vector<vector<Player>> toString) {
 		outfile << "\n";
 	}
 }
+/// Handles the Process of creation of the log file
 void GAMELog() {
 	string gameID = "";
 	if (outfile.is_open()) {
@@ -1216,6 +1219,7 @@ void GAMELog() {
 	gameID += "\n";
 	outfile << gameID;
 }
+/// Utility function of GAMELog
 string increaseSTR(string temp) {
 	int carry = 1; 
 	string tempStrCpy = temp;
@@ -1232,4 +1236,4 @@ string increaseSTR(string temp) {
 	return tempStrCpy;
 }
 #pragma endregion
-/// 959
+/// 1239

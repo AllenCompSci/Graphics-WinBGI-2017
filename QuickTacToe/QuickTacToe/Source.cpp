@@ -1,4 +1,4 @@
-#include "Record.h"
+#include "Functions.h"
 
 void main() {
 	gr_Start(GrDriver, GrMode, ErrorCode);

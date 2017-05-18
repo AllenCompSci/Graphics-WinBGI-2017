@@ -27,15 +27,15 @@ bool ActionListener(int); /// Key Listener Attribute
 void gr_Start(int&, int&, int&);  /// Creates Graphics Window
 void game(); // Thread 1
 void Listener(); // Thread 2
-void INTRO(); /// Draws an Intro for Connect 4
 float distance(int, int, int, int); /// Application of Distance Forumula
 void draw(int, int, int, int); /// Draws a Circle using putpixel
+void drawDRAW(int, int, int, int, int); /// Draws the Draw Circle for end sequence. 
 void boundedCircle(int, int, int, int, int, int, int, int); // Allows the Circle to be drawn in only visible areas of two other circles maintaint its shape
 void topCircle(int, int, int, int, int, int, int, int); // As bounded, except the top Circle is a Rectangle increaseing the area of its range from being inside two circles to a rectangle and then a circle offset from the radius of the rectangle (VISUAL)
 bool WIN(Player, vector<vector<Player>>);  // Checks Left to Right
 void printBoard(vector<vector<Player>>); // Displays to console the game. 
-string increaseSTR(string);
-void GAMELog();
+string increaseSTR(string); /// increases the string for the log
+void GAMELog(); // This is for the log file, established instance and creates opens and prints out to the file
 /// LOAD BMP SETTINGS
 string toUpper(string);
 unsigned char* ReadBMP(char*);
@@ -46,7 +46,6 @@ void drawCard(int, int);
 void drawMinion(Minion,int, int);
 void drawSpell(Spell, int, int);
 void drawToken(Token, int, int);
-void drawDRAW(int, int, int, int, int);
 #pragma endregion
 #pragma region GLOBAL_VARS
 const int NUMVECTOR = 8; /// LoadBMP VECTORSIZE
@@ -76,9 +75,9 @@ int GrDriver, GrMode, ErrorCode;
 int maxX, maxY; // Size of canvas
 int BLANKCARD[IMGHeight][IMGWidth]; /// CARD SPECIFIC FUNCTION.
 int w, h; /// BMP using for passing through functions 
-bool AIHeadsUp = true;
+bool AIHeadsUp = true; /// Debug purposes but 
 vector <int> XColBounds;
-ofstream outfile;
+ofstream outfile; /// Stream dedicated to write out to a file for the log
 #pragma endregion
 #pragma region RECORDS
 struct KeyState {
@@ -583,4 +582,4 @@ struct BUTTON {
 #pragma region RECORD_VECTOR(CONTAINERS)
 vector <RGB> colors(NUMVECTOR);
 #pragma endregion
-// 581
+// 585

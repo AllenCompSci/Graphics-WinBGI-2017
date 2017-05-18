@@ -58,13 +58,14 @@ struct SPACE {
 	int left, top, right, bottom;
 	POINT collection[13];
 	int color;
+	int value;
 	void create(int x1, int y1) {
 		currValue = Empty;
 		left = x1;
 		top = y1;
 		right = x1 + UNIT * 3;
 		bottom = y1 + UNIT * 3;
-#pragma region X
+		#pragma region X
 		collection[0].x = left;
 		collection[0].y = top + UNIT / 2;
 		collection[1].x = left + UNIT / 2;
@@ -98,7 +99,9 @@ struct SPACE {
 		collection[12].x = right - UNIT / 2;
 		collection[12].y = bottom - UNIT / 2;
 #pragma endregion
-
+	}
+	void assignVAL(int VAL) {
+		value = VAL;
 	}
 	void draw(int c) {
 		color = c;
@@ -145,8 +148,19 @@ struct SPACE {
 		floodfill(collection[x].x, collection[x].y, color);
 	}
 }test;
+
 struct Grid {
 	SPACE board[SQR_GRID][SQR_GRID];
 	int screenX;
+	int screenY;
+	int GRIDLENGTH;
 
+	void init() {
+		screenX = getmaxx();
+		screenY = getmaxy();
+		GRIDLENGTH = (3 * (3 * UNIT) + 20);
+		int topGrid = (screenY - GRIDLENGTH) / 2;
+		int leftGrid = (screenX - GRIDLENGTH) / 2;
+
+	}
 }grid;

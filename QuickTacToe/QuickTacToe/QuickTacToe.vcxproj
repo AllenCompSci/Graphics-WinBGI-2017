@@ -113,6 +113,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="GlobalVars.h" />
     <ClInclude Include="Libs.h" />
     <ClInclude Include="Record.h" />
