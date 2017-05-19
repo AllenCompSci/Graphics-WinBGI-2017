@@ -142,12 +142,27 @@ void TicTacToe() {
 				settextstyle(0, 0, 72);
 				int x = (grid.screenX - textwidth(temp.c_str())) / 2;
 				int y = (grid.screenY - textheight(temp.c_str())) / 2;
+				if (temp[0] == 'X') {
+					setcolor(XColor);
+				}
+				else if (temp[0] == 'O') {
+					setcolor(OColor);
+				}
+				else {
+					setcolor(WHITE);
+				}
 				outtextxy(x, y, temp.c_str());
+				putpixel(0, 0, 0);
+				do {
+					Input.reset();
+					Sleep(15);
+				} while (Input.isPressed);
 			}
 			Input.reset();
 			do {
 				Sleep(10);
 			} while (Input.isPressed == false);
+			Sleep(1000);
 			GAME = Start_Menu;
 			break;
 		}

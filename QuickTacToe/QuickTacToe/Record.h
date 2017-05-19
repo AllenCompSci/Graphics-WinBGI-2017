@@ -268,11 +268,11 @@ struct Grid {
 		for (int i = 0; i < SQR_GRID; i++) {
 			HORIZONTAL = board[0][i].currValue == TURN;
 			VERTICAL = board[i][i].currValue == TURN;
-			for (int j = 0; HORIZONTAL && j < SQR_GRID; j++) {
+			for (int j = 1; HORIZONTAL && j < SQR_GRID; j++) {
 				if (board[i][j].currValue != TURN)
 					HORIZONTAL = false;
 			}
-			for (int j = 1; VERTICAL && j < SQR_GRID; j++) {
+			for (int j = 0; VERTICAL && j < SQR_GRID; j++) {
 				if (board[j][i].currValue != TURN)
 					VERTICAL = false;
 			}
