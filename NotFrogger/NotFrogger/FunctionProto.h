@@ -41,7 +41,7 @@ void updateCREATE(int);
 bool isSafe(Column, int top, int h);
 #pragma endregion
 #pragma region GLOBAL_VARS
-const int NUMVECTOR = 9; /// LoadBMP VECTORSIZE
+const int NUMVECTOR = 17; /// LoadBMP VECTORSIZE
 const int RANDOMIZER[] = { 3, 4, 3, 4, 3, 3, 4 }; // GAME Frequency 
 const int UNIT = 40; /// Might be able to set as const should never change
 #pragma region Height_Width

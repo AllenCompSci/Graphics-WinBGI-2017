@@ -11,7 +11,7 @@ int main() {
 	//CREATE("LOG.bmp"); // To Create LOG (PIXELMAP) // Prescaled /// LOG GARYcXJK
 	//CREATE("lily.bmp");
 	*/
-	CREATE("chicken.bmp");
+	CREATE("apple.bmp");
 	thread FROGGER(game);
 	thread LISTENER(Listener);
 	FROGGER.join();
