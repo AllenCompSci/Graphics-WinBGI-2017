@@ -135,9 +135,20 @@ void epicfailure(){//display "FAIL", code at the end will run this in a crash
 }
 
 void playSound(string fileName, int dur){
-	PlaySound(TEXT(fileName.c_str()), NULL, SND_ASYNC);
-	Sleep(dur);
-	PlaySound(TEXT(fileName.c_str()), 0,0);
+	if (fileName.substr(fileName.length() - 2) == "v") {
+		PlaySound(TEXT(fileName.c_str()), NULL, SND_ASYNC);
+		Sleep(duration);
+		PlaySound(TEXT(fileName.c_str()), 0, 0);
+		return;
+	}
+	string concat = "open " + fileName + " type mpegvideo alias MP3_Device";
+	LPCSTR a = concat.c_str();
+	mciSendString(a, NULL, 0, 0);
+
+	mciSendString("play MP3_Device", NULL, 0, 0);
+	Sleep(duration);
+	mciSendString("stop MP3_Device", NULL, 0, 0);
+	mciSendString("close MP3_Device", NULL, 0, 0);
 	return;
 }
 
@@ -234,7 +245,7 @@ bool KEYBOARD(int VirtualKey){//from source code
 
 void music(){
 	while (gameACTIVE){
-		playSound("easy.wav", 421000);
+		playSound("easy.mp3", 421000);
 	}
 }
 
