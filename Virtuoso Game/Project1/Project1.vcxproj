@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A2E1CCB3-27C0-4A1F-9147-9439D91B4F81}</ProjectGuid>
+    <RootNamespace>Project1</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="Virtuso.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="RESOURCE\EDM.txt" />
+    <Text Include="RESOURCE\JAZZ.txt" />
+    <Text Include="RESOURCE\POP.txt" />
+    <Text Include="RESOURCE\RAP.txt" />
+    <Text Include="RESOURCE\ROCK.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RESOURCE\stripes_1.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="RESOURCE\Hamster Dance.ico" />
+    <Image Include="RESOURCE\Music.ico" />
+    <Image Include="RESOURCE\NyanCat.ico" />
+    <Image Include="RESOURCE\Pedobear.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\Downloads\And_So_It_Goes_-_Billy_Joel1.mp3" />
+    <Media Include="..\..\..\..\Downloads\And_So_It_Goes_-_Billy_Joel2.mp3" />
+    <Media Include="..\..\..\..\Downloads\And_So_It_Goes_-_Billy_Joel3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Barbara_Ann_-_Beach_Boys1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Born_to_be_Wild_-_Steppenwolf1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Born_to_be_Wild_-_Steppenwolf2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Born_to_be_Wild_-_Steppenwolf3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Bye_Bye_Blackbird_-_Ella_Fitzgerald1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Bye_Bye_Blackbird_-_Ella_Fitzgerald2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Bye_Bye_Blackbird_-_Ella_Fitzgerald3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Centuries_-_Fall_Out_Boy1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Centuries_-_Fall_Out_Boy2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Centuries_-_Fall_Out_Boy3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Chattanooga_Choo_Choo_-_Glenn_Miller1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Chattanooga_Choo_Choo_-_Glenn_Miller2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Chattanooga_Choo_Choo_-_Glenn_Miller3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Don%27t_Stop_Believin_-_Journey1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Don%27t_Stop_Believin_-_Journey2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Don%27t_Stop_Believin_-_Journey3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Ex%27s_&amp;_Oh%27s_-_Elle_King1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Ex%27s_&amp;_Oh%27s_-_Elle_King2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Free_Bird_-_Lynyrd_Skynyrd2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Free_Bird_-_Lynyrd_Skynyrd3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Good_Vibrations_-_The_Beach_Boys1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Good_Vibrations_-_The_Beach_Boys2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Good_Vibrations_-_The_Beach_Boys3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Irresistible_-_Fall_Out_Boy1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Irresistible_-_Fall_Out_Boy2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Irresistible_-_Fall_Out_Boy3.mp3" />
+    <Media Include="..\..\..\..\Downloads\It_Don%27t_Mean_A_Thing_-_Ella_Fitzgerald1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Livin_On_A_Prayer_-_Bon_Jovi1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Livin_On_A_Prayer_-_Bon_Jovi2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Livin_On_A_Prayer_-_Bon_Jovi3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Lydia_-_Highly_Suspect1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Lydia_-_Highly_Suspect2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Lydia_-_Highly_Suspect3.mp3" />
+    <Media Include="..\..\..\..\Downloads\My_Funny_Valentine_-_Ella_Fitzgerald1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Never_Gonna_Give_You_Up_-_Rick_Astley1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Radioactive_-_Imagine_Dragons1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Radioactive_-_Imagine_Dragons2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Radioactive_-_Imagine_Dragons3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Ramblin_Man_-_The_Allman_Brothers_Band1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Renegades_-_X_Ambassadors1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Renegades_-_X_Ambassadors2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Renegades_-_X_Ambassadors3.mp3" />
+    <Media Include="..\..\..\..\Downloads\SING_SING_SING_Benny_Goodman1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Take_Me_To_Church_-_Hozier1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Take_Me_To_Church_-_Hozier2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Take_Me_To_Church_-_Hozier3.mp3" />
+    <Media Include="..\..\..\..\Downloads\The_Final_Countdown_-_Europe1.mp3" />
+    <Media Include="..\..\..\..\Downloads\The_Final_Countdown_-_Europe2.mp3" />
+    <Media Include="..\..\..\..\Downloads\The_Final_Countdown_-_Europe3.mp3" />
+    <Media Include="..\..\..\..\Downloads\The_Girl_From_Ipanema_-_Astrud_Gilberto1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Uma Thurman_-_Fall_Out_Boy1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Uma Thurman_-_Fall_Out_Boy2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Uma Thurman_-_Fall_Out_Boy3.mp3" />
+    <Media Include="..\..\..\..\Downloads\Walk_This_Way_-_Aerosmith1.mp3" />
+    <Media Include="..\..\..\..\Downloads\Walk_This_Way_-_Aerosmith2.mp3" />
+    <Media Include="..\..\..\..\Downloads\Walk_This_Way_-_Aerosmith3.mp3" />
+    <Media Include="..\..\..\VIRTUSO\22_-_Taylor_Swift1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Blank_Space_-_Taylor_Swift1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Dark_Horse_-_Katy_Perry1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Hands_To_Myself_-_Selena_Gomez1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Love_Yourself_-_Justin_Bieber1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Shake_It_Off_-_Taylor_Swift1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Shut_And_Dance_-_WALK_THE_MOON1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Stiches_Shawn_-_Mendes1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Stressed_Out_-_TwentyOne_Pilots1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Style_-_Taylor_Swift1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Uptown_Funk_-_Bruno_Marz1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\What_Do_You_Mean_-_Justin_Bieber1.mp3" />
+    <Media Include="..\..\..\VIRTUSO\Work_From_Home_-_Fifth_Harmony1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Don%27t_Let_Me_Down_-_The_Chainsmokers1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Faded_-_Alan_Walker1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Fast_Car_-_Tracy_Chapman1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Firestone_-_Kygo1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Lean_On_-_Major_Lazer_&amp;_DJ_Snake1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Light_It_Up_-_Major_Lazer1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Middle_-_DJ_Snake1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Never_Forget_You_-_Zara Larsson_&amp;_MNEK.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Roses_-_The_Chainsmokers1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Scary_Monsters_&amp;_Nice_Sprites_-_SKRILLEX1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Sugar_-_Robin_Schulz1.mp3" />
+    <Media Include="..\Debug\RESOURCE\EDM\Summer_-_Calvin_Harris1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\679_-_Fetty_Wap1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Airplanes_-_B.o.B1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\All_I_Do_Is_Win_-_DJ_Khaled1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Ariana Grande - Let Me Love You1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Bad Blood_-_Taylor_Swift1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Empire_State_Of_Mind_-_Jay_Z1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Jumpman_-_Drake1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Jumpman_-_Drake2.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Lil Wayne &amp; Charlie Puth - Nothing But Trouble1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Me,_Myself_&amp;_I_-_G-Eazy1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Me,_Myself_&amp;_I_-_G-Eazy2.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Me,_Myself_&amp;_I_-_G-Eazy3.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Panda_-_Desiigner1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Panda_-_Desiigner2.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Panda_-_Desiigner3.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Promise_-_Fetty_Wap1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Promise_-_Fetty_Wap2.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Promise_-_Fetty_Wap3.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Stronger_-_Kanye_West1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\Team_-_Iggy_Azalea1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\The_Slim_Shady_-_Eminem1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\White_Iverson_-_Post_Malone1.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\White_Iverson_-_Post_Malone2.mp3" />
+    <Media Include="..\Debug\RESOURCE\RAP\White_Iverson_-_Post_Malone3.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\ACDC_-_Back_In_Black1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Barracuda-_Heart1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Billy_Joel_-_Piano_Man1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Deep_Purple_-_Smoke_on_the_Water1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Gorillaz_-_Clint_Eastwood1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Hey_Jude_-_The_Beatles1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\I_Love_Rock_and_Roll_-_Joan_Jett_The_Blackherats1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Kashmir-Led_Zeppelin1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Lynyrd_Skynyrd_-_Sweet_Home_Alabama1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Pink_Floyd_-_Comfortably_Numb1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Pink_Floyd_-_Wish_You_Were_Here1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Queen_-_Bohemian_Rhapsody1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Queen_-_Bohemian_Rhapsody2.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Satisfaction_-_The_Rolling_Stones1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\Stairway_to_Heaven_-_Led_Zepplin1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\The_Pretty_Reckless_-_Heaven_Knows1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\The_White_Stripes_-_Seven_Nation_Army1.mp3" />
+    <Media Include="..\Debug\RESOURCE\ROCK\ZZ_Top_-_La_Grange1.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\I_Took_A_Pill_Ibiza_-_Mike_Posner2.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\I_Took_A_Pill_Ibiza_-_Mike_Posner3.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\Pillowtalk_-_Zayn_Malik2.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\Pillowtalk_-_Zayn_Malik3.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\Sorry_-_Justin_Bieber2.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\Sorry_-_Justin_Bieber3.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\Work_-_Rihanna_ft_Drake2.mp3" />
+    <Media Include="..\Release\RESOURCE\POP\Work_-_Rihanna_ft_Drake3.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\Hey_Jude_-_The_Beatles2.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\Hey_Jude_-_The_Beatles3.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\I_Love_Rock_and_Roll_-_Joan_Jett_The_Blackherats2.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\I_Love_Rock_and_Roll_-_Joan_Jett_The_Blackherats3.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\Satisfaction_-_The_Rolling_Stones2.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\Satisfaction_-_The_Rolling_Stones3.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\Stairway_to_Heaven_-_Led_Zepplin2.mp3" />
+    <Media Include="..\Release\RESOURCE\ROCK\Stairway_to_Heaven_-_Led_Zepplin3.mp3" />
+    <Media Include="RESOURCE\JAZZ\Ain%27t_No_Mountain_High_Enough_-_Marvin_Gaye_&amp;_Tammi_Terrell1.mp3" />
+    <Media Include="RESOURCE\JAZZ\Bill_Withers_-_Ain%27t_No_Sunshine1.mp3" />
+    <Media Include="RESOURCE\JAZZ\Duke_Ellington_-_It_don%27t_mean_a_thing1.mp3" />
+    <Media Include="RESOURCE\JAZZ\Louis_&amp;_Ella_-_Dream_A_Little_Dream_Of_Me1.mp3" />
+    <Media Include="RESOURCE\JAZZ\Louis_Armstrong_-_What_a_wonderful_world1.mp3" />
+    <Media Include="RESOURCE\JAZZ\Ray_Charles_-_Georgia_On_My_Mind1.mp3" />
+    <Media Include="RESOURCE\JAZZ\The_Temptations_-_My_Girl1.mp3" />
+    <Media Include="RESOURCE\POP\I_Took_A_Pill_Ibiza_-_Mike_Posner1.mp3" />
+    <Media Include="RESOURCE\POP\Pillowtalk_-_Zayn_Malik1.mp3" />
+    <Media Include="RESOURCE\POP\Sorry_-_Justin_Bieber1.mp3" />
+    <Media Include="RESOURCE\POP\Work_-_Rihanna_ft_Drake1.mp3" />
+    <Media Include="RESOURCE\ROCK\Billy_Joel_-_Piano_Man1.mp3" />
+    <Media Include="RESOURCE\ROCK\Hey_Jude_-_The_Beatles1.mp3" />
+    <Media Include="RESOURCE\ROCK\I_Love_Rock_and_Roll_-_Joan_Jett_The_Blackherats1.mp3" />
+    <Media Include="RESOURCE\ROCK\Lynyrd_Skynyrd_-_Sweet_Home_Alabama1.mp3" />
+    <Media Include="RESOURCE\ROCK\Queen_-_Bohemian_Rhapsody1.mp3" />
+    <Media Include="RESOURCE\ROCK\Queen_-_Bohemian_Rhapsody2.mp3" />
+    <Media Include="RESOURCE\ROCK\Satisfaction_-_The_Rolling_Stones1.mp3" />
+    <Media Include="RESOURCE\ROCK\Stairway_to_Heaven_-_Led_Zepplin1.mp3" />
+    <Media Include="RESOURCE\ROCK\ZZ_Top_-_La_Grange1.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project11.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
